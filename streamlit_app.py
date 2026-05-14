@@ -157,12 +157,20 @@ def css():
         .product-card { border:1px solid #ffedd5; border-radius:28px; padding:1.25rem; background:#fff; box-shadow:0 10px 28px rgba(249,115,22,0.07); min-height:390px; }
         .tag { display:inline-block; background:#f97316; color:white; border-radius:999px; padding:0.25rem 0.7rem; font-size:0.75rem; font-weight:900; }
         .soft-box { background:#fff7ed; border-radius:18px; padding:0.75rem; margin-top:0.7rem; }
-        .chat-widget { position:fixed; bottom:20px; right:20px; width:380px; max-height:82vh; z-index:99999; background:white; border:1px solid #ffedd5; border-radius:28px; box-shadow:0 20px 60px rgba(249,115,22,0.18); overflow:hidden; }
-        .chat-header { background:linear-gradient(135deg,#f97316,#fbbf24); color:white; padding:1rem 1.2rem; font-weight:900; font-size:1rem; }
-        .chat-body { padding:1rem; max-height:420px; overflow-y:auto; background:#fff; }
-        .chat-input-area { padding:1rem; border-top:1px solid #ffedd5; background:#fff; }
-        .chat-msg-user { background:#f97316; color:white; padding:0.75rem 1rem; border-radius:18px; margin:0.5rem 0 0.5rem 2rem; }
-        .chat-msg-bot { background:#fff7ed; color:#334155; border:1px solid #ffedd5; padding:0.75rem 1rem; border-radius:18px; margin:0.5rem 2rem 0.5rem 0; white-space:pre-wrap; }
+        .chat-widget { position:fixed; bottom:24px; right:24px; width:390px; max-height:84vh; z-index:99999; background:white; border:1px solid #ffedd5; border-radius:30px; box-shadow:0 24px 80px rgba(249,115,22,0.24); overflow:hidden; }
+        .chat-header { background:linear-gradient(135deg,#f97316,#fbbf24); color:white; padding:1rem 1.1rem; display:flex; align-items:center; gap:0.8rem; }
+        .bot-avatar { width:46px; height:46px; border-radius:18px; background:rgba(255,255,255,0.22); border:1px solid rgba(255,255,255,0.45); display:flex; align-items:center; justify-content:center; font-size:1.4rem; box-shadow:inset 0 0 18px rgba(255,255,255,0.18); }
+        .bot-title { font-weight:950; font-size:1rem; line-height:1.1; }
+        .bot-status { display:flex; align-items:center; gap:0.4rem; font-size:0.78rem; font-weight:650; opacity:0.95; margin-top:0.22rem; }
+        .status-dot { width:8px; height:8px; background:#22c55e; border-radius:50%; box-shadow:0 0 0 3px rgba(34,197,94,0.25); display:inline-block; }
+        .chat-body { padding:1rem; max-height:390px; overflow-y:auto; background:linear-gradient(180deg,#fff,#fff7ed); }
+        .chat-input-area { padding:0.9rem; border-top:1px solid #ffedd5; background:white; }
+        .chat-msg-user { background:#f97316; color:white; padding:0.78rem 1rem; border-radius:18px 18px 4px 18px; margin:0.65rem 0 0.65rem 3.2rem; box-shadow:0 10px 22px rgba(249,115,22,0.18); }
+        .chat-msg-bot { background:white; color:#334155; border:1px solid #ffedd5; padding:0.78rem 1rem; border-radius:18px 18px 18px 4px; margin:0.65rem 3.2rem 0.65rem 0; white-space:pre-wrap; box-shadow:0 8px 22px rgba(15,23,42,0.06); }
+        .chat-chip-row { display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.65rem; }
+        .chat-chip { border:1px solid #fed7aa; background:#fff7ed; color:#c2410c; border-radius:999px; padding:0.32rem 0.65rem; font-size:0.75rem; font-weight:800; }
+        .chat-mini-label { color:#64748b; font-size:0.72rem; font-weight:800; margin-bottom:0.25rem; }
+        @media (max-width: 700px) { .chat-widget { left:12px; right:12px; bottom:12px; width:auto; max-height:78vh; } .chat-body { max-height:320px; } }
         footer { text-align:center; color:#64748b; border-top:1px solid #ffedd5; padding:2rem 0; margin-top:2rem; }
         </style>
         """,
@@ -490,7 +498,15 @@ def render_support(t):
 
 def render_chat(lang, t):
     st.markdown("<div class='chat-widget'>", unsafe_allow_html=True)
-    st.markdown("<div class='chat-header'>INVESMATE AI Advisor</div>", unsafe_allow_html=True)
+    st.markdown("""
+    <div class='chat-header'>
+      <div class='bot-avatar'>🤖</div>
+      <div>
+        <div class='bot-title'>INVESMATE AI Chatbot</div>
+        <div class='bot-status'><span class='status-dot'></span> Online • Course advisor</div>
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
     st.markdown("<div class='chat-body'>", unsafe_allow_html=True)
 
     for message in st.session_state.messages:
@@ -502,10 +518,12 @@ def render_chat(lang, t):
 
     chips = ["Hi, guide me", "Predict my course", "Language offer", "Compare INSIGNIA", "Options course", "Price and EMI", "Need support"]
 
-    selected_chip = st.selectbox("Quick prompts", [""] + chips, key="chat_chip")
+    st.markdown("<div class='chat-mini-label'>Quick questions</div>", unsafe_allow_html=True)
+    st.markdown("<div class='chat-chip-row'>" + "".join([f"<span class='chat-chip'>{chip}</span>" for chip in chips[:4]]) + "</div>", unsafe_allow_html=True)
+    selected_chip = st.selectbox("Quick prompts", [""] + chips, key="chat_chip", label_visibility="collapsed")
 
     col1, col2 = st.columns([4,1])
-    user_text = col1.text_input("", placeholder=t["chat_placeholder"], key="chat_input")
+    user_text = col1.text_input("Message", placeholder=t["chat_placeholder"], key="chat_input", label_visibility="collapsed")
 
     if col2.button("Send", use_container_width=True):
         final_text = selected_chip if selected_chip else user_text
