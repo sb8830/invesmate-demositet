@@ -18,24 +18,29 @@ COPY = {
         "predictor_text": "Select your goal, experience, and budget to predict the best course.",
         "support_title": "Talk to the team before you enroll",
         "chat_placeholder": "Ask: predict my course, options, compare, price, support...",
+        "chat_hello": "Hi, I am your INVESMATE AI advisor. Ask me about products, pricing, language offers, prediction, support, purchase, refund, or enrollment."
+        "chat_hello": "Hi, I am your INVESMATE AI advisor. Ask me about products, pricing, language offers, prediction, support, purchase, refund, or enrollment."
     },
     "Bengali": {
         "hero_title": "সেরা স্টক মার্কেট লার্নিং এক্সপেরিয়েন্স",
         "hero_text": "INVESMATE ও INSIGNIA-এর জন্য প্রফেশনাল ডেমো ওয়েবসাইট, যেখানে প্রোডাক্ট ক্যাটালগ, AI গাইড, prediction এবং support routing আছে।",
         "catalog_title": "INVESMATE + INSIGNIA প্রোডাক্ট ক্যাটালগ",
         "predictor_title": "AI কোর্স প্রেডিক্টর",
-        "predictor_text": "আপনার লক্ষ্য, অভিজ্ঞতা ও বাজেট বেছে নিয়ে সেরা কোর্স prediction পান।",
+      "chat_placeholder": "জিজ্ঞাসা করুন: predict, options, compare, price...",
+        "chat_hello": "নমস্কার, আমি INVESMATE AI অ্যাডভাইজার। প্রোডাক্ট, দাম, prediction, support বা enrollment সম্পর্কে জিজ্ঞাসা করুন।" prediction পান।",
         "support_title": "এনরোল করার আগে টিমের সাথে কথা বলুন",
         "chat_placeholder": "জিজ্ঞাসা করুন: predict, options, compare, price...",
+        "chat_hello": "নমস্কার, আমি INVESMATE AI অ্যাডভাইজার। প্রোডাক্ট, দাম, prediction, support বা enrollment সম্পর্কে জিজ্ঞাসা করুন।"
     },
     "Hindi": {
         "hero_title": "बेहतरीन स्टॉक मार्केट लर्निंग एक्सपीरियंस",
-        "hero_text": "INVESMATE और INSIGNIA के लिए professional demo website, जिसमें product catalog, AI guide, prediction और support routing शामिल है।",
-        "catalog_title": "INVESMATE + INSIGNIA प्रोडक्ट कैटलॉग",
+        "hero_text": "INVESMATE और INSIGNIA के लिए professional demo website, जिसमें product catalog, AI guide, prediction और support ro"chat_placeholder": "पूछें: predict, options, compare, price...",
+        "chat_hello": "नमस्ते, मैं INVESMATE AI advisor हूं। Product, price, prediction, support या enrollment के बारे में पूछें।"प्रोडक्ट कैटलॉग",
         "predictor_title": "AI कोर्स प्रेडिक्टर",
         "predictor_text": "अपना goal, experience और budget चुनकर best course prediction पाएं।",
         "support_title": "एनरोल करने से पहले टीम से बात करें",
         "chat_placeholder": "पूछें: predict, options, compare, price...",
+        "chat_hello": "नमस्ते, मैं INVESMATE AI advisor हूं। Product, price, prediction, support या enrollment के बारे में पूछें।"
     },
 }
 COPY["Auto"] = COPY["English"]
@@ -474,9 +479,7 @@ def run_tests():
         ("Need support", "support@invesmate.com", "English"),
         ("Compare Insignia", "Equity Market", "English"),
         ("Predict my course for options premium", "AI prediction", "English"),
-        ("Language offer", "English, Bengali, Hindi", "English"),
-        ("Need support", "हिंदी", "Hindi"),
-        ("Compare Insignia", "বাংলা", "Bengali"),
+        ("Language offer", "English, Bengali, Hindi", "st.session_state.messages = [{"role": "assistant", "content": COPY["English"]["chat_hello"]}] "Bengali"),
         ("Refund", "order ID", "English"),
         ("नमस्ते", "हिंदी", "Auto"),
     ]
