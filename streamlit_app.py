@@ -157,7 +157,8 @@ def css():
         .product-card { border:1px solid #ffedd5; border-radius:28px; padding:1.25rem; background:#fff; box-shadow:0 10px 28px rgba(249,115,22,0.07); min-height:390px; }
         .tag { display:inline-block; background:#f97316; color:white; border-radius:999px; padding:0.25rem 0.7rem; font-size:0.75rem; font-weight:900; }
         .soft-box { background:#fff7ed; border-radius:18px; padding:0.75rem; margin-top:0.7rem; }
-        .chat-widget { position:fixed; bottom:24px; right:24px; width:390px; max-height:84vh; z-index:99999; background:white; border:1px solid #ffedd5; border-radius:30px; box-shadow:0 24px 80px rgba(249,115,22,0.24); overflow:hidden; }
+        .chat-launcher { position:fixed; right:24px; bottom:24px; width:68px; height:68px; border-radius:50%; background:linear-gradient(135deg,#f97316,#fbbf24); color:white; display:flex; align-items:center; justify-content:center; font-size:2rem; box-shadow:0 20px 50px rgba(249,115,22,0.35); z-index:99998; border:4px solid white; }
+        .chat-widget { position:fixed; bottom:104px; right:24px; width:390px; max-height:84vh; z-index:99999; background:white; border:1px solid #ffedd5; border-radius:30px; box-shadow:0 24px 80px rgba(249,115,22,0.24); overflow:hidden; }
         .chat-header { background:linear-gradient(135deg,#f97316,#fbbf24); color:white; padding:1rem 1.1rem; display:flex; align-items:center; gap:0.8rem; }
         .bot-avatar { width:46px; height:46px; border-radius:18px; background:rgba(255,255,255,0.22); border:1px solid rgba(255,255,255,0.45); display:flex; align-items:center; justify-content:center; font-size:1.4rem; box-shadow:inset 0 0 18px rgba(255,255,255,0.18); }
         .bot-title { font-weight:950; font-size:1rem; line-height:1.1; }
@@ -170,7 +171,7 @@ def css():
         .chat-chip-row { display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.65rem; }
         .chat-chip { border:1px solid #fed7aa; background:#fff7ed; color:#c2410c; border-radius:999px; padding:0.32rem 0.65rem; font-size:0.75rem; font-weight:800; }
         .chat-mini-label { color:#64748b; font-size:0.72rem; font-weight:800; margin-bottom:0.25rem; }
-        @media (max-width: 700px) { .chat-widget { left:12px; right:12px; bottom:12px; width:auto; max-height:78vh; } .chat-body { max-height:320px; } }
+        @media (max-width: 700px) { .chat-launcher { right:16px; bottom:16px; width:62px; height:62px; } .chat-widget { left:12px; right:12px; bottom:88px; width:auto; max-height:78vh; } .chat-body { max-height:320px; } }
         footer { text-align:center; color:#64748b; border-top:1px solid #ffedd5; padding:2rem 0; margin-top:2rem; }
         </style>
         """,
@@ -497,13 +498,27 @@ def render_support(t):
 
 
 def render_chat(lang, t):
+    if "chat_open" not in st.session_state:
+        st.session_state.chat_open = False
+
+    launcher_col = st.columns([9,1])[1]
+    with launcher_col:
+        if st.button("💬", key="chat_launcher", use_container_width=True):
+            st.session_state.chat_open = not st.session_state.chat_open
+            st.rerun()
+
+    st.markdown("<div class='chat-launcher'>💬</div>", unsafe_allow_html=True)
+
+    if not st.session_state.chat_open:
+        return
+
     st.markdown("<div class='chat-widget'>", unsafe_allow_html=True)
     st.markdown("""
     <div class='chat-header'>
       <div class='bot-avatar'>🤖</div>
       <div>
         <div class='bot-title'>INVESMATE AI Chatbot</div>
-        <div class='bot-status'><span class='status-dot'></span> Online • Course advisor</div>
+        <div class='bot-status'><span class='status-dot'></span> Online • AI Course advisor</div>
       </div>
     </div>
     """, unsafe_allow_html=True)
