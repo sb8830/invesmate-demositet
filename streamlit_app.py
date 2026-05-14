@@ -157,6 +157,10 @@ def css():
         .product-card { border:1px solid #ffedd5; border-radius:28px; padding:1.25rem; background:#fff; box-shadow:0 10px 28px rgba(249,115,22,0.07); min-height:390px; }
         .tag { display:inline-block; background:#f97316; color:white; border-radius:999px; padding:0.25rem 0.7rem; font-size:0.75rem; font-weight:900; }
         .soft-box { background:#fff7ed; border-radius:18px; padding:0.75rem; margin-top:0.7rem; }
+        .chat-widget { position:fixed; bottom:20px; right:20px; width:380px; max-height:82vh; z-index:99999; background:white; border:1px solid #ffedd5; border-radius:28px; box-shadow:0 20px 60px rgba(249,115,22,0.18); overflow:hidden; }
+        .chat-header { background:linear-gradient(135deg,#f97316,#fbbf24); color:white; padding:1rem 1.2rem; font-weight:900; font-size:1rem; }
+        .chat-body { padding:1rem; max-height:420px; overflow-y:auto; background:#fff; }
+        .chat-input-area { padding:1rem; border-top:1px solid #ffedd5; background:#fff; }
         .chat-msg-user { background:#f97316; color:white; padding:0.75rem 1rem; border-radius:18px; margin:0.5rem 0 0.5rem 2rem; }
         .chat-msg-bot { background:#fff7ed; color:#334155; border:1px solid #ffedd5; padding:0.75rem 1rem; border-radius:18px; margin:0.5rem 2rem 0.5rem 0; white-space:pre-wrap; }
         footer { text-align:center; color:#64748b; border-top:1px solid #ffedd5; padding:2rem 0; margin-top:2rem; }
@@ -485,25 +489,32 @@ def render_support(t):
 
 
 def render_chat(lang, t):
-    st.sidebar.markdown("## INVESMATE AI Advisor")
-    st.sidebar.caption("Human-like counseling, prediction, language offers, purchase, support, and refund guidance.")
+    st.markdown("<div class='chat-widget'>", unsafe_allow_html=True)
+    st.markdown("<div class='chat-header'>INVESMATE AI Advisor</div>", unsafe_allow_html=True)
+    st.markdown("<div class='chat-body'>", unsafe_allow_html=True)
 
     for message in st.session_state.messages:
         css_class = "chat-msg-user" if message["role"] == "user" else "chat-msg-bot"
-        st.sidebar.markdown(f"<div class='{css_class}'>{message['content']}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='{css_class}'>{message['content']}</div>", unsafe_allow_html=True)
+
+    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("<div class='chat-input-area'>", unsafe_allow_html=True)
 
     chips = ["Hi, guide me", "Predict my course", "Language offer", "Compare INSIGNIA", "Options course", "Price and EMI", "Need support"]
-    selected_chip = st.sidebar.selectbox("Quick prompts", [""] + chips)
-    if selected_chip and st.sidebar.button("Send prompt", use_container_width=True):
-        st.session_state.messages.append({"role": "user", "content": selected_chip})
-        st.session_state.messages.append({"role": "assistant", "content": bot_reply(selected_chip, lang)})
-        st.rerun()
 
-    user_text = st.sidebar.text_input("Message", placeholder=t["chat_placeholder"])
-    if st.sidebar.button("Send", use_container_width=True) and user_text.strip():
-        st.session_state.messages.append({"role": "user", "content": user_text.strip()})
-        st.session_state.messages.append({"role": "assistant", "content": bot_reply(user_text.strip(), lang)})
-        st.rerun()
+    selected_chip = st.selectbox("Quick prompts", [""] + chips, key="chat_chip")
+
+    col1, col2 = st.columns([4,1])
+    user_text = col1.text_input("", placeholder=t["chat_placeholder"], key="chat_input")
+
+    if col2.button("Send", use_container_width=True):
+        final_text = selected_chip if selected_chip else user_text
+        if final_text.strip():
+            st.session_state.messages.append({"role": "user", "content": final_text.strip()})
+            st.session_state.messages.append({"role": "assistant", "content": bot_reply(final_text.strip(), lang)})
+            st.rerun()
+
+    st.markdown("</div></div>", unsafe_allow_html=True)
 
 
 def run_tests():
@@ -529,8 +540,7 @@ def main():
     if "messages" not in st.session_state:
         st.session_state.messages = [{"role": "assistant", "content": COPY["English"].get("chat_hello", COPY["English"]["chatHello"])}]
 
-    with st.sidebar:
-        st.session_state.lang = st.selectbox("Language", LANGUAGES, index=LANGUAGES.index(st.session_state.lang))
+    st.session_state.lang = st.selectbox("Language", LANGUAGES, index=LANGUAGES.index(st.session_state.lang))
 
     lang = st.session_state.lang
     t = COPY.get(lang, COPY["English"])
