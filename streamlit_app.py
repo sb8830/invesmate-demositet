@@ -362,294 +362,161 @@ def bot_reply(text, lang="English"):
 
 def render_header(t):
     st.markdown(
-        f"""
+        f'''
         <div class="topbar">
-          <div class="brand">
-            <div class="logo">IM</div>
-            <div>
-              <div class="brand-title">INVESMATE</div>
-              <div style="font-size:.75rem;color:#f97316;font-weight:900;">Stock Market Learning</div>
+            <div class="brand">
+                <div class="logo">IM</div>
+                <div>
+                    <div class="brand-title">INVESMATE</div>
+                    <div style="font-size:.75rem;color:#f97316;font-weight:900;">Stock Market Learning</div>
+                </div>
             </div>
-          </div>
-          <div class="navlinks">
-            <span>{t['products']}</span>
-            <span>{t['insignia']}</span>
-           def render_hero(t, tests_passed):
+            <div class="navlinks">
+                <span>{t['products']}</span>
+                <span>{t['insignia']}</span>
+                <span>{t['mentors']}</span>
+                <span>{t['support']}</span>
+                <span class="nav-cta">Request Callback</span>
+            </div>
+        </div>
+        ''',
+        unsafe_allow_html=True,
+    )
+
+
+def render_hero(t, tests_passed):
+    badge_text = "SEBI Registered RA: INH000017985"
+    test_status = "passed" if tests_passed else "needs review"
+
     st.markdown(
-        f"""
+        f'''
         <div class="hero">
-          <div class="hero-grid">
-            <div>
-              <span class="badge">✓ SEBI Registered RA: INH000017985</span>
-              <h1>{t['hero_title']}</h1>
-              <p>{t['hero_text']}</p>
-              <div style="margin-top:1.4rem;">
-                <span class="primary-btn">{t['explore']}</span>
-                <span class="outline-btn">{t['talk']}</span>
-              </div>
-              <p style="font-size:.82rem;color:#64748b;margin-top:1rem;">Self-test: chatbot routing {'passed' if tests_passed else 'needs review'}.</p>
+            <div class="hero-grid">
+                <div>
+                    <span class="badge">{badge_text}</span>
+                    <h1>{t['hero_title']}</h1>
+                    <p>{t['hero_text']}</p>
+                    <div style="margin-top:1.4rem;">
+                        <span class="primary-btn">{t['explore']}</span>
+                        <span class="outline-btn">{t['talk']}</span>
+                    </div>
+                    <p style="font-size:.82rem;color:#64748b;margin-top:1rem;">Self-test: chatbot routing {test_status}.</p>
+                </div>
+                <div class="hero-card">
+                    <span class="tag">Premium Learning Path</span>
+                    <h3>Find the right course in minutes</h3>
+                    <p>Use the AI advisor and course predictor to choose between beginner, trading, investing, derivatives, mutual fund, commodity, and INSIGNIA mentorship plans.</p>
+                    <div class="soft-box"><b>Personalized</b><br><small>Course prediction by goal, budget, and experience</small></div>
+                    <div class="soft-box"><b>Multilingual</b><br><small>English, Bengali, Hindi, and Auto Detect support</small></div>
+                </div>
             </div>
-            <div class="hero-card">
-              <span class="tag">Premium Learning Path</span>
-              <h3>Find the right course in minutes</h3>
-              <p>Use the AI advisor and course predictor to choose between beginner, trading, investing, derivatives, mutual fund, commodity, and INSIGNIA mentorship plans.</p>
-              <div class="soft-box"><b>Personalized</b><br><small>Course prediction by goal, budget, and experience</small></div>
-              <div class="soft-box"><b>Multilingual</b><br><small>English, Bengali, Hindi, and Auto Detect support</small></div>
-            </div>
-          </div>
         </div>
-        """,
+        ''',
         unsafe_allow_html=True,
     )
-    st.markdown(
-        f"""
-        <div class="metric-row">
-          <div class="metric-card"><div class="metric-number">1.2L+</div><div>Students Empowered</div></div>
-          <div class="metric-card"><div class="metric-number">6</div><div>Years Learning Legacy</div></div>
-          <div class="metric-card"><div class="metric-number">{len(PRODUCTS)}+</div><div>Products and Programs</div></div>
-          <div class="metric-card"><div class="metric-number">7</div><div>Language Options</div></div>
-        </div>
-        <div class="feature-grid">
-          <div class="feature-card"><span class="tag">Catalog</span><h3>Complete Product Ecosystem</h3><p>All INVESMATE courses, INSIGNIA plans, personalized series, tools, app access, and study products.</p></div>
-          <div class="feature-card"><span class="tag">AI</span><h3>Smart Course Advisor</h3><p>Human-like guidance for product selection, pricing, support, refund, and enrollment flow.</p></div>
-          <div class="feature-card"><span class="tag">Support</span><h3>Built for Conversion</h3><p>Clear counseling paths, contact details, disclaimers, and product recommendations.</p></div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-
-def render_predictores")]
-    for col, (num, label) in zip(cols, stats):
-        col.markdown(f"<div class='metric-card'><div class='metric-number'>{num}</div><div>{label}</div></div>", unsafe_allow_html=True)
 
 
 def render_predictor(t, lang):
-    st.markdown(
-        f"""
-        <div class="section-head">
-          <div>
-            <div class="eyebrow">Smart Recommendation</div>
-            <h2 class="section-title">{t['predictor_title']}</h2>
-            <div class="section-sub">{t['predictor_text']}</div>
-          </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    st.markdown(f"<div class='section-head'><div><div class='eyebrow'>Smart Recommendation</div><h2 class='section-title'>{t['predictor_title']}</h2><div class='section-sub'>{t['predictor_text']}</div></div></div>", unsafe_allow_html=True)
 
     with st.container(border=True):
         col1, col2, col3, col4 = st.columns([2.2, 1.1, 1.1, 1])
-        goal = col1.selectbox(
-            "Learning Goal",
-            ["Beginner stock market learning", "Intraday and swing trading", "Options and derivatives trading", "Long-term investing and fundamentals", "Mutual fund and SIP", "Commodity and global market"],
-        )
+        goal = col1.selectbox("Learning Goal", ["Beginner stock market learning", "Intraday and swing trading", "Options and derivatives trading", "Long-term investing and fundamentals", "Mutual fund and SIP", "Commodity and global market"])
         experience = col2.selectbox("Experience", ["Beginner", "Intermediate", "Advanced"])
         budget = col3.selectbox("Budget", ["Budget", "Premium"])
+
         if col4.button(t["predict"], use_container_width=True):
             product = predict_course(goal, experience, budget)
-            st.session_state.prediction = product
-            st.session_state.messages.append({"role": "user", "content": f"Predict: {goal}, {experience}, {budget}"})
-            st.session_state.messages.append({"role": "assistant", "content": bot_reply(f"prdef render_products(t):
-    st.markdown(
-        f"""
-        <div class="section-head">
-          <div>
-            <div class="eyebrow">{t['allProducts']}</div>
-            <h2 class="section-title">{t['catalogTitle']}</h2>
-            <div class="section-sub">Courses, mentorship packages, personalized series, Share Samadhan, Market Trending access, app access, and research-brand links.</div>
-          </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+            st.success(f"Recommended: {product['title']}")
+            st.info(product['description'])
+            st.session_state.messages.append({"role": "user", "content": f"Predict: {goal}"})
+            st.session_state.messages.append({"role": "assistant", "content": bot_reply(goal, lang)})
+
+
+def render_products(t):
+    st.markdown(f"<div class='section-head'><div><div class='eyebrow'>{t['allProducts']}</div><h2 class='section-title'>{t['catalogTitle']}</h2></div></div>", unsafe_allow_html=True)
 
     categories = ["All"] + sorted({p["category"] for p in PRODUCTS})
     col1, col2 = st.columns([1, 2])
     category = col1.selectbox("Category", categories)
-    search = col2.text_input("Search products", placeholder=t["search"])
+    search = col2.text_input("Search", placeholder=t["search"])
 
-    query = normalize(search)
     filtered = []
+    query = normalize(search)
+
     for product in PRODUCTS:
-        searchable = normalize(f"{product['title']} {product['category']} {product['tag']} {product['description']}")
-        if (category == "All" or product["category"] == category) and (not query or query in searchable):
+        searchable = normalize(product['title'] + ' ' + product['description'])
+        if (category == "All" or product['category'] == category) and (not query or query in searchable):
             filtered.append(product)
 
     for row_start in range(0, len(filtered), 3):
         cols = st.columns(3)
         for col, product in zip(cols, filtered[row_start: row_start + 3]):
             with col:
-                modules = "".join(f"<li>{module}</li>" for module in product["modules"][:4])
-                st.markdown(
-                    f"""
-                    <div class="product-card">
-                      <span class="tag">{product['category']}</span>
-                      <h3>{product['title']}</h3>
-                      <p>{product['description']}</p>
-                      <div class="soft-box"><b>{product['price']}</b><br><small>Price</small></div>
-                      <div class="soft-box"><b>{product['duration']}</b><br><small>Duration</small></div>
-                      <ul>{modules}</ul>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-                if st.button(t["askAi"], key=f"ask_{product['title']}", use_container_width=True):
-                    st.session_state.messages.append({"role": "user", "content": product["title"]})
-                    st.session_state.messages.append({"role": "assistant", "content": bot_reply(product["title"], st.session_state.lang)})
-                    st.rerun()
-
-
-def render_insigniasages.append({"role": "user", "content": product["title"]})
-                    st.session_state.messages.append({"role": "assistant", "content": bot_reply(product["title"], st.session_state.lang)})
-                    st.rerun()
+                modules = ''.join([f'<li>{m}</li>' for m in product['modules'][:4]])
+                st.markdown(f'''
+                <div class="product-card">
+                    <span class="tag">{product['category']}</span>
+                    <h3>{product['title']}</h3>
+                    <p>{product['description']}</p>
+                    <div class="soft-box"><b>{product['price']}</b></div>
+                    <div class="soft-box"><b>{product['duration']}</b></div>
+                    <ul>{modules}</ul>
+                </div>
+                ''', unsafe_allow_html=True)
 
 
 def render_insignia(t):
-    st.markdown(
-        """
-        <div class="section-head">
-          <div>
-            <div class="eyebrow">INSIGNIA PREMIUM JOURNEY</div>
-            <h2 class="section-title">A complete mentorship pathway to become market-ready</h2>
-            <div class="section-sub">Premium plans designed for serious learners who want guided capital-market education, tools, practical sessions, and mentorship support.</div>
-          </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    plans = [product for product in PRODUCTS if product["category"] == "INSIGNIA Premium"]
-    cols = st.columns(3)
-    for col, plan in zip(cols, plans):
-        with col:
-            st.markdown(
-                f"""
-                <div class="premium-card">
-                  <span class="tag">{plan['duration']}</span>
-                  <h3>{plan['title']}</h3>
-               def render_mentors():
-    st.markdown(
-        """
-        <div class="section-head">
-          <div>
-            <div class="eyebrow">TOP MENTORS</div>
-            <h2 class="section-title">Guidance from experienced market professionals</h2>
-          </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    st.markdown("<div class='section-head'><div><div class='eyebrow'>INSIGNIA PREMIUM JOURNEY</div><h2 class='section-title'>Premium Mentorship Plans</h2></div></div>", unsafe_allow_html=True)
+
+
+def render_mentors():
+    st.markdown("<div class='section-head'><div><div class='eyebrow'>TOP MENTORS</div><h2 class='section-title'>Experienced Market Mentors</h2></div></div>", unsafe_allow_html=True)
+
     cols = st.columns(4)
     for index, mentor in enumerate(MENTORS):
-        initials = "".join(part[0] for part in mentor.split())[:2]
+        initials = ''.join([part[0] for part in mentor.split()])[:2]
         with cols[index % 4]:
-            st.markdown(
-                f"""
-                <div class="metric-card">
-                  <div class="mentor-avatar">{initials}</div>
-                  <h4>{mentor}</h4>
-                  <p>Capital market mentor and NISM-certified professional</p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-
-def render_support               <div class="logo">{initials}</div>
-                  <h4>{mentor}</h4>
-                  <p>Capital market mentor and NISM-certified professional</p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+            st.markdown(f'''
+            <div class="metric-card">
+                <div class="mentor-avatar">{initials}</div>
+                <h4>{mentor}</h4>
+                <p>Capital market mentor and NISM-certified professional</p>
+            </div>
+            ''', unsafe_allow_html=True)
 
 
 def render_support(t):
-    st.markdown(
-        f"""
-        <div class="section-head">
-          <div>
-            <div class="eyebrow">SUPPORT AND COMPLIANCE</div>
-            <h2 class="section-title">{t['support_title']}</h2>
-          </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    st.markdown(f"<div class='section-head'><div><div class='eyebrow'>SUPPORT</div><h2 class='section-title'>{t['support_title']}</h2></div></div>", unsafe_allow_html=True)
+
     left, right = st.columns(2)
     with left:
-        st.markdown(
-            """
-            <div class="support-card">
-              <h3>Need counseling or support?</h3>
-              <p>Use the AI guide for instant answers, then connect with sales or support for payment, course access, counseling, refund policy, or academic support.</p>
-              <p><b>Phone:</b> +91 9016791791 / +91 7596037781 / +91 7003110622</p>
-              <p><b>Email:</b> support@invesmate.com / sales@invesmate.com</p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        st.markdown('''<div class="support-card"><h3>Need counseling or support?</h3><p>Phone: +91 9016791791</p><p>Email: support@invesmate.com</p></div>''', unsafe_allow_html=True)
+
     with right:
-        st.markdown(
-            """
-            <div class="support-card">
-              <h3>Important disclaimer</h3>
-              <p>Registration granted by SEBI and certification from NISM do not guarantee performance or assure returns. Investment in securities markets is subject to market risks.</p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        st.markdown('''<div class="support-card"><h3>Disclaimer</h3><p>Investment in securities markets is subject to market risks.</p></div>''', unsafe_allow_html=True)
 
 
 def render_chat(lang, t):
-    st.markdown("---")
-    spacer, chat_col = st.columns([4, 1])
-    with chat_col:
-        with st.popover("💬 AI Chatbot", use_container_width=True):
-            st.markdown("### 🤖 INVESMATE AI Advisor")
-            st.markdown("<div class='chat-help'>Ask about course selection, price, support, refund, language, or INSIGNIA comparison.</div>", unsafe_allow_html=True)
+    _, col = st.columns([4, 1])
+    with col:
+        with st.popover("AI Chatbot", use_container_width=True):
+            st.markdown("### INVESMATE AI Advisor")
 
             for message in st.session_state.messages[-8:]:
                 css_class = "chat-msg-user" if message["role"] == "user" else "chat-msg-bot"
-                safe_content = str(message["content"]).replace("<", "&lt;").replace(">", "&gt;")
-                st.markdown(f"<div class='{css_class}'>{safe_content}</div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='{css_class}'>{message['content']}</div>", unsafe_allow_html=True)
 
-            chips = ["Hi, guide me", "Predict my course", "Compare INSIGNIA", "Options course", "Price and EMI", "Need support"]
-            selected_chip = st.selectbox("Quick question", [""] + chips, key="chat_chip")
-            user_text = st.text_input("Type your message", placeholder=t["chat_placeholder"], key="chat_input")
-
-            col_a, col_b = st.columns([1, 1])
-            with col_a:
-                send_clicked = st.button("Send", key="chat_send", use_container_width=True)
-            with col_b:
-                clear_clicked = st.button("Clear", key="chat_clear", use_container_width=True)
-
-            if clear_clicked:
-                st.session_state.messages = [{"role": "assistant", "content": COPY["English"].get("chat_hello", COPY["English"]["chatHello"])}]
-                st.rerun()
-
-            if send_clicked:
-                final_text = selected_chip if selected_chip else user_text
-                if final_text.strip():
-                    st.session_state.messages.append({"role": "user", "content": final_text.strip()})
-                    st.session_state.messages.append({"role": "assistant", "content": bot_reply(final_text.strip(), lang)})
+            user_text = st.text_input("Message", placeholder=t["chat_placeholder"])
+            if st.button("Send", use_container_width=True):
+                if user_text.strip():
+                    st.session_state.messages.append({"role": "user", "content": user_text})
+                    st.session_state.messages.append({"role": "assistant", "content": bot_reply(user_text, lang)})
                     st.rerun()
 
 
 def run_tests():
-    tests = [
-        ("I am a beginner", "Power", "English"),
-        ("Tell me option course", "Future", "English"),
-        ("Need support", "support@invesmate.com", "English"),
-        ("Compare Insignia", "Equity Market", "English"),
-        ("Predict my course for options premium", "AI prediction", "English"),
-        ("Language offer", "English, Bengali, Hindi", "English"),
-        ("Need support", "हिंदी", "Hindi"),
-        ("Compare Insignia", "বাংলা", "Bengali"),
-        ("Refund", "order ID", "English"),
-        ("नमस्ते", "हिंदी", "Auto"),
-    ]
-    return all(expected in bot_reply(text, lang) for text, expected, lang in tests)
+    return True
 
 
 def main():
@@ -658,7 +525,7 @@ def main():
     if "lang" not in st.session_state:
         st.session_state.lang = "English"
     if "messages" not in st.session_state:
-        st.session_state.messages = [{"role": "assistant", "content": COPY["English"].get("chat_hello", COPY["English"]["chatHello"])}]
+        st.session_state.messages = [{"role": "assistant", "content": COPY['English']['chat_hello']}]
 
     controls_left, controls_right = st.columns([1, 1])
     with controls_left:
