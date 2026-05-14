@@ -522,11 +522,56 @@ def run_tests():
 def main():
     if "theme" not in st.session_state:
         st.session_state.theme = "Light"
+
     if "lang" not in st.session_state:
         st.session_state.lang = "English"
+
     if "messages" not in st.session_state:
-        st.session_state.messages = [{"role": "assistant", "content": COPY['English']['chat_hello']}]
+        st.session_state.messages = [
+            {
+                "role": "assistant",
+                "content": COPY["English"]["chat_hello"],
+            }
+        ]
 
     controls_left, controls_right = st.columns([1, 1])
+
     with controls_left:
-     
+        st.session_state.theme = st.selectbox(
+            "Theme",
+            ["Light", "Dark"],
+            index=["Light", "Dark"].index(st.session_state.theme),
+        )
+
+    with controls_right:
+        st.session_state.lang = st.selectbox(
+            "Language",
+            LANGUAGES,
+            index=LANGUAGES.index(st.session_state.lang),
+        )
+
+    css(st.session_state.theme)
+
+    t = COPY[st.session_state.lang]
+
+    render_header(t)
+    render_hero(t, run_tests())
+    render_predictor(t, st.session_state.lang)
+    render_products(t)
+    render_insignia(t)
+    render_mentors()
+    render_support(t)
+    render_chat(st.session_state.lang, t)
+
+    st.markdown(
+        """
+        <footer>
+            © 2026 INVESMATE Demo Platform • Professional AI Guided Learning Experience
+        </footer>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+if __name__ == "__main__":
+    main()
