@@ -190,6 +190,16 @@ def css(theme="Light"):
         div[data-testid="stPopover"] button {{ background:linear-gradient(135deg,#f97316,#fbbf24) !important; color:white !important; border-radius:999px !important; border:0 !important; font-weight:950 !important; box-shadow:0 15px 45px rgba(249,115,22,.28) !important; }}
         footer {{ text-align:center; color:{muted}; border-top:1px solid {border}; padding:2rem 0; margin-top:2rem; }}
         @media (max-width:900px) {{ .hero-grid, .feature-grid, .metric-row {{ grid-template-columns:1fr; }} .navlinks {{ display:none; }} .hero {{ padding:2.2rem 1.3rem; }} }}
+        .chat-float-wrap { position:fixed; right:24px; bottom:24px; z-index:99999; width:360px; max-width:calc(100vw - 32px); }
+        .chat-launcher-card { background:linear-gradient(135deg,#f97316,#fbbf24); color:white; border-radius:999px; padding:.75rem .95rem; box-shadow:0 18px 55px rgba(249,115,22,.35); border:4px solid {surface}; display:flex; align-items:center; justify-content:center; gap:.55rem; font-weight:950; }
+        .chat-panel { background:{surface}; border:1px solid {border}; border-radius:26px; box-shadow:0 24px 80px rgba(15,23,42,.22); overflow:hidden; margin-bottom:.75rem; }
+        .chat-panel-head { background:linear-gradient(135deg,#f97316,#fbbf24); color:white; padding:1rem; display:flex; align-items:center; gap:.8rem; }
+        .chat-avatar { width:42px; height:42px; border-radius:16px; background:rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.45); display:flex; align-items:center; justify-content:center; font-size:1rem; font-weight:950; }
+        .chat-title { font-size:1rem; font-weight:950; line-height:1.1; }
+        .chat-status { font-size:.72rem; font-weight:700; opacity:.95; margin-top:.15rem; }
+        .chat-window { max-height:330px; overflow-y:auto; padding:.7rem .95rem; background:{surface_2}; }
+        .chat-actions { padding:.75rem .95rem; border-top:1px solid {border}; background:{surface}; }
+        @media (max-width:700px) { .chat-float-wrap { left:12px; right:12px; bottom:14px; width:auto; } .chat-window { max-height:280px; } }
         </style>
         """,
         unsafe_allow_html=True,
@@ -498,21 +508,73 @@ def render_support(t):
 
 
 def render_chat(lang, t):
-    _, col = st.columns([4, 1])
-    with col:
-        with st.popover("AI Chatbot", use_container_width=True):
-            st.markdown("### INVESMATE AI Advisor")
+    if "chat_open" not in st.session_state:
+        st.session_state.chat_open = False
 
-            for message in st.session_state.messages[-8:]:
-                css_class = "chat-msg-user" if message["role"] == "user" else "chat-msg-bot"
-                st.markdown(f"<div class='{css_class}'>{message['content']}</div>", unsafe_allow_html=True)
+    st.markdown('<div class="chat-float-wrap">', unsafe_allow_html=True)
 
-            user_text = st.text_input("Message", placeholder=t["chat_placeholder"])
-            if st.button("Send", use_container_width=True):
-                if user_text.strip():
-                    st.session_state.messages.append({"role": "user", "content": user_text})
-                    st.session_state.messages.append({"role": "assistant", "content": bot_reply(user_text, lang)})
-                    st.rerun()
+    if st.session_state.chat_open:
+        st.markdown(
+            '''
+            <div class="chat-panel">
+                <div class="chat-panel-head">
+                    <div class="chat-avatar">AI</div>
+                    <div>
+                        <div class="chat-title">INVESMATE AI Advisor</div>
+                        <div class="chat-status">Online - course guidance, pricing and support</div>
+                    </div>
+                </div>
+                <div class="chat-help">Ask about courses, INSIGNIA plans, pricing, refund, support, enrollment, or language preference.</div>
+                <div class="chat-window">
+            ''',
+            unsafe_allow_html=True,
+        )
+
+        for message in st.session_state.messages[-8:]:
+            css_class = "chat-msg-user" if message["role"] == "user" else "chat-msg-bot"
+            safe_content = str(message["content"]).replace("<", "&lt;").replace(">", "&gt;")
+            st.markdown(f"<div class='{css_class}'>{safe_content}</div>", unsafe_allow_html=True)
+
+        st.markdown('</div><div class="chat-actions">', unsafe_allow_html=True)
+
+        quick_cols = st.columns(3)
+        quick_prompts = ["Predict course", "Compare plans", "Need support"]
+        for col, prompt in zip(quick_cols, quick_prompts):
+            if col.button(prompt, key=f"chat_quick_{prompt}", use_container_width=True):
+                st.session_state.messages.append({"role": "user", "content": prompt})
+                st.session_state.messages.append({"role": "assistant", "content": bot_reply(prompt, lang)})
+                st.rerun()
+
+        user_text = st.text_input(
+            "Chat message",
+            placeholder=t["chat_placeholder"],
+            key="chat_text_input",
+            label_visibility="collapsed",
+        )
+
+        send_col, clear_col, close_col = st.columns([2, 1, 1])
+        if send_col.button("Send", key="chat_send_button", use_container_width=True):
+            if user_text.strip():
+                st.session_state.messages.append({"role": "user", "content": user_text.strip()})
+                st.session_state.messages.append({"role": "assistant", "content": bot_reply(user_text.strip(), lang)})
+                st.rerun()
+
+        if clear_col.button("Clear", key="chat_clear_button", use_container_width=True):
+            st.session_state.messages = [{"role": "assistant", "content": COPY["English"]["chat_hello"]}]
+            st.rerun()
+
+        if close_col.button("Close", key="chat_close_button", use_container_width=True):
+            st.session_state.chat_open = False
+            st.rerun()
+
+        st.markdown('</div></div>', unsafe_allow_html=True)
+
+    launcher_label = "Hide AI Chatbot" if st.session_state.chat_open else "Open AI Chatbot"
+    if st.button(launcher_label, key="chat_launcher_main", use_container_width=True):
+        st.session_state.chat_open = not st.session_state.chat_open
+        st.rerun()
+
+    st.markdown('</div>', unsafe_allow_html=True)
 
 
 def run_tests():
