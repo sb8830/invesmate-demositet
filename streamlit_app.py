@@ -190,16 +190,16 @@ def css(theme="Light"):
         div[data-testid="stPopover"] button {{ background:linear-gradient(135deg,#f97316,#fbbf24) !important; color:white !important; border-radius:999px !important; border:0 !important; font-weight:950 !important; box-shadow:0 15px 45px rgba(249,115,22,.28) !important; }}
         footer {{ text-align:center; color:{muted}; border-top:1px solid {border}; padding:2rem 0; margin-top:2rem; }}
         @media (max-width:900px) {{ .hero-grid, .feature-grid, .metric-row {{ grid-template-columns:1fr; }} .navlinks {{ display:none; }} .hero {{ padding:2.2rem 1.3rem; }} }}
-        .chat-float-wrap { position:fixed; right:24px; bottom:24px; z-index:99999; width:360px; max-width:calc(100vw - 32px); }
-        .chat-launcher-card { background:linear-gradient(135deg,#f97316,#fbbf24); color:white; border-radius:999px; padding:.75rem .95rem; box-shadow:0 18px 55px rgba(249,115,22,.35); border:4px solid {surface}; display:flex; align-items:center; justify-content:center; gap:.55rem; font-weight:950; }
-        .chat-panel { background:{surface}; border:1px solid {border}; border-radius:26px; box-shadow:0 24px 80px rgba(15,23,42,.22); overflow:hidden; margin-bottom:.75rem; }
-        .chat-panel-head { background:linear-gradient(135deg,#f97316,#fbbf24); color:white; padding:1rem; display:flex; align-items:center; gap:.8rem; }
-        .chat-avatar { width:42px; height:42px; border-radius:16px; background:rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.45); display:flex; align-items:center; justify-content:center; font-size:1rem; font-weight:950; }
-        .chat-title { font-size:1rem; font-weight:950; line-height:1.1; }
-        .chat-status { font-size:.72rem; font-weight:700; opacity:.95; margin-top:.15rem; }
-        .chat-window { max-height:330px; overflow-y:auto; padding:.7rem .95rem; background:{surface_2}; }
-        .chat-actions { padding:.75rem .95rem; border-top:1px solid {border}; background:{surface}; }
-        @media (max-width:700px) { .chat-float-wrap { left:12px; right:12px; bottom:14px; width:auto; } .chat-window { max-height:280px; } }
+        .chat-float-wrap {{ position:fixed; right:24px; bottom:24px; z-index:99999; width:360px; max-width:calc(100vw - 32px); }}
+        .chat-launcher-card {{ background:linear-gradient(135deg,#f97316,#fbbf24); color:white; border-radius:999px; padding:.75rem .95rem; box-shadow:0 18px 55px rgba(249,115,22,.35); border:4px solid {surface}; display:flex; align-items:center; justify-content:center; gap:.55rem; font-weight:950; }}
+        .chat-panel {{ background:{surface}; border:1px solid {border}; border-radius:26px; box-shadow:0 24px 80px rgba(15,23,42,.22); overflow:hidden; margin-bottom:.75rem; }}
+        .chat-panel-head {{ background:linear-gradient(135deg,#f97316,#fbbf24); color:white; padding:1rem; display:flex; align-items:center; gap:.8rem; }}
+        .chat-avatar {{ width:42px; height:42px; border-radius:16px; background:rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.45); display:flex; align-items:center; justify-content:center; font-size:1rem; font-weight:950; }}
+        .chat-title {{ font-size:1rem; font-weight:950; line-height:1.1; }}
+        .chat-status {{ font-size:.72rem; font-weight:700; opacity:.95; margin-top:.15rem; }}
+        .chat-window {{ max-height:330px; overflow-y:auto; padding:.7rem .95rem; background:{surface_2}; }}
+        .chat-actions {{ padding:.75rem .95rem; border-top:1px solid {border}; background:{surface}; }}
+        @media (max-width:700px) {{ .chat-float-wrap {{ left:12px; right:12px; bottom:14px; width:auto; }} .chat-window {{ max-height:280px; }} }}
         </style>
         """,
         unsafe_allow_html=True,
