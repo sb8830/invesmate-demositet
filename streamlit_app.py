@@ -134,45 +134,54 @@ MENTORS = [
 ]
 
 
-def css():
+def css(theme="Light"):
+    is_dark = theme == "Dark"
+    bg = "#0f172a" if is_dark else "#ffffff"
+    text = "#f8fafc" if is_dark else "#0f172a"
+    muted = "#cbd5e1" if is_dark else "#475569"
+    card = "#111827" if is_dark else "#ffffff"
+    soft = "#1e293b" if is_dark else "#fff7ed"
+    border = "#334155" if is_dark else "#ffedd5"
+    hero_bg = "linear-gradient(135deg,#0f172a,#1e293b,#431407)" if is_dark else "linear-gradient(135deg,#ffffff,#fff7ed,#fffbeb)"
+
     st.markdown(
-        """
+        f"""
         <style>
-        .stApp { background: #ffffff; color: #0f172a; }
-        .block-container { padding-top: 1.25rem; }
-        .topbar { display:flex; align-items:center; justify-content:space-between; gap:1rem; border-bottom:1px solid #ffedd5; padding: 0.5rem 0 1rem; }
-        .brand { display:flex; align-items:center; gap:0.8rem; }
-        .logo { width:44px; height:44px; border-radius:16px; background:linear-gradient(135deg,#f97316,#fbbf24); color:white; display:flex; align-items:center; justify-content:center; font-weight:900; }
-        .brand-title { font-weight:900; font-size:1.15rem; line-height:1; }
-        .hero { border-radius:34px; background:linear-gradient(135deg,#ffffff,#fff7ed,#fffbeb); border:1px solid #ffedd5; padding:3rem; margin-top:1.5rem; }
-        .badge { display:inline-block; border:1px solid #fed7aa; background:#fff; color:#ea580c; border-radius:999px; padding:0.45rem 0.85rem; font-weight:700; font-size:0.85rem; margin-bottom:1rem; }
-        .hero h1 { font-size: clamp(2.5rem, 6vw, 5rem); line-height:0.95; font-weight:950; margin:0; color:#020617; }
-        .hero p { font-size:1.1rem; line-height:1.8; color:#475569; max-width:760px; }
-        .primary-btn { background:#f97316; color:white; border-radius:999px; padding:0.85rem 1.25rem; font-weight:800; display:inline-block; margin-right:0.75rem; }
-        .outline-btn { border:1px solid #fdba74; color:#ea580c; background:white; border-radius:999px; padding:0.85rem 1.25rem; font-weight:800; display:inline-block; }
-        .metric-card { border:1px solid #ffedd5; border-radius:26px; padding:1.25rem; background:#fff; box-shadow:0 12px 35px rgba(249,115,22,0.08); }
-        .metric-number { color:#f97316; font-size:2rem; font-weight:950; }
-        .section-title { font-size:2.3rem; font-weight:950; color:#020617; margin-bottom:0.5rem; }
-        .eyebrow { color:#ea580c; font-weight:900; letter-spacing:0.04em; }
-        .product-card { border:1px solid #ffedd5; border-radius:28px; padding:1.25rem; background:#fff; box-shadow:0 10px 28px rgba(249,115,22,0.07); min-height:390px; }
-        .tag { display:inline-block; background:#f97316; color:white; border-radius:999px; padding:0.25rem 0.7rem; font-size:0.75rem; font-weight:900; }
-        .soft-box { background:#fff7ed; border-radius:18px; padding:0.75rem; margin-top:0.7rem; }
-        .chat-launcher { position:fixed; right:24px; bottom:24px; width:68px; height:68px; border-radius:50%; background:linear-gradient(135deg,#f97316,#fbbf24); color:white; display:flex; align-items:center; justify-content:center; font-size:2rem; box-shadow:0 20px 50px rgba(249,115,22,0.35); z-index:99998; border:4px solid white; }
-        .chat-widget { position:fixed; bottom:104px; right:24px; width:390px; max-height:84vh; z-index:99999; background:white; border:1px solid #ffedd5; border-radius:30px; box-shadow:0 24px 80px rgba(249,115,22,0.24); overflow:hidden; }
-        .chat-header { background:linear-gradient(135deg,#f97316,#fbbf24); color:white; padding:1rem 1.1rem; display:flex; align-items:center; gap:0.8rem; }
-        .bot-avatar { width:46px; height:46px; border-radius:18px; background:rgba(255,255,255,0.22); border:1px solid rgba(255,255,255,0.45); display:flex; align-items:center; justify-content:center; font-size:1.4rem; box-shadow:inset 0 0 18px rgba(255,255,255,0.18); }
-        .bot-title { font-weight:950; font-size:1rem; line-height:1.1; }
-        .bot-status { display:flex; align-items:center; gap:0.4rem; font-size:0.78rem; font-weight:650; opacity:0.95; margin-top:0.22rem; }
-        .status-dot { width:8px; height:8px; background:#22c55e; border-radius:50%; box-shadow:0 0 0 3px rgba(34,197,94,0.25); display:inline-block; }
-        .chat-body { padding:1rem; max-height:390px; overflow-y:auto; background:linear-gradient(180deg,#fff,#fff7ed); }
-        .chat-input-area { padding:0.9rem; border-top:1px solid #ffedd5; background:white; }
-        .chat-msg-user { background:#f97316; color:white; padding:0.78rem 1rem; border-radius:18px 18px 4px 18px; margin:0.65rem 0 0.65rem 3.2rem; box-shadow:0 10px 22px rgba(249,115,22,0.18); }
-        .chat-msg-bot { background:white; color:#334155; border:1px solid #ffedd5; padding:0.78rem 1rem; border-radius:18px 18px 18px 4px; margin:0.65rem 3.2rem 0.65rem 0; white-space:pre-wrap; box-shadow:0 8px 22px rgba(15,23,42,0.06); }
-        .chat-chip-row { display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.65rem; }
-        .chat-chip { border:1px solid #fed7aa; background:#fff7ed; color:#c2410c; border-radius:999px; padding:0.32rem 0.65rem; font-size:0.75rem; font-weight:800; }
-        .chat-mini-label { color:#64748b; font-size:0.72rem; font-weight:800; margin-bottom:0.25rem; }
-        @media (max-width: 700px) { .chat-launcher { right:16px; bottom:16px; width:62px; height:62px; } .chat-widget { left:12px; right:12px; bottom:88px; width:auto; max-height:78vh; } .chat-body { max-height:320px; } }
-        footer { text-align:center; color:#64748b; border-top:1px solid #ffedd5; padding:2rem 0; margin-top:2rem; }
+        .stApp {{ background:{bg}; color:{text}; }}
+        .block-container {{ padding-top:1.25rem; }}
+        .topbar {{ display:flex; align-items:center; justify-content:space-between; gap:1rem; border-bottom:1px solid {border}; padding:0.5rem 0 1rem; }}
+        .brand {{ display:flex; align-items:center; gap:0.8rem; }}
+        .logo {{ width:44px; height:44px; border-radius:16px; background:linear-gradient(135deg,#f97316,#fbbf24); color:white; display:flex; align-items:center; justify-content:center; font-weight:900; }}
+        .brand-title {{ font-weight:900; font-size:1.15rem; line-height:1; color:{text}; }}
+        .hero {{ border-radius:34px; background:{hero_bg}; border:1px solid {border}; padding:3rem; margin-top:1.5rem; }}
+        .badge {{ display:inline-block; border:1px solid #fed7aa; background:{card}; color:#f97316; border-radius:999px; padding:0.45rem 0.85rem; font-weight:700; font-size:0.85rem; margin-bottom:1rem; }}
+        .hero h1 {{ font-size:clamp(2.5rem,6vw,5rem); line-height:0.95; font-weight:950; margin:0; color:{text}; }}
+        .hero p {{ font-size:1.1rem; line-height:1.8; color:{muted}; max-width:760px; }}
+        .primary-btn {{ background:#f97316; color:white; border-radius:999px; padding:0.85rem 1.25rem; font-weight:800; display:inline-block; margin-right:0.75rem; }}
+        .outline-btn {{ border:1px solid #fdba74; color:#fb923c; background:{card}; border-radius:999px; padding:0.85rem 1.25rem; font-weight:800; display:inline-block; }}
+        .metric-card, .product-card {{ border:1px solid {border}; border-radius:26px; padding:1.25rem; background:{card}; color:{text}; box-shadow:0 12px 35px rgba(249,115,22,0.08); }}
+        .product-card {{ border-radius:28px; min-height:390px; }}
+        .metric-number {{ color:#f97316; font-size:2rem; font-weight:950; }}
+        .section-title {{ font-size:2.3rem; font-weight:950; color:{text}; margin-bottom:0.5rem; }}
+        .eyebrow {{ color:#f97316; font-weight:900; letter-spacing:0.04em; }}
+        .tag {{ display:inline-block; background:#f97316; color:white; border-radius:999px; padding:0.25rem 0.7rem; font-size:0.75rem; font-weight:900; }}
+        .soft-box {{ background:{soft}; border-radius:18px; padding:0.75rem; margin-top:0.7rem; }}
+        .chat-launcher {{ position:fixed; right:22px; bottom:22px; width:62px; height:62px; border-radius:50%; background:linear-gradient(135deg,#f97316,#fbbf24); color:white; display:flex; align-items:center; justify-content:center; font-size:1.8rem; box-shadow:0 20px 50px rgba(249,115,22,0.35); z-index:99998; border:4px solid {card}; pointer-events:none; }}
+        .chat-widget {{ position:fixed; bottom:92px; right:22px; width:340px; max-height:76vh; z-index:99999; background:{card}; border:1px solid {border}; border-radius:24px; box-shadow:0 24px 80px rgba(249,115,22,0.24); overflow:hidden; }}
+        .chat-header {{ background:linear-gradient(135deg,#f97316,#fbbf24); color:white; padding:0.85rem 1rem; display:flex; align-items:center; gap:0.7rem; }}
+        .bot-avatar {{ width:40px; height:40px; border-radius:15px; background:rgba(255,255,255,0.22); border:1px solid rgba(255,255,255,0.45); display:flex; align-items:center; justify-content:center; font-size:1.2rem; }}
+        .bot-title {{ font-weight:950; font-size:0.95rem; line-height:1.1; }}
+        .bot-status {{ display:flex; align-items:center; gap:0.4rem; font-size:0.72rem; font-weight:650; opacity:0.95; margin-top:0.18rem; }}
+        .status-dot {{ width:8px; height:8px; background:#22c55e; border-radius:50%; box-shadow:0 0 0 3px rgba(34,197,94,0.25); display:inline-block; }}
+        .chat-body {{ padding:0.85rem; max-height:310px; overflow-y:auto; background:{soft}; }}
+        .chat-input-area {{ padding:0.75rem; border-top:1px solid {border}; background:{card}; }}
+        .chat-msg-user {{ background:#f97316; color:white; padding:0.68rem 0.85rem; border-radius:16px 16px 4px 16px; margin:0.55rem 0 0.55rem 2.4rem; box-shadow:0 10px 22px rgba(249,115,22,0.18); font-size:0.86rem; }}
+        .chat-msg-bot {{ background:{card}; color:{text}; border:1px solid {border}; padding:0.68rem 0.85rem; border-radius:16px 16px 16px 4px; margin:0.55rem 2.4rem 0.55rem 0; white-space:pre-wrap; box-shadow:0 8px 22px rgba(15,23,42,0.06); font-size:0.86rem; }}
+        .chat-chip-row {{ display:flex; gap:0.35rem; flex-wrap:wrap; margin-bottom:0.55rem; }}
+        .chat-chip {{ border:1px solid #fed7aa; background:{soft}; color:#f97316; border-radius:999px; padding:0.25rem 0.55rem; font-size:0.68rem; font-weight:800; }}
+        .chat-mini-label {{ color:{muted}; font-size:0.7rem; font-weight:800; margin-bottom:0.25rem; }}
+        footer {{ text-align:center; color:{muted}; border-top:1px solid {border}; padding:2rem 0; margin-top:2rem; }}
+        @media (max-width:700px) {{ .chat-launcher {{ right:16px; bottom:16px; width:58px; height:58px; }} .chat-widget {{ left:12px; right:12px; bottom:84px; width:auto; max-height:76vh; }} .chat-body {{ max-height:290px; }} }}
         </style>
         """,
         unsafe_allow_html=True,
@@ -501,12 +510,12 @@ def render_chat(lang, t):
     if "chat_open" not in st.session_state:
         st.session_state.chat_open = False
 
-    launcher_col = st.columns([9,1])[1]
-    with launcher_col:
+    # Compact floating launcher control
+    _, launch_col = st.columns([12, 1])
+    with launch_col:
         if st.button("💬", key="chat_launcher", use_container_width=True):
             st.session_state.chat_open = not st.session_state.chat_open
             st.rerun()
-
     st.markdown("<div class='chat-launcher'>💬</div>", unsafe_allow_html=True)
 
     if not st.session_state.chat_open:
@@ -518,29 +527,28 @@ def render_chat(lang, t):
       <div class='bot-avatar'>🤖</div>
       <div>
         <div class='bot-title'>INVESMATE AI Chatbot</div>
-        <div class='bot-status'><span class='status-dot'></span> Online • AI Course advisor</div>
+        <div class='bot-status'><span class='status-dot'></span> Online • Course advisor</div>
       </div>
     </div>
     """, unsafe_allow_html=True)
     st.markdown("<div class='chat-body'>", unsafe_allow_html=True)
 
-    for message in st.session_state.messages:
+    for message in st.session_state.messages[-6:]:
         css_class = "chat-msg-user" if message["role"] == "user" else "chat-msg-bot"
-        st.markdown(f"<div class='{css_class}'>{message['content']}</div>", unsafe_allow_html=True)
+        safe_content = str(message["content"]).replace("<", "&lt;").replace(">", "&gt;")
+        st.markdown(f"<div class='{css_class}'>{safe_content}</div>", unsafe_allow_html=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
     st.markdown("<div class='chat-input-area'>", unsafe_allow_html=True)
 
-    chips = ["Hi, guide me", "Predict my course", "Language offer", "Compare INSIGNIA", "Options course", "Price and EMI", "Need support"]
-
+    chips = ["Hi, guide me", "Predict my course", "Compare INSIGNIA", "Price and EMI", "Need support"]
     st.markdown("<div class='chat-mini-label'>Quick questions</div>", unsafe_allow_html=True)
-    st.markdown("<div class='chat-chip-row'>" + "".join([f"<span class='chat-chip'>{chip}</span>" for chip in chips[:4]]) + "</div>", unsafe_allow_html=True)
+    st.markdown("<div class='chat-chip-row'>" + "".join([f"<span class='chat-chip'>{chip}</span>" for chip in chips[:3]]) + "</div>", unsafe_allow_html=True)
+
     selected_chip = st.selectbox("Quick prompts", [""] + chips, key="chat_chip", label_visibility="collapsed")
+    user_text = st.text_input("Message", placeholder=t["chat_placeholder"], key="chat_input", label_visibility="collapsed")
 
-    col1, col2 = st.columns([4,1])
-    user_text = col1.text_input("Message", placeholder=t["chat_placeholder"], key="chat_input", label_visibility="collapsed")
-
-    if col2.button("Send", use_container_width=True):
+    if st.button("Send message", key="chat_send", use_container_width=True):
         final_text = selected_chip if selected_chip else user_text
         if final_text.strip():
             st.session_state.messages.append({"role": "user", "content": final_text.strip()})
@@ -567,7 +575,10 @@ def run_tests():
 
 
 def main():
-    css()
+    if "theme" not in st.session_state:
+        st.session_state.theme = "Light"
+    st.session_state.theme = st.selectbox("Theme", ["Light", "Dark"], index=["Light", "Dark"].index(st.session_state.theme))
+    css(st.session_state.theme)
     if "lang" not in st.session_state:
         st.session_state.lang = "English"
     if "messages" not in st.session_state:
