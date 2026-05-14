@@ -166,20 +166,10 @@ def css(theme="Light"):
         .eyebrow {{ color:#f97316; font-weight:900; letter-spacing:0.04em; }}
         .tag {{ display:inline-block; background:#f97316; color:white; border-radius:999px; padding:0.25rem 0.7rem; font-size:0.75rem; font-weight:900; }}
         .soft-box {{ background:{soft}; border-radius:18px; padding:0.75rem; margin-top:0.7rem; }}
-        .chat-launcher {{ position:fixed; right:22px; bottom:22px; width:62px; height:62px; border-radius:50%; background:linear-gradient(135deg,#f97316,#fbbf24); color:white; display:flex; align-items:center; justify-content:center; font-size:1.8rem; box-shadow:0 20px 50px rgba(249,115,22,0.35); z-index:99998; border:4px solid {card}; pointer-events:none; }}
-        .chat-widget {{ position:fixed; bottom:92px; right:22px; width:340px; max-height:76vh; z-index:99999; background:{card}; border:1px solid {border}; border-radius:24px; box-shadow:0 24px 80px rgba(249,115,22,0.24); overflow:hidden; }}
-        .chat-header {{ background:linear-gradient(135deg,#f97316,#fbbf24); color:white; padding:0.85rem 1rem; display:flex; align-items:center; gap:0.7rem; }}
-        .bot-avatar {{ width:40px; height:40px; border-radius:15px; background:rgba(255,255,255,0.22); border:1px solid rgba(255,255,255,0.45); display:flex; align-items:center; justify-content:center; font-size:1.2rem; }}
-        .bot-title {{ font-weight:950; font-size:0.95rem; line-height:1.1; }}
-        .bot-status {{ display:flex; align-items:center; gap:0.4rem; font-size:0.72rem; font-weight:650; opacity:0.95; margin-top:0.18rem; }}
-        .status-dot {{ width:8px; height:8px; background:#22c55e; border-radius:50%; box-shadow:0 0 0 3px rgba(34,197,94,0.25); display:inline-block; }}
-        .chat-body {{ padding:0.85rem; max-height:310px; overflow-y:auto; background:{soft}; }}
-        .chat-input-area {{ padding:0.75rem; border-top:1px solid {border}; background:{card}; }}
-        .chat-msg-user {{ background:#f97316; color:white; padding:0.68rem 0.85rem; border-radius:16px 16px 4px 16px; margin:0.55rem 0 0.55rem 2.4rem; box-shadow:0 10px 22px rgba(249,115,22,0.18); font-size:0.86rem; }}
-        .chat-msg-bot {{ background:{card}; color:{text}; border:1px solid {border}; padding:0.68rem 0.85rem; border-radius:16px 16px 16px 4px; margin:0.55rem 2.4rem 0.55rem 0; white-space:pre-wrap; box-shadow:0 8px 22px rgba(15,23,42,0.06); font-size:0.86rem; }}
-        .chat-chip-row {{ display:flex; gap:0.35rem; flex-wrap:wrap; margin-bottom:0.55rem; }}
-        .chat-chip {{ border:1px solid #fed7aa; background:{soft}; color:#f97316; border-radius:999px; padding:0.25rem 0.55rem; font-size:0.68rem; font-weight:800; }}
-        .chat-mini-label {{ color:{muted}; font-size:0.7rem; font-weight:800; margin-bottom:0.25rem; }}
+        .chat-help { color:{muted}; font-size:0.82rem; line-height:1.5; margin-bottom:0.8rem; }
+        .chat-msg-user { background:#f97316; color:white; padding:0.72rem 0.9rem; border-radius:16px 16px 4px 16px; margin:0.55rem 0 0.55rem 2rem; box-shadow:0 10px 22px rgba(249,115,22,0.18); font-size:0.9rem; }
+        .chat-msg-bot { background:{soft}; color:{text}; border:1px solid {border}; padding:0.72rem 0.9rem; border-radius:16px 16px 16px 4px; margin:0.55rem 2rem 0.55rem 0; white-space:pre-wrap; box-shadow:0 8px 22px rgba(15,23,42,0.06); font-size:0.9rem; }
+        div[data-testid="stPopover"] button { background:linear-gradient(135deg,#f97316,#fbbf24) !important; color:white !important; border-radius:999px !important; border:0 !important; font-weight:900 !important; box-shadow:0 15px 45px rgba(249,115,22,0.28) !important; }; font-size:0.7rem; font-weight:800; margin-bottom:0.25rem; }}
         footer {{ text-align:center; color:{muted}; border-top:1px solid {border}; padding:2rem 0; margin-top:2rem; }}
         @media (max-width:700px) {{ .chat-launcher {{ right:16px; bottom:16px; width:58px; height:58px; }} .chat-widget {{ left:12px; right:12px; bottom:84px; width:auto; max-height:76vh; }} .chat-body {{ max-height:290px; }} }}
         </style>
@@ -507,55 +497,38 @@ def render_support(t):
 
 
 def render_chat(lang, t):
-    if "chat_open" not in st.session_state:
-        st.session_state.chat_open = False
+    st.markdown("---")
+    spacer, chat_col = st.columns([4, 1])
+    with chat_col:
+        with st.popover("💬 AI Chatbot", use_container_width=True):
+            st.markdown("### 🤖 INVESMATE AI Advisor")
+            st.markdown("<div class='chat-help'>Ask about course selection, price, support, refund, language, or INSIGNIA comparison.</div>", unsafe_allow_html=True)
 
-    # Compact floating launcher control
-    _, launch_col = st.columns([12, 1])
-    with launch_col:
-        if st.button("💬", key="chat_launcher", use_container_width=True):
-            st.session_state.chat_open = not st.session_state.chat_open
-            st.rerun()
-    st.markdown("<div class='chat-launcher'>💬</div>", unsafe_allow_html=True)
+            for message in st.session_state.messages[-8:]:
+                css_class = "chat-msg-user" if message["role"] == "user" else "chat-msg-bot"
+                safe_content = str(message["content"]).replace("<", "&lt;").replace(">", "&gt;")
+                st.markdown(f"<div class='{css_class}'>{safe_content}</div>", unsafe_allow_html=True)
 
-    if not st.session_state.chat_open:
-        return
+            chips = ["Hi, guide me", "Predict my course", "Compare INSIGNIA", "Options course", "Price and EMI", "Need support"]
+            selected_chip = st.selectbox("Quick question", [""] + chips, key="chat_chip")
+            user_text = st.text_input("Type your message", placeholder=t["chat_placeholder"], key="chat_input")
 
-    st.markdown("<div class='chat-widget'>", unsafe_allow_html=True)
-    st.markdown("""
-    <div class='chat-header'>
-      <div class='bot-avatar'>🤖</div>
-      <div>
-        <div class='bot-title'>INVESMATE AI Chatbot</div>
-        <div class='bot-status'><span class='status-dot'></span> Online • Course advisor</div>
-      </div>
-    </div>
-    """, unsafe_allow_html=True)
-    st.markdown("<div class='chat-body'>", unsafe_allow_html=True)
+            col_a, col_b = st.columns([1, 1])
+            with col_a:
+                send_clicked = st.button("Send", key="chat_send", use_container_width=True)
+            with col_b:
+                clear_clicked = st.button("Clear", key="chat_clear", use_container_width=True)
 
-    for message in st.session_state.messages[-6:]:
-        css_class = "chat-msg-user" if message["role"] == "user" else "chat-msg-bot"
-        safe_content = str(message["content"]).replace("<", "&lt;").replace(">", "&gt;")
-        st.markdown(f"<div class='{css_class}'>{safe_content}</div>", unsafe_allow_html=True)
+            if clear_clicked:
+                st.session_state.messages = [{"role": "assistant", "content": COPY["English"].get("chat_hello", COPY["English"]["chatHello"])}]
+                st.rerun()
 
-    st.markdown("</div>", unsafe_allow_html=True)
-    st.markdown("<div class='chat-input-area'>", unsafe_allow_html=True)
-
-    chips = ["Hi, guide me", "Predict my course", "Compare INSIGNIA", "Price and EMI", "Need support"]
-    st.markdown("<div class='chat-mini-label'>Quick questions</div>", unsafe_allow_html=True)
-    st.markdown("<div class='chat-chip-row'>" + "".join([f"<span class='chat-chip'>{chip}</span>" for chip in chips[:3]]) + "</div>", unsafe_allow_html=True)
-
-    selected_chip = st.selectbox("Quick prompts", [""] + chips, key="chat_chip", label_visibility="collapsed")
-    user_text = st.text_input("Message", placeholder=t["chat_placeholder"], key="chat_input", label_visibility="collapsed")
-
-    if st.button("Send message", key="chat_send", use_container_width=True):
-        final_text = selected_chip if selected_chip else user_text
-        if final_text.strip():
-            st.session_state.messages.append({"role": "user", "content": final_text.strip()})
-            st.session_state.messages.append({"role": "assistant", "content": bot_reply(final_text.strip(), lang)})
-            st.rerun()
-
-    st.markdown("</div></div>", unsafe_allow_html=True)
+            if send_clicked:
+                final_text = selected_chip if selected_chip else user_text
+                if final_text.strip():
+                    st.session_state.messages.append({"role": "user", "content": final_text.strip()})
+                    st.session_state.messages.append({"role": "assistant", "content": bot_reply(final_text.strip(), lang)})
+                    st.rerun()
 
 
 def run_tests():
