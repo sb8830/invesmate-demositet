@@ -419,8 +419,8 @@ def render_hero(t, tests_passed):
                 <div class="hero-card">
                     <span class="tag">Premium Learning Path</span>
                     <h3>Find the right course in minutes</h3>
-                    <p>Use the AI advisor and course predictor to choose between beginner, trading, investing, derivatives, mutual fund, commodity, and INSIGNIA mentorship plans.</p>
-                    <div class="soft-box"><b>Personalized</b><br><small>Course prediction by goal, budget, and experience</small></div>
+                    <p>Use the AI advisor to choose between beginner, trading, investing, derivatives, mutual fund, commodity, and INSIGNIA mentorship plans.</p>
+                    <div class="soft-box"><b>Personalized</b><br><small>Course prediction is available inside the AI chatbot</small></div>
                     <div class="soft-box"><b>Multilingual</b><br><small>English, Bengali, Hindi, and Auto Detect support</small></div>
                 </div>
             </div>
@@ -431,20 +431,8 @@ def render_hero(t, tests_passed):
 
 
 def render_predictor(t, lang):
-    st.markdown(f"<div class='section-head'><div><div class='eyebrow'>Smart Recommendation</div><h2 class='section-title'>{t['predictor_title']}</h2><div class='section-sub'>{t['predictor_text']}</div></div></div>", unsafe_allow_html=True)
-
-    with st.container(border=True):
-        col1, col2, col3, col4 = st.columns([2.2, 1.1, 1.1, 1])
-        goal = col1.selectbox("Learning Goal", ["Beginner stock market learning", "Intraday and swing trading", "Options and derivatives trading", "Long-term investing and fundamentals", "Mutual fund and SIP", "Commodity and global market"])
-        experience = col2.selectbox("Experience", ["Beginner", "Intermediate", "Advanced"])
-        budget = col3.selectbox("Budget", ["Budget", "Premium"])
-
-        if col4.button(t["predict"], use_container_width=True):
-            product = predict_course(goal, experience, budget)
-            st.success(f"Recommended: {product['title']}")
-            st.info(product['description'])
-            st.session_state.messages.append({"role": "user", "content": f"Predict: {goal}"})
-            st.session_state.messages.append({"role": "assistant", "content": bot_reply(goal, lang)})
+    """Course prediction is handled inside the chatbot."""
+    return None
 
 
 def render_products(t):
@@ -512,11 +500,7 @@ def render_support(t):
 
 
 def render_chat(lang, t):
-    """Bottom-right chatbot launcher.
-
-    This intentionally avoids placing the chatbot inside page columns. The popover
-    button is fixed to the bottom-right by CSS and opens a compact chat panel.
-    """
+    """Bottom-right chatbot launcher with built-in course predictor."""
     with st.popover("Chat", use_container_width=False):
         st.markdown(
             """
@@ -530,48 +514,89 @@ def render_chat(lang, t):
                         </div>
                     </div>
                 </div>
-                <div class="chat-pro-subtitle">Ask about courses, INSIGNIA plans, pricing, support, refund, or enrollment.</div>
+                <div class="chat-pro-subtitle">Ask questions or use the built-in course predictor below.</div>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-        st.markdown("<div class='chat-pro-body'>", unsafe_allow_html=True)
-        for message in st.session_state.messages[-8:]:
-            css_class = "chat-msg-user" if message["role"] == "user" else "chat-msg-bot"
-            safe_content = str(message["content"]).replace("<", "&lt;").replace(">", "&gt;")
-            st.markdown(f"<div class='{css_class}'>{safe_content}</div>", unsafe_allow_html=True)
-        st.markdown("</div>", unsafe_allow_html=True)
+        tab_chat, tab_predict = st.tabs(["Chat", "Predict"])
 
-        quick_1, quick_2 = st.columns(2)
-        if quick_1.button("Predict course", key="chat_quick_predict", use_container_width=True):
-            prompt = "Predict my course"
-            st.session_state.messages.append({"role": "user", "content": prompt})
-            st.session_state.messages.append({"role": "assistant", "content": bot_reply(prompt, lang)})
-            st.rerun()
-        if quick_2.button("Need support", key="chat_quick_support", use_container_width=True):
-            prompt = "Need support"
-            st.session_state.messages.append({"role": "user", "content": prompt})
-            st.session_state.messages.append({"role": "assistant", "content": bot_reply(prompt, lang)})
-            st.rerun()
+        with tab_chat:
+            st.markdown("<div class='chat-pro-body'>", unsafe_allow_html=True)
+            for message in st.session_state.messages[-8:]:
+                css_class = "chat-msg-user" if message["role"] == "user" else "chat-msg-bot"
+                safe_content = str(message["content"]).replace("<", "&lt;").replace(">", "&gt;")
+                st.markdown(f"<div class='{css_class}'>{safe_content}</div>", unsafe_allow_html=True)
+            st.markdown("</div>", unsafe_allow_html=True)
 
-        user_text = st.text_input(
-            "Message",
-            placeholder=t["chat_placeholder"],
-            key="chat_message_input",
-            label_visibility="collapsed",
-        )
-
-        send_col, clear_col = st.columns([2, 1])
-        if send_col.button("Send", key="chat_send_message", use_container_width=True):
-            if user_text.strip():
-                st.session_state.messages.append({"role": "user", "content": user_text.strip()})
-                st.session_state.messages.append({"role": "assistant", "content": bot_reply(user_text.strip(), lang)})
+            quick_1, quick_2 = st.columns(2)
+            if quick_1.button("Compare plans", key="chat_quick_compare", use_container_width=True):
+                prompt = "Compare INSIGNIA"
+                st.session_state.messages.append({"role": "user", "content": prompt})
+                st.session_state.messages.append({"role": "assistant", "content": bot_reply(prompt, lang)})
+                st.rerun()
+            if quick_2.button("Need support", key="chat_quick_support", use_container_width=True):
+                prompt = "Need support"
+                st.session_state.messages.append({"role": "user", "content": prompt})
+                st.session_state.messages.append({"role": "assistant", "content": bot_reply(prompt, lang)})
                 st.rerun()
 
-        if clear_col.button("Clear", key="chat_clear_messages", use_container_width=True):
-            st.session_state.messages = [{"role": "assistant", "content": COPY["English"]["chat_hello"]}]
-            st.rerun()
+            user_text = st.text_input(
+                "Message",
+                placeholder=t["chat_placeholder"],
+                key="chat_message_input",
+                label_visibility="collapsed",
+            )
+
+            send_col, clear_col = st.columns([2, 1])
+            if send_col.button("Send", key="chat_send_message", use_container_width=True):
+                if user_text.strip():
+                    st.session_state.messages.append({"role": "user", "content": user_text.strip()})
+                    st.session_state.messages.append({"role": "assistant", "content": bot_reply(user_text.strip(), lang)})
+                    st.rerun()
+
+            if clear_col.button("Clear", key="chat_clear_messages", use_container_width=True):
+                st.session_state.messages = [{"role": "assistant", "content": COPY["English"]["chat_hello"]}]
+                st.rerun()
+
+        with tab_predict:
+            st.caption("Select your details and the AI advisor will recommend a course inside the chat.")
+            goal = st.selectbox(
+                "Learning goal",
+                [
+                    "Beginner stock market learning",
+                    "Intraday and swing trading",
+                    "Options and derivatives trading",
+                    "Long-term investing and fundamentals",
+                    "Mutual fund and SIP",
+                    "Commodity and global market",
+                ],
+                key="chat_predict_goal",
+            )
+            experience = st.selectbox(
+                "Experience",
+                ["Beginner", "Intermediate", "Advanced"],
+                key="chat_predict_experience",
+            )
+            budget = st.selectbox(
+                "Budget",
+                ["Budget", "Premium"],
+                key="chat_predict_budget",
+            )
+
+            if st.button("Predict my course", key="chat_predict_button", use_container_width=True):
+                product = predict_course(goal, experience, budget)
+                prompt = f"Predict my course: {goal}, {experience}, {budget}"
+                result = answer(
+                    "AI course prediction result",
+                    format_product(product),
+                    reason="This recommendation is based on your selected learning goal, experience level, and budget preference.",
+                    next_step="Ask the advisor for price, enrollment process, EMI option, or comparison before purchasing.",
+                )
+                st.session_state.messages.append({"role": "user", "content": prompt})
+                st.session_state.messages.append({"role": "assistant", "content": with_language(result, lang, prompt)})
+                st.rerun()
 
 
 def run_tests():
@@ -615,7 +640,6 @@ def main():
 
     render_header(t)
     render_hero(t, run_tests())
-    render_predictor(t, st.session_state.lang)
     render_products(t)
     render_insignia(t)
     render_mentors()
