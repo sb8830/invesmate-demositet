@@ -193,17 +193,17 @@ def css(theme="Light"):
         .chat-pro-avatar {{ width:44px; height:44px; border-radius:16px; background:rgba(255,255,255,.22); border:1px solid rgba(255,255,255,.45); display:flex; align-items:center; justify-content:center; font-weight:950; }}
         .chat-pro-title {{ font-weight:950; font-size:1rem; line-height:1.1; }}
         .chat-pro-status {{ font-size:.72rem; font-weight:750; opacity:.95; margin-top:.18rem; }}
-        .chat-pro-body {{ max-height:360px; overflow-y:auto; padding:.85rem; background:{surface_2}; border-radius:18px; margin:.6rem 0; }}
+        .chat-pro-body {{ max-height:240px; overflow-y:auto; padding:.7rem; background:{surface_2}; border-radius:16px; margin:.45rem 0; }}
         .chat-help {{ color:{muted}; font-size:.82rem; line-height:1.5; margin:.7rem 0; }}
-        .chat-msg-user {{ background:#f97316; color:white; padding:.72rem .9rem; border-radius:16px 16px 4px 16px; margin:.55rem 0 .55rem 2rem; box-shadow:0 10px 22px rgba(249,115,22,.18); font-size:.9rem; line-height:1.45; }}
-        .chat-msg-bot {{ background:{surface}; color:{text}; border:1px solid {border}; padding:.72rem .9rem; border-radius:16px 16px 16px 4px; margin:.55rem 2rem .55rem 0; white-space:pre-wrap; box-shadow:0 8px 22px rgba(15,23,42,.06); font-size:.9rem; line-height:1.45; }}
+        .chat-msg-user {{ background:#f97316; color:white; padding:.58rem .72rem; border-radius:14px 14px 4px 14px; margin:.4rem 0 .4rem 2rem; box-shadow:0 8px 18px rgba(249,115,22,.16); font-size:.82rem; line-height:1.4; }}
+        .chat-msg-bot {{ background:{surface}; color:{text}; border:1px solid {border}; padding:.58rem .72rem; border-radius:14px 14px 14px 4px; margin:.4rem 2rem .4rem 0; white-space:pre-wrap; box-shadow:0 6px 16px rgba(15,23,42,.05); font-size:.82rem; line-height:1.4; }}
         div[data-testid="stPopover"] {{ position:fixed !important; right:26px !important; bottom:26px !important; z-index:999999 !important; width:64px !important; }}
         div[data-testid="stPopover"] button {{ width:64px !important; height:64px !important; min-height:64px !important; padding:0 !important; background:linear-gradient(135deg,#f97316,#fbbf24) !important; color:white !important; border-radius:999px !important; border:4px solid {surface} !important; font-size:0 !important; box-shadow:0 18px 55px rgba(249,115,22,.35) !important; }}
         div[data-testid="stPopover"] button:before {{ content:'💬'; font-size:28px; line-height:1; }}
-        div[data-testid="stPopover"] div[data-baseweb="popover"] {{ width:380px !important; max-width:calc(100vw - 32px) !important; }}
+        div[data-testid="stPopover"] div[data-baseweb="popover"] {{ width:320px !important; max-width:320px !important; min-width:320px !important; border-radius:22px !important; overflow:hidden !important; }}
         .chat-pro-shell {{ width:100%; max-width:360px; }}
-        .chat-pro-subtitle {{ font-size:.78rem; color:{muted}; margin:.7rem 0 .8rem; line-height:1.45; }}
-        @media (max-width:700px) {{ div[data-testid="stPopover"] {{ left:14px !important; right:14px !important; bottom:14px !important; }} .chat-pro-body {{ max-height:300px; }} }}
+        .chat-pro-subtitle {{ font-size:.74rem; color:{muted}; margin:.45rem 0 .6rem; line-height:1.4; }}
+        @media (max-width:700px) {{ div[data-testid="stPopover"] {{ right:14px !important; bottom:14px !important; left:auto !important; }} div[data-testid="stPopover"] div[data-baseweb="popover"] {{ width:290px !important; min-width:290px !important; max-width:290px !important; }} .chat-pro-body {{ max-height:220px; }} }}
         </style>
         """,
         unsafe_allow_html=True,
