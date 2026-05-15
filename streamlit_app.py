@@ -197,8 +197,12 @@ def css(theme="Light"):
         .chat-help {{ color:{muted}; font-size:.82rem; line-height:1.5; margin:.7rem 0; }}
         .chat-msg-user {{ background:#f97316; color:white; padding:.72rem .9rem; border-radius:16px 16px 4px 16px; margin:.55rem 0 .55rem 2rem; box-shadow:0 10px 22px rgba(249,115,22,.18); font-size:.9rem; line-height:1.45; }}
         .chat-msg-bot {{ background:{surface}; color:{text}; border:1px solid {border}; padding:.72rem .9rem; border-radius:16px 16px 16px 4px; margin:.55rem 2rem .55rem 0; white-space:pre-wrap; box-shadow:0 8px 22px rgba(15,23,42,.06); font-size:.9rem; line-height:1.45; }}
-        div[data-testid="stPopover"] button {{ background:linear-gradient(135deg,#f97316,#fbbf24) !important; color:white !important; border-radius:999px !important; border:0 !important; font-weight:950 !important; box-shadow:0 15px 45px rgba(249,115,22,.28) !important; }}
-        div[data-testid="stPopover"] {{ position:fixed !important; right:24px !important; bottom:24px !important; z-index:99999 !important; }}
+        div[data-testid="stPopover"] {{ position:fixed !important; right:26px !important; bottom:26px !important; z-index:999999 !important; width:64px !important; }}
+        div[data-testid="stPopover"] button {{ width:64px !important; height:64px !important; min-height:64px !important; padding:0 !important; background:linear-gradient(135deg,#f97316,#fbbf24) !important; color:white !important; border-radius:999px !important; border:4px solid {surface} !important; font-size:0 !important; box-shadow:0 18px 55px rgba(249,115,22,.35) !important; }}
+        div[data-testid="stPopover"] button:before {{ content:'💬'; font-size:28px; line-height:1; }}
+        div[data-testid="stPopover"] div[data-baseweb="popover"] {{ width:380px !important; max-width:calc(100vw - 32px) !important; }}
+        .chat-pro-shell {{ width:100%; max-width:360px; }}
+        .chat-pro-subtitle {{ font-size:.78rem; color:{muted}; margin:.7rem 0 .8rem; line-height:1.45; }}
         @media (max-width:700px) {{ div[data-testid="stPopover"] {{ left:14px !important; right:14px !important; bottom:14px !important; }} .chat-pro-body {{ max-height:300px; }} }}
         </style>
         """,
@@ -508,65 +512,66 @@ def render_support(t):
 
 
 def render_chat(lang, t):
-    """Professional Streamlit-native chatbot.
+    """Bottom-right chatbot launcher.
 
-    Streamlit widgets cannot reliably live inside arbitrary fixed HTML wrappers.
-    This uses a styled popover so it works on Streamlit Cloud and behaves like a
-    normal website chatbot: a compact button opens a clean assistant panel.
+    This intentionally avoids placing the chatbot inside page columns. The popover
+    button is fixed to the bottom-right by CSS and opens a compact chat panel.
     """
-    _, chat_col = st.columns([5, 1])
-
-    with chat_col:
-        with st.popover("AI Chatbot", use_container_width=True):
-            st.markdown(
-                """
+    with st.popover("Chat", use_container_width=False):
+        st.markdown(
+            """
+            <div class="chat-pro-shell">
                 <div class="chat-pro-card">
                     <div class="chat-pro-header">
                         <div class="chat-pro-avatar">AI</div>
                         <div>
                             <div class="chat-pro-title">INVESMATE AI Advisor</div>
-                            <div class="chat-pro-status">Online - course guidance, pricing and support</div>
+                            <div class="chat-pro-status">Online - course guidance</div>
                         </div>
                     </div>
                 </div>
-                """,
-                unsafe_allow_html=True,
-            )
+                <div class="chat-pro-subtitle">Ask about courses, INSIGNIA plans, pricing, support, refund, or enrollment.</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-            st.markdown(
-                "<div class='chat-help'>Ask about courses, INSIGNIA plans, pricing, refund, support, enrollment, or language preference.</div>",
-                unsafe_allow_html=True,
-            )
+        st.markdown("<div class='chat-pro-body'>", unsafe_allow_html=True)
+        for message in st.session_state.messages[-8:]:
+            css_class = "chat-msg-user" if message["role"] == "user" else "chat-msg-bot"
+            safe_content = str(message["content"]).replace("<", "&lt;").replace(">", "&gt;")
+            st.markdown(f"<div class='{css_class}'>{safe_content}</div>", unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
-            st.markdown("<div class='chat-pro-body'>", unsafe_allow_html=True)
-            for message in st.session_state.messages[-8:]:
-                css_class = "chat-msg-user" if message["role"] == "user" else "chat-msg-bot"
-                safe_content = str(message["content"]).replace("<", "&lt;").replace(">", "&gt;")
-                st.markdown(f"<div class='{css_class}'>{safe_content}</div>", unsafe_allow_html=True)
-            st.markdown("</div>", unsafe_allow_html=True)
+        quick_1, quick_2 = st.columns(2)
+        if quick_1.button("Predict course", key="chat_quick_predict", use_container_width=True):
+            prompt = "Predict my course"
+            st.session_state.messages.append({"role": "user", "content": prompt})
+            st.session_state.messages.append({"role": "assistant", "content": bot_reply(prompt, lang)})
+            st.rerun()
+        if quick_2.button("Need support", key="chat_quick_support", use_container_width=True):
+            prompt = "Need support"
+            st.session_state.messages.append({"role": "user", "content": prompt})
+            st.session_state.messages.append({"role": "assistant", "content": bot_reply(prompt, lang)})
+            st.rerun()
 
-            selected_prompt = st.selectbox(
-                "Quick prompts",
-                ["", "Predict my course", "Compare INSIGNIA", "Price and EMI", "Need support"],
-                key="chat_quick_prompt",
-            )
-            user_text = st.text_input(
-                "Message",
-                placeholder=t["chat_placeholder"],
-                key="chat_message_input",
-            )
+        user_text = st.text_input(
+            "Message",
+            placeholder=t["chat_placeholder"],
+            key="chat_message_input",
+            label_visibility="collapsed",
+        )
 
-            send_col, clear_col = st.columns([2, 1])
-            if send_col.button("Send message", key="chat_send_message", use_container_width=True):
-                final_text = selected_prompt if selected_prompt else user_text
-                if final_text.strip():
-                    st.session_state.messages.append({"role": "user", "content": final_text.strip()})
-                    st.session_state.messages.append({"role": "assistant", "content": bot_reply(final_text.strip(), lang)})
-                    st.rerun()
-
-            if clear_col.button("Clear", key="chat_clear_messages", use_container_width=True):
-                st.session_state.messages = [{"role": "assistant", "content": COPY["English"]["chat_hello"]}]
+        send_col, clear_col = st.columns([2, 1])
+        if send_col.button("Send", key="chat_send_message", use_container_width=True):
+            if user_text.strip():
+                st.session_state.messages.append({"role": "user", "content": user_text.strip()})
+                st.session_state.messages.append({"role": "assistant", "content": bot_reply(user_text.strip(), lang)})
                 st.rerun()
+
+        if clear_col.button("Clear", key="chat_clear_messages", use_container_width=True):
+            st.session_state.messages = [{"role": "assistant", "content": COPY["English"]["chat_hello"]}]
+            st.rerun()
 
 
 def run_tests():
