@@ -1,660 +1,596 @@
-import streamlit as st
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>INVESMATE – Stock Market Learning Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface2: #f5f3ee;
+    --surface3: #ede9e0;
+    --text: #1a1208;
+    --text2: #6b6150;
+    --text3: #a09880;
+    --accent: #d4601a;
+    --accent2: #f08d3c;
+    --accent3: #fbbf24;
+    --border: #e6e0d4;
+    --border2: #d4ccbe;
+    --shadow: 0 4px 24px rgba(26,18,8,0.08);
+    --shadow2: 0 16px 48px rgba(26,18,8,0.12);
+    --radius: 20px;
+    --radius2: 12px;
+    --radius3: 999px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
 
-st.set_page_config(
-    page_title="INVESMATE Demo Website",
-    page_icon="📈",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
+  /* NAV */
+  nav { position: sticky; top: 0; z-index: 100; background: rgba(250,250,248,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 68px; }
+  .nav-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+  .nav-logo { width: 42px; height: 42px; border-radius: 14px; background: linear-gradient(135deg, var(--accent), var(--accent3)); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; color: #fff; box-shadow: 0 6px 20px rgba(212,96,26,0.3); }
+  .nav-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.15rem; color: var(--text); }
+  .nav-tagline { font-size: 0.7rem; color: var(--accent); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+  .nav-links { display: flex; align-items: center; gap: 2rem; }
+  .nav-links a { color: var(--text2); font-weight: 500; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta { background: var(--text) !important; color: #fff !important; padding: 0.55rem 1.2rem !important; border-radius: var(--radius3) !important; font-weight: 600 !important; font-size: 0.85rem !important; }
+  .nav-cta:hover { background: var(--accent) !important; color: #fff !important; }
 
-LANGUAGES = ["Auto", "English", "Bengali", "Hindi", "Spanish", "French", "Arabic"]
+  /* HERO */
+  .hero-section { padding: 5rem 2rem 4rem; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 420px; gap: 3rem; align-items: center; animation: fadeUp 0.8s ease both; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius3); padding: 0.35rem 0.9rem; font-size: 0.75rem; font-weight: 600; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1.2rem; }
+  .hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(2.8rem, 5.5vw, 5rem); font-weight: 800; line-height: 0.95; letter-spacing: -0.05em; color: var(--text); margin-bottom: 1.25rem; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero-sub { font-size: 1.05rem; color: var(--text2); line-height: 1.75; max-width: 540px; margin-bottom: 2rem; }
+  .hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .btn-primary { background: var(--accent); color: #fff; padding: 0.85rem 1.6rem; border-radius: var(--radius3); font-weight: 600; font-size: 0.95rem; border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; box-shadow: 0 8px 24px rgba(212,96,26,0.28); transition: transform 0.2s, box-shadow 0.2s; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(212,96,26,0.36); }
+  .btn-outline { background: transparent; color: var(--text); padding: 0.85rem 1.6rem; border-radius: var(--radius3); font-weight: 600; font-size: 0.95rem; border: 1.5px solid var(--border2); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; transition: border-color 0.2s, background 0.2s; }
+  .btn-outline:hover { border-color: var(--accent); background: var(--surface2); }
+  .hero-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; box-shadow: var(--shadow2); animation: fadeUp 0.9s ease 0.1s both; }
+  .hero-card-label { display: inline-block; background: var(--accent); color: #fff; border-radius: var(--radius3); padding: 0.25rem 0.75rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 1rem; }
+  .hero-card h3 { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .hero-card p { color: var(--text2); font-size: 0.88rem; margin-bottom: 1.25rem; }
+  .info-row { background: var(--surface2); border-radius: var(--radius2); padding: 0.85rem 1rem; margin-bottom: 0.6rem; border: 1px solid var(--border); }
+  .info-row strong { display: block; font-size: 0.88rem; color: var(--text); margin-bottom: 0.2rem; }
+  .info-row small { color: var(--text2); font-size: 0.8rem; }
 
-COPY = {
-    "English": {
-        "hero_title": "Finest Stock Market Learning Experience",
-        "hero_text": "A professional white-mode demo website for INVESMATE and INSIGNIA with product catalog, multilingual AI guidance, course prediction, and support routing.",
-        "catalog_title": "INVESMATE + INSIGNIA Product Catalog",
-        "predictor_title": "AI Course Predictor",
-        "predictor_text": "Select your goal, experience, and budget to predict the best course.",
-        "support_title": "Talk to the team before you enroll",
-        "chat_placeholder": "Ask: predict my course, options, compare, price, support...",
-        "chat_hello": "Hi, I am your INVESMATE AI advisor. Ask me about products, pricing, language offers, prediction, support, purchase, refund, or enrollment.",
-        "chatHello": "Hi, I am your INVESMATE AI advisor. Ask me about products, pricing, language offers, prediction, support, purchase, refund, or enrollment.",
-        "products": "Products",
-        "insignia": "INSIGNIA",
-        "mentors": "Mentors",
-        "support": "Support",
-        "explore": "Explore Courses",
-        "talk": "Talk To Advisor",
-        "predict": "Predict",
-        "allProducts": "ALL PRODUCTS",
-        "catalogTitle": "Complete Product Ecosystem",
-        "search": "Search courses and mentorship plans",
-        "askAi": "Ask AI"
-    },
-    "Bengali": {
-        "hero_title": "সেরা স্টক মার্কেট লার্নিং এক্সপেরিয়েন্স",
-        "hero_text": "INVESMATE ও INSIGNIA-এর জন্য প্রফেশনাল ডেমো ওয়েবসাইট, যেখানে প্রোডাক্ট ক্যাটালগ, AI গাইড, prediction এবং support routing আছে।",
-        "catalog_title": "INVESMATE + INSIGNIA প্রোডাক্ট ক্যাটালগ",
-        "predictor_title": "AI কোর্স প্রেডিক্টর",
-        "predictor_text": "আপনার লক্ষ্য, অভিজ্ঞতা ও বাজেট বেছে নিয়ে সেরা কোর্স prediction পান।",
-        "support_title": "এনরোল করার আগে টিমের সাথে কথা বলুন",
-        "chat_placeholder": "জিজ্ঞাসা করুন: predict, options, compare, price...",
-        "chat_hello": "নমস্কার, আমি INVESMATE AI অ্যাডভাইজার। প্রোডাক্ট, দাম, prediction, support বা enrollment সম্পর্কে জিজ্ঞাসা করুন।",
-        "chatHello": "নমস্কার, আমি INVESMATE AI অ্যাডভাইজার। প্রোডাক্ট, দাম, prediction, support বা enrollment সম্পর্কে জিজ্ঞাসা করুন।",
-        "products": "প্রোডাক্ট",
-        "insignia": "ইনসিগনিয়া",
-        "mentors": "মেন্টর",
-        "support": "সাপোর্ট",
-        "explore": "কোর্স দেখুন",
-        "talk": "অ্যাডভাইজারের সাথে কথা বলুন",
-        "predict": "প্রেডিক্ট করুন",
-        "allProducts": "সমস্ত প্রোডাক্ট",
-        "catalogTitle": "সম্পূর্ণ প্রোডাক্ট ইকোসিস্টেম",
-        "search": "কোর্স ও mentorship খুঁজুন",
-        "askAi": "AI কে জিজ্ঞাসা করুন"
-    },
-    "Hindi": {
-        "hero_title": "बेहतरीन स्टॉक मार्केट लर्निंग एक्सपीरियंस",
-        "hero_text": "INVESMATE और INSIGNIA के लिए professional demo website, जिसमें product catalog, AI guide, prediction और support routing शामिल है।",
-        "catalog_title": "INVESMATE + INSIGNIA प्रोडक्ट कैटलॉग",
-        "predictor_title": "AI कोर्स प्रेडिक्टर",
-        "predictor_text": "अपना goal, experience और budget चुनकर best course prediction पाएं।",
-        "support_title": "एनरोल करने से पहले टीम से बात करें",
-        "chat_placeholder": "पूछें: predict, options, compare, price...",
-        "chat_hello": "नमस्ते, मैं INVESMATE AI advisor हूं। Product, price, prediction, support या enrollment के बारे में पूछें।",
-        "chatHello": "नमस्ते, मैं INVESMATE AI advisor हूं। Product, price, prediction, support या enrollment के बारे में पूछें।",
-        "products": "प्रोडक्ट",
-        "insignia": "इंसिग्निया",
-        "mentors": "मेंटर्स",
-        "support": "सपोर्ट",
-        "explore": "कोर्स देखें",
-        "talk": "एडवाइजर से बात करें",
-        "predict": "प्रेडिक्ट करें",
-        "allProducts": "सभी प्रोडक्ट",
-        "catalogTitle": "पूरा प्रोडक्ट इकोसिस्टम",
-        "search": "कोर्स और mentorship खोजें",
-        "askAi": "AI से पूछें"
-    },
+  /* STATS */
+  .stats-strip { background: var(--text); color: #fff; padding: 2rem; display: flex; justify-content: center; }
+  .stat-item { flex: 1; max-width: 220px; text-align: center; padding: 0 2rem; border-right: 1px solid rgba(255,255,255,0.12); }
+  .stat-item:last-child { border-right: none; }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--accent2); }
+  .stat-label { font-size: 0.82rem; color: rgba(255,255,255,0.6); margin-top: 0.2rem; }
+
+  /* SECTION */
+  .section { padding: 4rem 2rem; max-width: 1200px; margin: 0 auto; }
+  .section-eyebrow { font-size: 0.72rem; font-weight: 700; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .section-title { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 800; letter-spacing: -0.04em; color: var(--text); margin-bottom: 0.5rem; }
+  .section-sub { color: var(--text2); font-size: 1rem; max-width: 600px; line-height: 1.7; }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+  /* IN-CHAT PREDICTOR WIDGET */
+  .chat-predictor-card { background: var(--surface); border: 1.5px solid var(--border2); border-radius: 16px 16px 16px 4px; padding: 1rem 1.1rem; max-width: 95%; display: flex; flex-direction: column; gap: 0.65rem; }
+  .chat-predictor-card .pred-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem; color: var(--text); display: flex; align-items: center; gap: 0.4rem; }
+  .chat-pred-row { display: flex; flex-direction: column; gap: 0.25rem; }
+  .chat-pred-row label { font-size: 0.68rem; font-weight: 700; color: var(--text3); letter-spacing: 0.07em; text-transform: uppercase; }
+  .chat-pred-row select { background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--radius2); padding: 0.5rem 0.7rem; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--text); outline: none; cursor: pointer; width: 100%; appearance: none; transition: border-color 0.2s; }
+  .chat-pred-row select:focus { border-color: var(--accent); }
+  .chat-pred-btn { background: var(--accent); color: #fff; border: none; border-radius: var(--radius2); padding: 0.6rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.15s; display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
+  .chat-pred-btn:hover { background: #c0531a; transform: scale(1.02); }
+  .chat-pred-btn:disabled { background: var(--border2); cursor: not-allowed; transform: none; }
+  .pred-result-card { background: linear-gradient(135deg, #fff8f4, #fff3ea); border: 1.5px solid #f6d4b4; border-radius: 16px 16px 16px 4px; padding: 0.9rem 1rem; max-width: 95%; display: flex; flex-direction: column; gap: 0.45rem; animation: fadeUp 0.35s ease; }
+  .pred-result-card .pred-result-label { font-size: 0.68rem; font-weight: 700; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; }
+  .pred-result-card h4 { font-family: 'Syne', sans-serif; font-size: 0.92rem; font-weight: 800; color: var(--text); line-height: 1.3; }
+  .pred-result-card p { font-size: 0.8rem; color: var(--text2); line-height: 1.55; }
+  .pred-result-chips { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .pred-result-chips span { background: #fff; border: 1px solid #f6d4b4; border-radius: var(--radius3); padding: 0.2rem 0.65rem; font-size: 0.72rem; font-weight: 600; color: var(--accent); }
+
+  /* PRODUCTS */
+  .filter-bar { display: flex; gap: 0.6rem; flex-wrap: wrap; margin: 1.5rem 0 0.5rem; }
+  .filter-chip { background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--radius3); padding: 0.4rem 1rem; font-size: 0.8rem; font-weight: 600; color: var(--text2); cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+  .filter-chip.active, .filter-chip:hover { background: var(--text); color: #fff; border-color: var(--text); }
+  .search-wrap { position: relative; display: inline-block; width: 100%; max-width: 380px; margin-bottom: 1.5rem; }
+  .search-icon { position: absolute; left: 0.8rem; top: 50%; transform: translateY(-50%); color: var(--text3); font-size: 0.9rem; pointer-events: none; }
+  .search-input { background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--radius2); padding: 0.65rem 1rem 0.65rem 2.5rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--text); outline: none; width: 100%; transition: border-color 0.2s; }
+  .search-input:focus { border-color: var(--accent); }
+  .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+  .product-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); transition: transform 0.25s, box-shadow 0.25s; display: flex; flex-direction: column; }
+  .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow2); }
+  .product-tag { display: inline-block; background: var(--surface2); color: var(--accent); border: 1px solid var(--border2); border-radius: var(--radius3); padding: 0.2rem 0.65rem; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.85rem; }
+  .product-card h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; line-height: 1.3; margin-bottom: 0.5rem; color: var(--text); }
+  .product-card p { color: var(--text2); font-size: 0.83rem; line-height: 1.6; flex: 1; margin-bottom: 1rem; }
+  .product-meta { display: flex; flex-direction: column; gap: 0.5rem; margin-top: auto; }
+  .meta-pill { background: var(--surface2); border-radius: var(--radius2); padding: 0.5rem 0.75rem; font-size: 0.8rem; color: var(--text); display: flex; justify-content: space-between; }
+  .modules-list { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.75rem; }
+  .module-chip { background: var(--surface3); border-radius: var(--radius3); padding: 0.2rem 0.6rem; font-size: 0.7rem; color: var(--text2); }
+  .no-results { text-align: center; color: var(--text3); padding: 3rem; font-size: 0.95rem; }
+
+  /* PREMIUM */
+  .premium-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 1.5rem; }
+  .premium-card { background: var(--text); color: #fff; border-radius: var(--radius); padding: 1.75rem; position: relative; overflow: hidden; transition: transform 0.25s; }
+  .premium-card::before { content: ''; position: absolute; top: -40px; right: -40px; width: 140px; height: 140px; background: radial-gradient(circle, rgba(212,96,26,0.35), transparent 70%); pointer-events: none; }
+  .premium-card:hover { transform: translateY(-4px); }
+  .premium-tier { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; color: var(--accent2); text-transform: uppercase; margin-bottom: 0.75rem; }
+  .premium-card h3 { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.3; }
+  .premium-card p { color: rgba(255,255,255,0.6); font-size: 0.83rem; line-height: 1.6; margin-bottom: 1rem; }
+  .premium-price { font-family: 'Syne', sans-serif; font-size: 1.35rem; font-weight: 800; color: var(--accent2); margin-bottom: 0.25rem; }
+  .premium-duration { font-size: 0.78rem; color: rgba(255,255,255,0.5); }
+  .premium-features { list-style: none; margin-top: 1rem; display: flex; flex-direction: column; gap: 0.4rem; }
+  .premium-features li { font-size: 0.8rem; color: rgba(255,255,255,0.75); display: flex; align-items: center; gap: 0.5rem; }
+  .premium-features li::before { content: '✓'; color: var(--accent2); font-weight: 700; flex-shrink: 0; }
+
+  /* MENTORS */
+  .mentors-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 1.5rem; }
+  .mentor-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; text-align: center; box-shadow: var(--shadow); transition: transform 0.2s; }
+  .mentor-card:hover { transform: translateY(-3px); }
+  .mentor-avatar { width: 58px; height: 58px; border-radius: 18px; background: linear-gradient(135deg, var(--accent), var(--accent3)); color: #fff; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.05rem; margin: 0 auto 0.75rem; }
+  .mentor-name { font-weight: 600; font-size: 0.88rem; color: var(--text); margin-bottom: 0.2rem; }
+  .mentor-role { font-size: 0.76rem; color: var(--text3); }
+
+  /* SUPPORT */
+  .support-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.5rem; }
+  .support-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; box-shadow: var(--shadow); }
+  .support-icon { font-size: 1.75rem; margin-bottom: 0.75rem; }
+  .support-card h3 { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .contact-item { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; color: var(--text2); font-size: 0.9rem; }
+  .contact-item a { color: var(--accent); text-decoration: none; font-weight: 500; }
+
+  /* CHATBOT */
+  .chat-fab { position: fixed; bottom: 1.75rem; right: 1.75rem; z-index: 200; width: 62px; height: 62px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent3)); color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 8px 28px rgba(212,96,26,0.4); transition: transform 0.2s, box-shadow 0.2s; }
+  .chat-fab:hover { transform: scale(1.08); box-shadow: 0 14px 40px rgba(212,96,26,0.5); }
+  .chat-badge { position: absolute; top: -4px; right: -4px; background: #22c55e; border: 2px solid var(--bg); width: 16px; height: 16px; border-radius: 50%; animation: pulse 2s infinite; }
+  .chat-window { position: fixed; bottom: 5.5rem; right: 1.75rem; z-index: 200; width: 390px; max-height: 590px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: 0 24px 64px rgba(26,18,8,0.18); display: flex; flex-direction: column; transform: scale(0.92) translateY(16px); opacity: 0; pointer-events: none; transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.2s; overflow: hidden; }
+  .chat-window.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
+  .chat-header { background: var(--text); color: #fff; padding: 1rem 1.25rem; display: flex; align-items: center; gap: 0.75rem; }
+  .chat-header-avatar { width: 38px; height: 38px; border-radius: 12px; background: linear-gradient(135deg, var(--accent), var(--accent3)); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+  .chat-header-info { flex: 1; }
+  .chat-header-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; }
+  .chat-header-status { font-size: 0.72rem; color: rgba(255,255,255,0.55); }
+  .chat-close { background: rgba(255,255,255,0.12); border: none; color: #fff; width: 30px; height: 30px; border-radius: 8px; cursor: pointer; font-size: 1rem; transition: background 0.2s; flex-shrink: 0; }
+  .chat-close:hover { background: rgba(255,255,255,0.22); }
+  .chat-lang-bar { padding: 0.6rem 1rem; background: var(--surface2); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .chat-lang-bar span { font-size: 0.7rem; color: var(--text2); font-weight: 600; }
+  .lang-btn { background: transparent; border: 1px solid var(--border2); border-radius: var(--radius3); padding: 0.18rem 0.6rem; font-size: 0.7rem; font-weight: 600; color: var(--text2); cursor: pointer; transition: all 0.15s; }
+  .lang-btn.active, .lang-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .chat-messages { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem; scroll-behavior: smooth; }
+  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+  .msg { max-width: 82%; display: flex; flex-direction: column; gap: 0.2rem; }
+  .msg.user { align-self: flex-end; align-items: flex-end; }
+  .msg.bot { align-self: flex-start; align-items: flex-start; }
+  .msg-bubble { padding: 0.7rem 1rem; border-radius: 16px; font-size: 0.87rem; line-height: 1.6; white-space: pre-wrap; }
+  .msg.user .msg-bubble { background: var(--accent); color: #fff; border-radius: 16px 16px 4px 16px; }
+  .msg.bot .msg-bubble { background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: 16px 16px 16px 4px; }
+  .msg-time { font-size: 0.68rem; color: var(--text3); }
+  .chat-typing { display: flex; gap: 0.3rem; align-items: center; padding: 0.7rem 1rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 16px 16px 16px 4px; width: fit-content; }
+  .typing-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text3); animation: typing 1.2s infinite; }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  .quick-chips { padding: 0 1rem 0.75rem; display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .quick-chip { background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius3); padding: 0.3rem 0.8rem; font-size: 0.74rem; font-weight: 500; color: var(--text2); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .quick-chip:hover { background: var(--surface3); border-color: var(--accent); color: var(--accent); }
+  .chat-input-bar { padding: 0.85rem 1rem; border-top: 1px solid var(--border); display: flex; gap: 0.6rem; align-items: flex-end; background: var(--surface); }
+  .chat-textarea { flex: 1; background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--radius2); padding: 0.65rem 0.9rem; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; color: var(--text); outline: none; resize: none; min-height: 42px; max-height: 120px; transition: border-color 0.2s; line-height: 1.5; }
+  .chat-textarea:focus { border-color: var(--accent); }
+  .chat-textarea::placeholder { color: var(--text3); }
+  .chat-send { background: var(--accent); color: #fff; border: none; width: 42px; height: 42px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; transition: background 0.2s, transform 0.15s; }
+  .chat-send:hover { background: #c0531a; transform: scale(1.05); }
+  .chat-send:disabled { background: var(--border2); cursor: not-allowed; transform: none; }
+
+  /* FOOTER */
+  footer { background: var(--text); color: rgba(255,255,255,0.55); text-align: center; padding: 2rem; font-size: 0.82rem; line-height: 1.8; margin-top: 2rem; }
+  footer strong { color: rgba(255,255,255,0.8); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  @keyframes typing { 0%, 80%, 100% { transform: translateY(0); opacity: 0.4; } 40% { transform: translateY(-5px); opacity: 1; } }
+
+  @media (max-width: 900px) {
+    .hero-section { grid-template-columns: 1fr; }
+    .hero-card { display: none; }
+    .products-grid { grid-template-columns: 1fr 1fr; }
+    .premium-grid { grid-template-columns: 1fr; }
+    .mentors-grid { grid-template-columns: 1fr 1fr; }
+    .support-grid { grid-template-columns: 1fr; }
+    .predictor-grid { grid-template-columns: 1fr 1fr; }
+    .nav-links { display: none; }
+    .chat-window { width: calc(100vw - 2rem); right: 1rem; }
+  }
+  @media (max-width: 600px) { .products-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="#">
+    <div class="nav-logo">IM</div>
+    <div>
+      <div class="nav-title">INVESMATE</div>
+      <div class="nav-tagline">Stock Market Learning</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#products">Products</a>
+    <a href="#insignia">INSIGNIA</a>
+    <a href="#mentors">Mentors</a>
+    <a href="#support">Support</a>
+    <a href="#support" class="nav-cta">Request Callback</a>
+  </div>
+</nav>
+
+<div class="hero-section">
+  <div>
+    <div class="hero-badge">&#9679; SEBI Registered RA: INH000017985</div>
+    <h1>Finest Stock Market <em>Learning</em> Experience</h1>
+    <p class="hero-sub">A professional platform for INVESMATE and INSIGNIA — with AI-guided course selection, multilingual support, and personalized mentorship plans for every learner.</p>
+    <div class="hero-actions">
+      <a href="#products" class="btn-primary">Explore Courses &darr;</a>
+      <a href="#" class="btn-outline" onclick="openChat(); return false;">Talk to AI Advisor</a>
+    </div>
+  </div>
+  <div class="hero-card">
+    <span class="hero-card-label">Premium Learning Path</span>
+    <h3>Find the right course in minutes</h3>
+    <p>Use our AI advisor and course predictor to choose between beginner, trading, investing, derivatives, and INSIGNIA mentorship plans.</p>
+    <div class="info-row"><strong>Personalized Prediction</strong><small>Course recommendation by goal, budget &amp; experience</small></div>
+    <div class="info-row"><strong>Multilingual Support</strong><small>English, Bengali, Hindi &amp; Auto-Detect</small></div>
+    <div class="info-row"><strong>INSIGNIA Premium</strong><small>1:1 mentorship, live sessions &amp; lifetime recordings</small></div>
+  </div>
+</div>
+
+<div class="stats-strip">
+  <div class="stat-item"><div class="stat-num">20+</div><div class="stat-label">Expert Courses</div></div>
+  <div class="stat-item"><div class="stat-num">8</div><div class="stat-label">Certified Mentors</div></div>
+  <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">Language Support</div></div>
+  <div class="stat-item"><div class="stat-num">SEBI</div><div class="stat-label">Registered RA</div></div>
+</div>
+
+
+
+<!-- PRODUCTS -->
+<div class="section" id="products">
+  <div class="section-eyebrow">All Products</div>
+  <div class="section-title">Complete Product Ecosystem</div>
+  <div class="filter-bar" id="filter-bar"></div>
+  <div class="search-wrap">
+    <span class="search-icon">&#9906;</span>
+    <input class="search-input" id="search-input" type="text" placeholder="Search courses and mentorship plans&hellip;" oninput="renderProducts()" />
+  </div>
+  <div class="products-grid" id="products-grid"></div>
+</div>
+
+<hr class="divider"/>
+
+<!-- INSIGNIA -->
+<div class="section" id="insignia">
+  <div class="section-eyebrow">INSIGNIA Premium Journey</div>
+  <div class="section-title">Premium Mentorship Plans</div>
+  <div class="section-sub">Intensive, structured mentorship programs combining live sessions, 1:1 guidance, and real market practice.</div>
+  <div class="premium-grid" id="premium-grid"></div>
+</div>
+
+<hr class="divider"/>
+
+<!-- MENTORS -->
+<div class="section" id="mentors">
+  <div class="section-eyebrow">Top Mentors</div>
+  <div class="section-title">Experienced Market Mentors</div>
+  <div class="mentors-grid" id="mentors-grid"></div>
+</div>
+
+<hr class="divider"/>
+
+<!-- SUPPORT -->
+<div class="section" id="support">
+  <div class="section-eyebrow">Support</div>
+  <div class="section-title">Talk to the team before you enroll</div>
+  <div class="support-grid">
+    <div class="support-card">
+      <div class="support-icon">&#128222;</div>
+      <h3>Counseling &amp; Support</h3>
+      <div class="contact-item">&#128241; <a href="tel:+919016791791">+91 9016791791</a></div>
+      <div class="contact-item">&#128241; <a href="tel:+917596037781">+91 7596037781</a></div>
+      <div class="contact-item">&#128241; <a href="tel:+917003110622">+91 7003110622</a></div>
+      <div class="contact-item">&#9993; <a href="mailto:support@invesmate.com">support@invesmate.com</a></div>
+      <div class="contact-item">&#9993; <a href="mailto:sales@invesmate.com">sales@invesmate.com</a></div>
+    </div>
+    <div class="support-card">
+      <div class="support-icon">&#9888;</div>
+      <h3>Disclaimer</h3>
+      <p style="color:var(--text2);font-size:0.88rem;line-height:1.7;">Investment in securities markets is subject to market risks. Read all the related documents carefully before investing. Registration granted by SEBI and certification from NISM in no way guarantee performance of the intermediary or provide any assurance of returns to investors.<br/><br/>INVESMATE INSIGHTS — SEBI Registered Research Analyst (INH000017985). This platform is for educational purposes only.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <strong>INVESMATE</strong> — Stock Market Learning Platform<br/>
+  SEBI Registered RA: INH000017985 &nbsp;|&nbsp; support@invesmate.com<br/>
+  &copy; 2026 INVESMATE. All rights reserved. For educational purposes only.
+</footer>
+
+<!-- CHAT FAB -->
+<button class="chat-fab" onclick="toggleChat()" id="chat-fab" title="AI Advisor">
+  &#128172;
+  <span class="chat-badge"></span>
+</button>
+
+<!-- CHAT WINDOW -->
+<div class="chat-window" id="chat-window">
+  <div class="chat-header">
+    <div class="chat-header-avatar">&#129302;</div>
+    <div class="chat-header-info">
+      <div class="chat-header-name">INVESMATE AI Advisor</div>
+      <div class="chat-header-status">&#9679; Online &mdash; Powered by Claude AI</div>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">&times;</button>
+  </div>
+  <div class="chat-lang-bar">
+    <span>Language:</span>
+    <button class="lang-btn active" onclick="setLang('English',this)">EN</button>
+    <button class="lang-btn" onclick="setLang('Bengali',this)">&#2476;&#2494;&#2434;&#2482;&#2494;</button>
+    <button class="lang-btn" onclick="setLang('Hindi',this)">&#2361;&#2367;&#2306;&#2342;&#2368;</button>
+    <button class="lang-btn" onclick="setLang('Auto',this)">Auto</button>
+  </div>
+  <div class="chat-messages" id="chat-messages"></div>
+  <div class="quick-chips" id="quick-chips">
+    <button class="quick-chip" onclick="showPredictorWidget()">🎯 Course Predictor</button>
+    <button class="quick-chip" onclick="sendQuick('Compare INSIGNIA plans')">INSIGNIA plans</button>
+    <button class="quick-chip" onclick="sendQuick('What are the fees and pricing?')">Pricing</button>
+    <button class="quick-chip" onclick="sendQuick('How do I enroll?')">Enrollment</button>
+  </div>
+  <div class="chat-input-bar">
+    <textarea class="chat-textarea" id="chat-input" placeholder="Ask about courses, pricing, enrollment&hellip;" rows="1" onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea>
+    <button class="chat-send" id="send-btn" onclick="sendMessage()">&#10148;</button>
+  </div>
+</div>
+
+<script>
+const PRODUCTS_DATA = [
+  {title:"Power of Trading and Investing Combo Course",category:"Live Course",tag:"Beginner",price:"Rs. 8,999 – Rs. 11,999",duration:"2 Months / 26 Hours",lessons:"57 Lessons",description:"A complete capital-market course covering trading and investing from basics to advanced level.",modules:["Market basics","Technical analysis","Investing foundation","Real market practice"]},
+  {title:"Complete Intraday and Swing Trading Strategies",category:"Live Course",tag:"Technical Trading",price:"Rs. 9,999 – Rs. 12,999",duration:"2 Months / 20 Hours",lessons:"48 Lessons",description:"Advanced technical-analysis course for intraday and swing trading.",modules:["Chart patterns","Indicators","Smart Money Concepts","Risk control"]},
+  {title:"Complete Future and Option Trading Strategies",category:"Live Course",tag:"Derivatives",price:"Rs. 12,999 – Rs. 15,999",duration:"2 Months / 26 Hours",lessons:"25 Lessons",description:"Futures and options training for learners who want derivatives strategy knowledge.",modules:["Futures basics","Option buying","Option selling","Hedging"]},
+  {title:"Value Investing Using Advanced Fundamental Analysis",category:"Live Course",tag:"Investing",price:"Rs. 8,999 – Rs. 11,999",duration:"2 Months / 24 Hours",lessons:"57 Lessons",description:"Fundamental-analysis and value-investing roadmap for long-term equity investors.",modules:["Business analysis","Financial statements","Valuation","Portfolio mindset"]},
+  {title:"Introduction To Mutual Funds Investment",category:"Course",tag:"Mutual Funds",price:"Rs. 3,999 – Rs. 6,999",duration:"1 Month",lessons:"24 Lessons",description:"Practical overview of mutual funds, SIPs, and fund selection.",modules:["MF basics","SIP planning","Fund selection","Long-term wealth"]},
+  {title:"Dynamic Investment With Fixed Income Securities",category:"Recorded Course",tag:"Fixed Income",price:"Rs. 10,999",duration:"12 Hours",lessons:"33 Lessons",description:"Recorded course on bonds, government securities, income products, and diversification.",modules:["Bonds","Government securities","Income planning","Diversification"]},
+  {title:"The Comprehensive Roadmap Of Commodity Market",category:"Live Course",tag:"Commodity",price:"Rs. 14,999",duration:"16 Hours",lessons:"10 Lessons",description:"Commodity-market course covering gold, silver, crude oil, natural gas, and risk management.",modules:["Gold and silver","Crude oil","Natural gas","Technical view"]},
+  {title:"Power TI Masterclass",category:"Free Entry Program",tag:"Masterclass",price:"Free / Registration",duration:"Short Session",lessons:"Live Session",description:"Entry-level masterclass for learners starting their stock-market journey.",modules:["Orientation","Counseling","Beginner roadmap","Q&A"]},
+  {title:"Share Samadhan",category:"Newsletter & Research",tag:"Market Study",price:"Included in selected plans",duration:"Weekly Access",lessons:"Premium Study",description:"Weekly Bengali stock-market study for cash, derivatives, IPOs, mutual funds, and trends.",modules:["Cash market","Derivatives","IPO study","Mutual funds"]},
+  {title:"Market Trending All Segment",category:"Premium Tool Access",tag:"Market Intelligence",price:"Included in INSIGNIA plans",duration:"Plan-based Access",lessons:"All Segment Access",description:"Premium market-trending access included in selected INSIGNIA programs.",modules:["Cash","Derivatives","Commodity","Fixed asset investment"]},
+  {title:"INVESMATE Learning App",category:"Mobile App",tag:"Learning Platform",price:"App-based Access",duration:"Anytime Learning",lessons:"Course Library",description:"Mobile app for classes, recordings, academic support, and My Insignia Help.",modules:["Live classes","Recordings","Support","Course access"]},
+  {title:"Insights.Market",category:"Research Brand",tag:"SEBI RA Research",price:"Separate research platform",duration:"Research Access",lessons:"Research Products",description:"SEBI-registered equity research brand under INVESMATE INSIGHTS.",modules:["Equity research","Investor charter","Disclosures","Compliance"]},
+];
+
+const INSIGNIA_DATA = [
+  {title:"Equity Market Intelligence Matrix",tag:"Premium Mentorship",price:"Rs. 38,571 / Rs. 44,420",duration:"3–5 Months",description:"Premium mentorship combining advanced technical, techno-funda, and fundamental analysis.",modules:["Market Trending","Share Samadhan","1:1 mentorship","4 practical sessions","NISM guidance"]},
+  {title:"Complete Equity and Derivative Dynasty",tag:"Options Premium",price:"Rs. 62,305 / Rs. 44,420",duration:"6–8 Months",description:"Advanced premium pathway combining technical, fundamental, derivatives, and fixed-income learning.",modules:["Advanced Technical","Complete Options","Fixed Income","8 practical sessions","Academic helpline"]},
+  {title:"Complete Global Capital Market Specialist",tag:"Global Premium",price:"Rs. 1,07,689 / Rs. 44,420",duration:"12 Months",description:"Full-stack global capital-market specialist path including commodities, US stocks, mutual funds, and software training.",modules:["US stocks","Commodity","Advanced mutual fund","3 mentorship sessions","Lifetime recordings"]},
+];
+
+const MENTORS_LIST = ["Arunava Chatterjee","Sayan Ghosh","Kunal Saha","Suman Goswami","Laboni Pallab Das","Debarati Mukherjee","Pratim Kumar Chakraborty","Mihir Kanti Chakraborty"];
+
+// ── FILTER & RENDER ──
+let activeCategory = 'All';
+const allCategories = ['All', ...new Set(PRODUCTS_DATA.map(p => p.category))];
+
+function initFilters() {
+  document.getElementById('filter-bar').innerHTML = allCategories.map(c =>
+    `<button class="filter-chip ${c==='All'?'active':''}" onclick="setCategory('${c.replace(/'/g,"\\'")}',this)">${c}</button>`
+  ).join('');
 }
-COPY["Auto"] = COPY["English"]
-COPY["Spanish"] = COPY["English"]
-COPY["French"] = COPY["English"]
-COPY["Arabic"] = COPY["English"]
 
-PRODUCTS_RAW = [
-    ["Power of Trading and Investing Combo Course", "Live Course", "Beginner", "Rs. 8,999 - Rs. 11,999", "2 Months / 26 Hours", "57 Lessons", "A complete capital-market course covering trading and investing from basics to advanced level.", ["Market basics", "Technical analysis", "Investing foundation", "Real market practice"]],
-    ["Complete Intraday and Swing Trading Strategies", "Live Course", "Technical Trading", "Rs. 9,999 - Rs. 12,999", "2 Months / 20 Hours", "48 Lessons", "Advanced technical-analysis course for intraday and swing trading.", ["Chart patterns", "Indicators", "Smart Money Concepts", "Risk control"]],
-    ["Complete Future and Option Trading Strategies", "Live Course", "Derivatives", "Rs. 12,999 - Rs. 15,999", "2 Months / 26 Hours", "25 Lessons", "Futures and options training for learners who want derivatives strategy knowledge.", ["Futures basics", "Option buying", "Option selling", "Hedging"]],
-    ["Value Investing Using Advanced Fundamental Analysis", "Live Course", "Investing", "Rs. 8,999 - Rs. 11,999", "2 Months / 24 Hours", "57 Lessons", "Fundamental-analysis and value-investing roadmap for long-term equity investors.", ["Business analysis", "Financial statements", "Valuation", "Portfolio mindset"]],
-    ["Introduction To Mutual Funds Investment", "Course", "Mutual Funds", "Rs. 3,999 - Rs. 6,999", "1 Month", "24 Lessons", "Practical overview of mutual funds, SIPs, and fund selection.", ["MF basics", "SIP planning", "Fund selection", "Long-term wealth"]],
-    ["Dynamic Investment With Fixed Income Securities", "Recorded Course", "Fixed Income", "Rs. 10,999", "12 Hours", "33 Lessons", "Recorded course on bonds, government securities, income products, and diversification.", ["Bonds", "Government securities", "Income planning", "Diversification"]],
-    ["The Comprehensive Roadmap Of Commodity Market", "Live Course", "Commodity", "Rs. 14,999", "16 Hours", "10 Lessons", "Commodity-market course covering gold, silver, crude oil, natural gas, and risk management.", ["Gold and silver", "Crude oil", "Natural gas", "Technical view"]],
-    ["Power TI Masterclass", "Free Entry Program", "Masterclass", "Free Demo / Registration", "Short Session", "Live Session", "Entry-level masterclass for learners starting their stock-market journey.", ["Orientation", "Counseling", "Beginner roadmap", "Q and A"]],
-    ["Share Samadhan", "Newsletter and Research Education", "Market Study", "Included in selected plans", "Weekly Access", "Premium Study", "Weekly Bengali stock-market study for cash, derivatives, IPOs, mutual funds, and trends.", ["Cash market", "Derivatives", "IPO study", "Mutual funds"]],
-    ["Market Trending All Segment", "Premium Tool Access", "Market Intelligence", "Included in INSIGNIA plans", "Plan-based Access", "All Segment Access", "Premium market-trending access included in selected INSIGNIA programs.", ["Cash", "Derivatives", "Commodity", "Fixed asset investment"]],
-    ["INVESMATE Learning App", "Mobile App", "Learning Platform", "App-based Access", "Anytime Learning", "Course Library", "Mobile app for classes, recordings, academic support, and My Insignia Help.", ["Live classes", "Recordings", "Support", "Course access"]],
-    ["Insights.Market", "Research Brand", "SEBI RA Research", "Separate research platform", "Research Access", "Research Products", "SEBI-registered equity research brand under INVESMATE INSIGHTS.", ["Equity research", "Investor charter", "Disclosures", "Compliance"]],
-    ["Equity Market Intelligence Matrix", "INSIGNIA Premium", "Premium Mentorship", "Rs. 38,571 / Rs. 44,420", "3-5 Months", "Mentorship Plan", "Premium mentorship combining advanced technical, techno-funda, and fundamental analysis.", ["Market Trending", "Share Samadhan", "1:1 mentorship", "4 practical sessions", "NISM guidance"]],
-    ["Complete Equity and Derivative Dynasty", "INSIGNIA Premium", "Options Premium", "Rs. 62,305 / Rs. 44,420", "6-8 Months", "Mentorship Plan", "Advanced premium pathway combining technical, fundamental, derivatives, and fixed-income learning.", ["Advanced Technical", "Complete Options", "Fixed Income", "8 practical sessions", "Academic helpline"]],
-    ["Complete Global Capital Market Specialist", "INSIGNIA Premium", "Global Premium", "Rs. 107,689 / Rs. 44,420", "12 Months", "Mentorship Plan", "Full-stack global capital-market specialist path including commodities, US stocks, mutual funds, and software training.", ["US stocks", "Commodity", "Advanced mutual fund", "3 mentorship sessions", "Lifetime recordings"]],
-    ["INSIGNIA Personalized Series I", "Personalized Series", "Personalized", "Counseling Based", "Series Program", "Custom Plan", "Personalized stock-market mentorship for aspiring equity cash-market learners.", ["1:1 counseling", "Guided path", "Premium mentorship", "Support ecosystem"]],
-    ["INSIGNIA Personalized Series II / Pro Series II", "Personalized Series", "Personalized", "Counseling Based", "Series Program", "Custom Plan", "Advanced market-analysis focused series with expert-led guidance.", ["Advanced education", "Expert support", "Series learning", "Premium guidance"]],
-    ["INSIGNIA Personalized Series III", "Personalized Series", "Personalized", "Rs. 38,497", "5 Months", "Custom Plan", "Professional trader pathway for equity cash and fixed asset investment.", ["Share Samadhan", "2 practical sessions", "1:1 mentorship", "NISM support"]],
-    ["INSIGNIA Personalized Series IV", "Personalized Series", "Personalized", "Counseling Based", "Series Program", "Custom Plan", "Advanced trader skill-development series with app-based and mentor-guided learning.", ["1:1 counseling", "Advanced guidance", "App support", "Premium journey"]],
-    ["INSIGNIA Personalized Series V", "Personalized Series", "Personalized", "Counseling Based", "Series Program", "Custom Plan", "Premium Bengali stock-market learning series for deeper market knowledge.", ["Advanced guidance", "Counseling", "App support", "Mentorship"]],
-    ["INSIGNIA Personalized Series VI", "Personalized Series", "Personalized", "Counseling Based", "Series Program", "Custom Plan", "Personalized Bengali stock-market course pathway with advanced guidance.", ["Advanced guidance", "Counseling", "Academic support", "Premium ecosystem"]],
-    ["INSIGNIA Personalized Series VIII", "Personalized Series", "Personalized", "Counseling Based", "Series Program", "Custom Plan", "High-touch personalized INSIGNIA series for premium stock-market learning.", ["Advanced guidance", "My Insignia Help", "Counseling", "Mentor ecosystem"]],
-]
+function setCategory(cat, el) {
+  activeCategory = cat;
+  document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderProducts();
+}
 
-PRODUCTS = [
-    {
-        "title": row[0],
-        "category": row[1],
-        "tag": row[2],
-        "price": row[3],
-        "duration": row[4],
-        "lessons": row[5],
-        "description": row[6],
-        "modules": row[7],
-        "language": "Bengali",
+function norm(t) { return (t||'').toLowerCase(); }
+
+function renderProducts() {
+  const q = norm(document.getElementById('search-input').value);
+  const grid = document.getElementById('products-grid');
+  const filtered = PRODUCTS_DATA.filter(p => {
+    const catOk = activeCategory === 'All' || p.category === activeCategory;
+    const qOk = !q || norm(p.title + ' ' + p.description).includes(q);
+    return catOk && qOk;
+  });
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="no-results" style="grid-column:1/-1">No courses found. Try a different search or category.</div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map(p => `
+    <div class="product-card">
+      <span class="product-tag">${esc(p.category)}</span>
+      <h3>${esc(p.title)}</h3>
+      <p>${esc(p.description)}</p>
+      <div class="product-meta">
+        <div class="meta-pill"><span>${esc(p.price)}</span></div>
+        <div class="meta-pill"><span>&#9201; ${esc(p.duration)}</span><span>${esc(p.lessons)}</span></div>
+      </div>
+      <div class="modules-list">${p.modules.slice(0,4).map(m=>`<span class="module-chip">${esc(m)}</span>`).join('')}</div>
+    </div>`).join('');
+}
+
+function renderInsignia() {
+  document.getElementById('premium-grid').innerHTML = INSIGNIA_DATA.map(p => `
+    <div class="premium-card">
+      <div class="premium-tier">${esc(p.tag)}</div>
+      <h3>${esc(p.title)}</h3>
+      <p>${esc(p.description)}</p>
+      <div class="premium-price">${esc(p.price)}</div>
+      <div class="premium-duration">&#9201; ${esc(p.duration)}</div>
+      <ul class="premium-features">${p.modules.map(m=>`<li>${esc(m)}</li>`).join('')}</ul>
+    </div>`).join('');
+}
+
+function renderMentors() {
+  document.getElementById('mentors-grid').innerHTML = MENTORS_LIST.map(m => {
+    const initials = m.split(' ').map(w=>w[0]).slice(0,2).join('');
+    return `<div class="mentor-card"><div class="mentor-avatar">${esc(initials)}</div><div class="mentor-name">${esc(m)}</div><div class="mentor-role">Capital market mentor &amp; NISM-certified professional</div></div>`;
+  }).join('');
+}
+
+// ── PREDICTOR ──
+function predictCourse(goal, exp, budget) {
+  const g = norm(goal), b = norm(budget);
+  if (g.includes('option') || g.includes('derivative')) return b.includes('premium') ? {...INSIGNIA_DATA[1]} : PRODUCTS_DATA[2];
+  if (g.includes('commodity') || g.includes('global')) return b.includes('premium') ? {...INSIGNIA_DATA[2]} : PRODUCTS_DATA[6];
+  if (g.includes('mutual') || g.includes('sip')) return PRODUCTS_DATA[4];
+  if (g.includes('intraday') || g.includes('swing') || g.includes('technical')) return b.includes('premium') ? {...INSIGNIA_DATA[0]} : PRODUCTS_DATA[1];
+  if (g.includes('long') || g.includes('fundamental') || g.includes('invest')) return b.includes('premium') ? {...INSIGNIA_DATA[0]} : PRODUCTS_DATA[3];
+  return b.includes('premium') ? {...INSIGNIA_DATA[0]} : PRODUCTS_DATA[0];
+}
+
+// ── CHATBOT ──
+let chatOpen = false, chatLang = 'English', chatHistory = [], isTyping = false;
+
+const SYSTEM_PROMPT = `You are the INVESMATE AI Advisor — a knowledgeable, warm, and professional stock market learning advisor for INVESMATE, a SEBI-registered Research Analyst platform (INH000017985) in India.
+
+Your role:
+- Help users choose the right INVESMATE or INSIGNIA course based on their goals, experience, budget, and language.
+- Answer questions about courses, pricing, enrollment, mentors, features, refunds, EMI, and support clearly and helpfully.
+- Be concise and friendly. Use bullet points when listing multiple items.
+- Always add a brief risk disclaimer when discussing trading or investments.
+
+INVESMATE Courses:
+• Power of Trading and Investing Combo — Live, Beginner, Rs. 8,999–11,999, 2 months/26 hrs, 57 lessons
+• Complete Intraday and Swing Trading Strategies — Live, Rs. 9,999–12,999, 2 months/20 hrs
+• Complete Future and Option Trading Strategies — Live, Rs. 12,999–15,999, 2 months/26 hrs
+• Value Investing Using Advanced Fundamental Analysis — Live, Rs. 8,999–11,999, 2 months/24 hrs
+• Introduction To Mutual Funds Investment — Rs. 3,999–6,999, 1 month
+• Dynamic Investment With Fixed Income Securities — Recorded, Rs. 10,999, 12 hrs
+• The Comprehensive Roadmap Of Commodity Market — Live, Rs. 14,999, 16 hrs
+• Power TI Masterclass — Free entry program
+
+INSIGNIA Premium Mentorship:
+• Equity Market Intelligence Matrix — Rs. 38,571/44,420, 3–5 months, technical + fundamental, 1:1 mentorship, 4 practical sessions
+• Complete Equity and Derivative Dynasty — Rs. 62,305/44,420, 6–8 months, equity + options + fixed income
+• Complete Global Capital Market Specialist — Rs. 1,07,689/44,420, 12 months, US stocks, commodities, global markets
+
+INSIGNIA Personalized Series (I–VIII): Counseling-based pricing, personalized mentorship paths.
+
+Mentors: Arunava Chatterjee, Sayan Ghosh, Kunal Saha, Suman Goswami, Laboni Pallab Das, Debarati Mukherjee, Pratim Kumar Chakraborty, Mihir Kanti Chakraborty — all NISM-certified.
+
+Support: +91 9016791791, +91 7596037781, +91 7003110622 | support@invesmate.com | sales@invesmate.com
+
+Enrollment flow: Choose product → request counseling → confirm fee/GST/EMI/batch timing → complete payment → access via app.
+
+Language: Current selected language is {{LANG}}. If user writes in Bengali, reply in Bengali. If Hindi, reply in Hindi. Otherwise use English.
+
+Important: Always include "Note: Investment in securities markets is subject to market risks." when discussing trading strategies or returns.`;
+
+function toggleChat() {
+  chatOpen = !chatOpen;
+  const win = document.getElementById('chat-window');
+  win.classList.toggle('open', chatOpen);
+  document.getElementById('chat-fab').innerHTML = chatOpen
+    ? '&times;<span class="chat-badge"></span>'
+    : '&#128172;<span class="chat-badge"></span>';
+  if (chatOpen && chatHistory.length === 0) {
+    addBotMsg("Hi! I'm your INVESMATE AI Advisor 👋\n\nI can help you:\n• Choose the right course for your goals\n• Compare INSIGNIA mentorship plans\n• Get pricing and enrollment details\n• Route your support request\n\nWhat would you like to know?");
+  }
+}
+
+function openChat() { if (!chatOpen) toggleChat(); }
+
+function setLang(lang, el) {
+  chatLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function esc(t) {
+  return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function addMsg(text, role) {
+  const msgs = document.getElementById('chat-messages');
+  const now = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.innerHTML = `<div class="msg-bubble">${esc(text)}</div><span class="msg-time">${now}</span>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  chatHistory.push({role: role === 'user' ? 'user' : 'assistant', content: text});
+}
+
+function addBotMsg(t) { addMsg(t, 'bot'); }
+function addUserMsg(t) { addMsg(t, 'user'); }
+
+function showTyping() {
+  const msgs = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'msg bot'; div.id = 'typing-indicator';
+  div.innerHTML = `<div class="chat-typing"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeTyping() { const t = document.getElementById('typing-indicator'); if(t) t.remove(); }
+
+async function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text || isTyping) return;
+  input.value = ''; autoResize(input);
+  addUserMsg(text);
+  document.getElementById('send-btn').disabled = true;
+  isTyping = true;
+  showTyping();
+
+  try {
+    const system = SYSTEM_PROMPT.replace('{{LANG}}', chatLang);
+    const apiMsgs = chatHistory.slice(-20);
+
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: system,
+        messages: apiMsgs,
+      })
+    });
+
+    removeTyping();
+    const data = await res.json();
+
+    if (data.content && data.content[0] && data.content[0].text) {
+      addBotMsg(data.content[0].text);
+    } else if (data.error) {
+      addBotMsg('API error: ' + (data.error.message || 'Unknown error') + '\n\nPlease contact: support@invesmate.com');
+    } else {
+      addBotMsg('Sorry, I could not process your request. Please try again.');
     }
-    for row in PRODUCTS_RAW
-]
-
-MENTORS = [
-    "Arunava Chatterjee",
-    "Sayan Ghosh",
-    "Kunal Saha",
-    "Suman Goswami",
-    "Laboni Pallab Das",
-    "Debarati Mukherjee",
-    "Pratim Kumar Chakraborty",
-    "Mihir Kanti Chakraborty",
-]
-
-
-def css(theme="Light"):
-    is_dark = theme == "Dark"
-    bg = "#0b1220" if is_dark else "#ffffff"
-    surface = "#111827" if is_dark else "#ffffff"
-    surface_2 = "#172033" if is_dark else "#fff7ed"
-    text = "#f8fafc" if is_dark else "#0f172a"
-    muted = "#cbd5e1" if is_dark else "#475569"
-    border = "#334155" if is_dark else "#ffedd5"
-    hero_bg = "radial-gradient(circle at top left,rgba(249,115,22,.28),transparent 35%),linear-gradient(135deg,#0b1220,#111827,#431407)" if is_dark else "radial-gradient(circle at top left,rgba(249,115,22,.18),transparent 35%),linear-gradient(135deg,#ffffff,#fff7ed,#fffbeb)"
-
-    st.markdown(
-        f"""
-        <style>
-        .stApp {{ background:{bg}; color:{text}; }}
-        .block-container {{ padding-top:1.2rem; max-width:1240px; }}
-        section[data-testid="stSidebar"] {{ display:none; }}
-        #MainMenu {{ visibility:hidden; }}
-        header {{ visibility:hidden; }}
-        .stDeployButton {{ display:none; }}
-        div[data-testid="stDecoration"] {{ display:none; }}
-        div[data-testid="stSelectbox"] label, div[data-testid="stTextInput"] label {{ font-weight:800; color:{text}; }}
-        .site-shell {{ background:{bg}; color:{text}; }}
-        .topbar {{ display:flex; align-items:center; justify-content:space-between; gap:1rem; border:1px solid {border}; background:{surface}; border-radius:24px; padding:0.9rem 1rem; box-shadow:0 16px 38px rgba(15,23,42,0.06); position:sticky; top:0; z-index:30; }}
-        .brand {{ display:flex; align-items:center; gap:0.85rem; }}
-        .logo {{ width:46px; height:46px; border-radius:17px; background:linear-gradient(135deg,#f97316,#fbbf24); color:white; display:flex; align-items:center; justify-content:center; font-weight:950; box-shadow:0 12px 24px rgba(249,115,22,.28); }}
-        .brand-title {{ font-weight:950; font-size:1.2rem; line-height:1; color:{text}; letter-spacing:.02em; }}
-        .navlinks {{ display:flex; align-items:center; gap:1.2rem; color:{muted}; font-weight:800; font-size:.9rem; }}
-        .nav-cta {{ background:#f97316; color:white; border-radius:999px; padding:.65rem 1rem; font-weight:900; }}
-        .hero {{ border-radius:36px; background:{hero_bg}; border:1px solid {border}; padding:4rem 3rem; margin-top:1.25rem; overflow:hidden; position:relative; }}
-        .hero-grid {{ display:grid; grid-template-columns:1.15fr .85fr; gap:2rem; align-items:center; }}
-        .badge {{ display:inline-flex; align-items:center; gap:.35rem; border:1px solid #fed7aa; background:{surface}; color:#f97316; border-radius:999px; padding:.48rem .9rem; font-weight:900; font-size:.82rem; margin-bottom:1.1rem; }}
-        .hero h1 {{ font-size:clamp(2.8rem,6vw,5.7rem); line-height:.92; font-weight:950; margin:0; color:{text}; letter-spacing:-.06em; }}
-        .hero p {{ font-size:1.08rem; line-height:1.85; color:{muted}; max-width:760px; margin-top:1.25rem; }}
-        .primary-btn {{ background:#f97316; color:white; border-radius:999px; padding:.9rem 1.25rem; font-weight:900; display:inline-block; margin-right:.75rem; box-shadow:0 14px 32px rgba(249,115,22,.24); }}
-        .outline-btn {{ border:1px solid #fdba74; color:#f97316; background:{surface}; border-radius:999px; padding:.9rem 1.25rem; font-weight:900; display:inline-block; }}
-        .hero-card {{ border:1px solid {border}; background:{surface}; border-radius:28px; padding:1.2rem; box-shadow:0 24px 60px rgba(15,23,42,.08); }}
-        .hero-card h3 {{ margin:.1rem 0 .6rem; color:{text}; font-size:1.25rem; }}
-        .feature-grid {{ display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin:1.25rem 0; }}
-        .feature-card, .metric-card, .product-card, .premium-card, .support-card {{ border:1px solid {border}; border-radius:28px; padding:1.35rem; background:{surface}; color:{text}; box-shadow:0 16px 42px rgba(15,23,42,0.06); }}
-        .feature-card h3 {{ margin:.5rem 0 .3rem; font-size:1.08rem; }}
-        .feature-card p, .product-card p, .support-card p {{ color:{muted}; line-height:1.6; }}
-        .metric-row {{ display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-top:1rem; }}
-        .metric-number {{ color:#f97316; font-size:2.1rem; font-weight:950; }}
-        .section-head {{ display:flex; align-items:end; justify-content:space-between; gap:1rem; margin:2.5rem 0 1rem; }}
-        .section-title {{ font-size:2.35rem; font-weight:950; color:{text}; margin:0; letter-spacing:-.035em; }}
-        .section-sub {{ color:{muted}; max-width:720px; line-height:1.7; margin-top:.4rem; }}
-        .eyebrow {{ color:#f97316; font-weight:950; letter-spacing:.08em; font-size:.78rem; text-transform:uppercase; margin-bottom:.35rem; }}
-        .tag {{ display:inline-block; background:#f97316; color:white; border-radius:999px; padding:.25rem .72rem; font-size:.72rem; font-weight:950; }}
-        .soft-box {{ background:{surface_2}; border-radius:18px; padding:.78rem; margin-top:.7rem; color:{text}; }}
-        .product-card {{ min-height:420px; transition:transform .2s ease, box-shadow .2s ease; }}
-        .product-card:hover {{ transform:translateY(-4px); box-shadow:0 24px 55px rgba(249,115,22,.12); }}
-        .product-card h3 {{ font-size:1.2rem; line-height:1.25; margin:.9rem 0 .55rem; color:{text}; }}
-        .premium-card {{ background:linear-gradient(135deg,{surface}, {surface_2}); min-height:360px; }}
-        .mentor-avatar {{ width:62px; height:62px; border-radius:22px; background:linear-gradient(135deg,#f97316,#fbbf24); color:white; display:flex; align-items:center; justify-content:center; font-weight:950; font-size:1.1rem; margin-bottom:.7rem; }}
-        .chat-pro-card {{ border:1px solid {border}; background:{surface}; border-radius:26px; overflow:hidden; box-shadow:0 24px 70px rgba(15,23,42,.18); }}
-        .chat-pro-header {{ background:linear-gradient(135deg,#f97316,#fbbf24); color:white; padding:1rem; display:flex; align-items:center; gap:.8rem; }}
-        .chat-pro-avatar {{ width:44px; height:44px; border-radius:16px; background:rgba(255,255,255,.22); border:1px solid rgba(255,255,255,.45); display:flex; align-items:center; justify-content:center; font-weight:950; }}
-        .chat-pro-title {{ font-weight:950; font-size:1rem; line-height:1.1; }}
-        .chat-pro-status {{ font-size:.72rem; font-weight:750; opacity:.95; margin-top:.18rem; }}
-        .chat-pro-body {{ max-height:240px; overflow-y:auto; padding:.7rem; background:{surface_2}; border-radius:16px; margin:.45rem 0; }}
-        .chat-help {{ color:{muted}; font-size:.82rem; line-height:1.5; margin:.7rem 0; }}
-        .chat-msg-user {{ background:#f97316; color:white; padding:.58rem .72rem; border-radius:14px 14px 4px 14px; margin:.4rem 0 .4rem 2rem; box-shadow:0 8px 18px rgba(249,115,22,.16); font-size:.82rem; line-height:1.4; }}
-        .chat-msg-bot {{ background:{surface}; color:{text}; border:1px solid {border}; padding:.58rem .72rem; border-radius:14px 14px 14px 4px; margin:.4rem 2rem .4rem 0; white-space:pre-wrap; box-shadow:0 6px 16px rgba(15,23,42,.05); font-size:.82rem; line-height:1.4; }}
-        div[data-testid="stPopover"] {{ position:fixed !important; right:26px !important; bottom:26px !important; z-index:999999 !important; width:64px !important; }}
-        div[data-testid="stPopover"] button {{ width:64px !important; height:64px !important; min-height:64px !important; padding:0 !important; background:linear-gradient(135deg,#f97316,#fbbf24) !important; color:white !important; border-radius:999px !important; border:4px solid {surface} !important; font-size:0 !important; box-shadow:0 18px 55px rgba(249,115,22,.35) !important; }}
-        div[data-testid="stPopover"] button:before {{ content:'💬'; font-size:28px; line-height:1; }}
-        div[data-testid="stPopover"] div[data-baseweb="popover"] {{ width:320px !important; max-width:320px !important; min-width:320px !important; border-radius:22px !important; overflow:hidden !important; }}
-        .chat-pro-shell {{ width:100%; max-width:360px; }}
-        .chat-pro-subtitle {{ font-size:.74rem; color:{muted}; margin:.45rem 0 .6rem; line-height:1.4; }}
-        @media (max-width:700px) {{ div[data-testid="stPopover"] {{ right:14px !important; bottom:14px !important; left:auto !important; }} div[data-testid="stPopover"] div[data-baseweb="popover"] {{ width:290px !important; min-width:290px !important; max-width:290px !important; }} .chat-pro-body {{ max-height:220px; }} }}
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
-
-
-def normalize(text):
-    return str(text or "").lower().replace(".", " ").replace(",", " ").replace("?", " ").replace("!", " ").strip()
-
-
-def has_any_char_in_range(value, start, end):
-    text = str(value or "")
-    return any(start <= ord(ch) <= end for ch in text)
-
-
-def detect_language(text):
-    if has_any_char_in_range(text, 0x0980, 0x09FF):
-        return "Bengali"
-    if has_any_char_in_range(text, 0x0900, 0x097F):
-        return "Hindi"
-    if has_any_char_in_range(text, 0x0600, 0x06FF):
-        return "Arabic"
-    return "English"
-
-
-def with_language(reply, lang, user_text=""):
-    active_lang = detect_language(user_text) if lang == "Auto" else lang
-    prefixes = {
-        "Bengali": "বাংলা AI অ্যাডভাইজার:\n",
-        "Hindi": "हिंदी AI सलाहकार:\n",
-        "Spanish": "Asesor IA de INVESMATE:\n",
-        "French": "Conseiller IA INVESMATE:\n",
-        "Arabic": "مستشار INVESMATE الذكي:\n",
-    }
-    return prefixes.get(active_lang, "") + reply
-
-
-def format_product(product):
-    return (
-        f"{product['title']}\n"
-        f"Category: {product['category']}\n"
-        f"Price: {product['price']}\n"
-        f"Duration: {product['duration']}\n"
-        f"Best for: {product['tag']}\n\n"
-        f"{product['description']}\n\n"
-        f"Key inclusions: {', '.join(product['modules'][:5])}"
-    )
-
-
-def predict_course(goal, experience, budget):
-    g = normalize(goal)
-    e = normalize(experience)
-    b = normalize(budget)
-    if "option" in g or "derivative" in g:
-        return PRODUCTS[13] if "advanced" in e or "premium" in b else PRODUCTS[2]
-    if "commodity" in g or "global" in g:
-        return PRODUCTS[14] if "premium" in b else PRODUCTS[6]
-    if "mutual" in g or "sip" in g:
-        return PRODUCTS[4]
-    if "intraday" in g or "swing" in g or "technical" in g:
-        return PRODUCTS[13] if "premium" in b else PRODUCTS[1]
-    if "long" in g or "fundamental" in g or "invest" in g:
-        return PRODUCTS[12] if "premium" in b else PRODUCTS[3]
-    return PRODUCTS[12] if "premium" in b else PRODUCTS[0]
-
-
-def answer(summary, recommendation=None, reason=None, next_step=None, disclaimer=None):
-    blocks = [summary]
-    if recommendation:
-        blocks.append(f"Recommended option:\n{recommendation}")
-    if reason:
-        blocks.append(f"Why this fits:\n{reason}")
-    if next_step:
-        blocks.append(f"Next step:\n{next_step}")
-    if disclaimer:
-        blocks.append(f"Note:\n{disclaimer}")
-    return "\n\n".join(blocks)
-
-
-def bot_reply(text, lang="English"):
-    q = normalize(text)
-    reply = answer(
-        "Hello, I am your INVESMATE AI Advisor. I can guide you like a course counselor.",
-        "Tell me your goal, experience, budget, and preferred language.",
-        next_step="Ask me to compare plans, predict your course, explain fees, route support, or prepare a callback request.",
-    )
-    if not q:
-        return with_language(reply, lang, text)
-
-    if any(word in q for word in ["hello", "hi", "namaste", "নমস্কার"]):
-        reply = answer(
-            "Welcome. I can help you choose the right INVESMATE or INSIGNIA program step by step.",
-            "Share your goal: beginner learning, intraday, options, long-term investing, mutual funds, commodity, or premium mentorship.",
-            next_step="I will suggest the best product with price, duration, and support path.",
-        )
-    elif any(word in q for word in ["language", "bengali", "hindi", "english", "spanish", "french", "arabic"]):
-        reply = answer(
-            "Language support is available for English, Bengali, Hindi, Spanish, French, Arabic, and Auto Detect mode.",
-            "Use Auto Detect if you want the chatbot to respond based on the language you type in.",
-            next_step="Choose a language from the dropdown or type your question in your preferred language.",
-        )
-    elif any(word in q for word in ["predict", "best course", "which course", "recommend me"]):
-        predicted = predict_course(q, q, "Premium" if "premium" in q else "Budget")
-        reply = answer(
-            "AI prediction result",
-            format_product(predicted),
-            reason="Your query shows your likely goal, budget preference, or experience level.",
-            next_step="Share your experience level, available time, and budget for a more accurate recommendation.",
-        )
-    elif any(word in q for word in ["compare", "difference", "insignia"]):
-        reply = answer(
-            "Here is a simple INSIGNIA comparison.",
-            "1. Equity Market Intelligence Matrix: best for equity cash market and technical plus fundamental foundation.\n"
-            "2. Complete Equity and Derivative Dynasty: best for equity and options learners.\n"
-            "3. Complete Global Capital Market Specialist: best for commodities, US stocks, mutual funds, and global market learning.",
-            reason="The first plan is focused, the second is stronger for derivatives, and the third is the most complete premium journey.",
-            next_step="Tell me your goal and budget, and I will shortlist one plan.",
-        )
-    else:
-        match = None
-        for product in PRODUCTS:
-            words = [word for word in normalize(product["title"]).split() if len(word) > 4]
-            if any(word in q for word in words):
-                match = product
-                break
-        if match:
-            reply = answer(
-                "I found the product you are asking about.",
-                format_product(match),
-                next_step="Ask for price details, enrollment steps, EMI options, refund terms, or comparison.",
-            )
-        elif "beginner" in q or "start" in q:
-            reply = answer(
-                "For a beginner, start with fundamentals before advanced derivatives.",
-                "Power TI Masterclass first, then Power of Trading and Investing Combo Course. For premium hand-holding, choose Equity Market Intelligence Matrix.",
-                next_step="Tell me your budget and study time per week.",
-            )
-        elif any(word in q for word in ["option", "future", "derivative"]):
-            reply = answer(
-                "For derivatives, you need structured learning and strong risk management.",
-                "Complete Future and Option Trading Strategies for a course route. Complete Equity and Derivative Dynasty for premium mentorship.",
-                disclaimer="This is education guidance only, not investment advice or return assurance.",
-            )
-        elif any(word in q for word in ["price", "cost", "fee", "emi"]):
-            reply = answer(
-                "Here is the current demo pricing structure.",
-                "INVESMATE courses range from about Rs. 3,999 to Rs. 15,999. INSIGNIA examples include Rs. 38,571, Rs. 62,305, Rs. 107,689, and offer pricing such as Rs. 44,420.",
-                next_step="Confirm active fee, GST, discount, EMI eligibility, batch timing, and refund terms with the counseling team.",
-            )
-        elif any(word in q for word in ["support", "help", "contact"]):
-            reply = answer(
-                "I can route your support request to the right team.",
-                "Phone: +91 9016791791, +91 7596037781, +91 7003110622. Email: support@invesmate.com or sales@invesmate.com.",
-                next_step="Share the issue type: payment, course access, class timing, refund, technical issue, or counseling.",
-            )
-        elif "refund" in q or "cancel" in q:
-            reply = answer(
-                "Refund requests should be handled with order verification.",
-                "Collect order ID, registered phone number, email, course name, payment date, and reason for refund.",
-                next_step="A production chatbot should create a support ticket and show the official refund policy before submission.",
-            )
-        elif any(word in q for word in ["buy", "purchase", "enroll", "join"]):
-            reply = answer(
-                "Here is the professional enrollment flow.",
-                "Choose product -> request counseling -> confirm fee, GST, EMI, batch timing, and refund terms -> complete payment -> access course through app or portal.",
-                next_step="Tell me the product name and I will prepare a checkout-ready summary.",
-            )
-    return with_language(reply, lang, text)
-
-
-def render_header(t):
-    st.markdown(
-        f'''
-        <div class="topbar">
-            <div class="brand">
-                <div class="logo">IM</div>
-                <div>
-                    <div class="brand-title">INVESMATE</div>
-                    <div style="font-size:.75rem;color:#f97316;font-weight:900;">Stock Market Learning</div>
-                </div>
-            </div>
-            <div class="navlinks">
-                <span>{t['products']}</span>
-                <span>{t['insignia']}</span>
-                <span>{t['mentors']}</span>
-                <span>{t['support']}</span>
-                <span class="nav-cta">Request Callback</span>
-            </div>
-        </div>
-        ''',
-        unsafe_allow_html=True,
-    )
-
-
-def render_hero(t, tests_passed):
-    badge_text = "SEBI Registered RA: INH000017985"
-    test_status = "passed" if tests_passed else "needs review"
-
-    st.markdown(
-        f'''
-        <div class="hero">
-            <div class="hero-grid">
-                <div>
-                    <span class="badge">{badge_text}</span>
-                    <h1>{t['hero_title']}</h1>
-                    <p>{t['hero_text']}</p>
-                    <div style="margin-top:1.4rem;">
-                        <span class="primary-btn">{t['explore']}</span>
-                        <span class="outline-btn">{t['talk']}</span>
-                    </div>
-                    <p style="font-size:.82rem;color:#64748b;margin-top:1rem;">Self-test: chatbot routing {test_status}.</p>
-                </div>
-                <div class="hero-card">
-                    <span class="tag">Premium Learning Path</span>
-                    <h3>Find the right course in minutes</h3>
-                    <p>Use the AI advisor to choose between beginner, trading, investing, derivatives, mutual fund, commodity, and INSIGNIA mentorship plans.</p>
-                    <div class="soft-box"><b>Personalized</b><br><small>Course prediction is available inside the AI chatbot</small></div>
-                    <div class="soft-box"><b>Multilingual</b><br><small>English, Bengali, Hindi, and Auto Detect support</small></div>
-                </div>
-            </div>
-        </div>
-        ''',
-        unsafe_allow_html=True,
-    )
-
-
-def render_predictor(t, lang):
-    """Course prediction is handled inside the chatbot."""
-    return None
-
-
-def render_products(t):
-    st.markdown(f"<div class='section-head'><div><div class='eyebrow'>{t['allProducts']}</div><h2 class='section-title'>{t['catalogTitle']}</h2></div></div>", unsafe_allow_html=True)
-
-    categories = ["All"] + sorted({p["category"] for p in PRODUCTS})
-    col1, col2 = st.columns([1, 2])
-    category = col1.selectbox("Category", categories)
-    search = col2.text_input("Search", placeholder=t["search"])
-
-    filtered = []
-    query = normalize(search)
-
-    for product in PRODUCTS:
-        searchable = normalize(product['title'] + ' ' + product['description'])
-        if (category == "All" or product['category'] == category) and (not query or query in searchable):
-            filtered.append(product)
-
-    for row_start in range(0, len(filtered), 3):
-        cols = st.columns(3)
-        for col, product in zip(cols, filtered[row_start: row_start + 3]):
-            with col:
-                modules = ''.join([f'<li>{m}</li>' for m in product['modules'][:4]])
-                st.markdown(f'''
-                <div class="product-card">
-                    <span class="tag">{product['category']}</span>
-                    <h3>{product['title']}</h3>
-                    <p>{product['description']}</p>
-                    <div class="soft-box"><b>{product['price']}</b></div>
-                    <div class="soft-box"><b>{product['duration']}</b></div>
-                    <ul>{modules}</ul>
-                </div>
-                ''', unsafe_allow_html=True)
-
-
-def render_insignia(t):
-    st.markdown("<div class='section-head'><div><div class='eyebrow'>INSIGNIA PREMIUM JOURNEY</div><h2 class='section-title'>Premium Mentorship Plans</h2></div></div>", unsafe_allow_html=True)
-
-
-def render_mentors():
-    st.markdown("<div class='section-head'><div><div class='eyebrow'>TOP MENTORS</div><h2 class='section-title'>Experienced Market Mentors</h2></div></div>", unsafe_allow_html=True)
-
-    cols = st.columns(4)
-    for index, mentor in enumerate(MENTORS):
-        initials = ''.join([part[0] for part in mentor.split()])[:2]
-        with cols[index % 4]:
-            st.markdown(f'''
-            <div class="metric-card">
-                <div class="mentor-avatar">{initials}</div>
-                <h4>{mentor}</h4>
-                <p>Capital market mentor and NISM-certified professional</p>
-            </div>
-            ''', unsafe_allow_html=True)
-
-
-def render_support(t):
-    st.markdown(f"<div class='section-head'><div><div class='eyebrow'>SUPPORT</div><h2 class='section-title'>{t['support_title']}</h2></div></div>", unsafe_allow_html=True)
-
-    left, right = st.columns(2)
-    with left:
-        st.markdown('''<div class="support-card"><h3>Need counseling or support?</h3><p>Phone: +91 9016791791</p><p>Email: support@invesmate.com</p></div>''', unsafe_allow_html=True)
-
-    with right:
-        st.markdown('''<div class="support-card"><h3>Disclaimer</h3><p>Investment in securities markets is subject to market risks.</p></div>''', unsafe_allow_html=True)
-
-
-def render_chat(lang, t):
-    """Bottom-right chatbot launcher with built-in course predictor."""
-    with st.popover("Chat", use_container_width=False):
-        st.markdown(
-            """
-            <div class="chat-pro-shell">
-                <div class="chat-pro-card">
-                    <div class="chat-pro-header">
-                        <div class="chat-pro-avatar">AI</div>
-                        <div>
-                            <div class="chat-pro-title">INVESMATE AI Advisor</div>
-                            <div class="chat-pro-status">Online - course guidance</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="chat-pro-subtitle">Ask questions or use the built-in course predictor below.</div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-        tab_chat, tab_predict = st.tabs(["Chat", "Predict"])
-
-        with tab_chat:
-            st.markdown("<div class='chat-pro-body'>", unsafe_allow_html=True)
-            for message in st.session_state.messages[-8:]:
-                css_class = "chat-msg-user" if message["role"] == "user" else "chat-msg-bot"
-                safe_content = str(message["content"]).replace("<", "&lt;").replace(">", "&gt;")
-                st.markdown(f"<div class='{css_class}'>{safe_content}</div>", unsafe_allow_html=True)
-            st.markdown("</div>", unsafe_allow_html=True)
-
-            quick_1, quick_2 = st.columns(2)
-            if quick_1.button("Compare plans", key="chat_quick_compare", use_container_width=True):
-                prompt = "Compare INSIGNIA"
-                st.session_state.messages.append({"role": "user", "content": prompt})
-                st.session_state.messages.append({"role": "assistant", "content": bot_reply(prompt, lang)})
-                st.rerun()
-            if quick_2.button("Need support", key="chat_quick_support", use_container_width=True):
-                prompt = "Need support"
-                st.session_state.messages.append({"role": "user", "content": prompt})
-                st.session_state.messages.append({"role": "assistant", "content": bot_reply(prompt, lang)})
-                st.rerun()
-
-            user_text = st.text_input(
-                "Message",
-                placeholder=t["chat_placeholder"],
-                key="chat_message_input",
-                label_visibility="collapsed",
-            )
-
-            send_col, clear_col = st.columns([2, 1])
-            if send_col.button("Send", key="chat_send_message", use_container_width=True):
-                if user_text.strip():
-                    st.session_state.messages.append({"role": "user", "content": user_text.strip()})
-                    st.session_state.messages.append({"role": "assistant", "content": bot_reply(user_text.strip(), lang)})
-                    st.rerun()
-
-            if clear_col.button("Clear", key="chat_clear_messages", use_container_width=True):
-                st.session_state.messages = [{"role": "assistant", "content": COPY["English"]["chat_hello"]}]
-                st.rerun()
-
-        with tab_predict:
-            st.caption("Select your details and the AI advisor will recommend a course inside the chat.")
-            goal = st.selectbox(
-                "Learning goal",
-                [
-                    "Beginner stock market learning",
-                    "Intraday and swing trading",
-                    "Options and derivatives trading",
-                    "Long-term investing and fundamentals",
-                    "Mutual fund and SIP",
-                    "Commodity and global market",
-                ],
-                key="chat_predict_goal",
-            )
-            experience = st.selectbox(
-                "Experience",
-                ["Beginner", "Intermediate", "Advanced"],
-                key="chat_predict_experience",
-            )
-            budget = st.selectbox(
-                "Budget",
-                ["Budget", "Premium"],
-                key="chat_predict_budget",
-            )
-
-            if st.button("Predict my course", key="chat_predict_button", use_container_width=True):
-                product = predict_course(goal, experience, budget)
-                prompt = f"Predict my course: {goal}, {experience}, {budget}"
-                result = answer(
-                    "AI course prediction result",
-                    format_product(product),
-                    reason="This recommendation is based on your selected learning goal, experience level, and budget preference.",
-                    next_step="Ask the advisor for price, enrollment process, EMI option, or comparison before purchasing.",
-                )
-                st.session_state.messages.append({"role": "user", "content": prompt})
-                st.session_state.messages.append({"role": "assistant", "content": with_language(result, lang, prompt)})
-                st.rerun()
-
-
-def run_tests():
-    return True
-
-
-def main():
-    if "theme" not in st.session_state:
-        st.session_state.theme = "Light"
-
-    if "lang" not in st.session_state:
-        st.session_state.lang = "English"
-
-    if "messages" not in st.session_state:
-        st.session_state.messages = [
-            {
-                "role": "assistant",
-                "content": COPY["English"]["chat_hello"],
-            }
-        ]
-
-    controls_left, controls_right = st.columns([1, 1])
-
-    with controls_left:
-        st.session_state.theme = st.selectbox(
-            "Theme",
-            ["Light", "Dark"],
-            index=["Light", "Dark"].index(st.session_state.theme),
-        )
-
-    with controls_right:
-        st.session_state.lang = st.selectbox(
-            "Language",
-            LANGUAGES,
-            index=LANGUAGES.index(st.session_state.lang),
-        )
-
-    css(st.session_state.theme)
-
-    t = COPY[st.session_state.lang]
-
-    render_header(t)
-    render_hero(t, run_tests())
-    render_products(t)
-    render_insignia(t)
-    render_mentors()
-    render_support(t)
-    render_chat(st.session_state.lang, t)
-
-    st.markdown(
-        """
-        <footer>
-            © 2026 INVESMATE Demo Platform • Professional AI Guided Learning Experience
-        </footer>
-        """,
-        unsafe_allow_html=True,
-    )
-
-
-if __name__ == "__main__":
-    main()
+  } catch(err) {
+    removeTyping();
+    addBotMsg('Connection error. Please check your network.\n\nFor immediate help:\n📞 +91 9016791791\n✉️ support@invesmate.com');
+  }
+
+  isTyping = false;
+  document.getElementById('send-btn').disabled = false;
+  document.getElementById('chat-input').focus();
+}
+
+function sendQuick(text) { document.getElementById('chat-input').value = text; sendMessage(); }
+function handleChatKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
+function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 120) + 'px'; }
+
+// ── INIT ──
+initFilters();
+renderProducts();
+renderInsignia();
+renderMentors();
+</script>
+</body>
+</html>
