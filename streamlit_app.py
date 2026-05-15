@@ -1,720 +1,884 @@
 import streamlit as st
-from datetime import datetime
+import streamlit.components.v1 as components
 
 st.set_page_config(
     page_title="INVESMATE - Stock Market Learning Platform",
-    page_icon="📈",
     layout="wide",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="collapsed"
 )
 
-# -----------------------------
-# CSS
-# -----------------------------
-st.markdown(
-    """
+html_code = r"""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>INVESMATE - Stock Market Learning Platform</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <style>
-.block-container {
-    padding-top: 1.5rem;
-    padding-bottom: 2rem;
+
+:root{
+    --bg:#fafaf8;
+    --surface:#ffffff;
+    --surface2:#f5f3ee;
+    --surface3:#ede9e0;
+    --text:#1a1208;
+    --text2:#6b6150;
+    --text3:#a09880;
+    --accent:#d4601a;
+    --accent2:#f08d3c;
+    --border:#e6e0d4;
+    --radius:20px;
 }
 
-body {
-    background: #fafaf8;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-.main-title {
-    font-size: 56px;
-    font-weight: 900;
-    line-height: 1.05;
-    color: #1a1208;
-    margin-bottom: 10px;
+body{
+    font-family:'DM Sans',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    overflow-x:hidden;
 }
 
-.highlight {
-    color: #d4601a;
+nav{
+    position:sticky;
+    top:0;
+    z-index:999;
+    background:rgba(250,250,248,0.95);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+    padding:18px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
-.hero-box {
-    background: linear-gradient(135deg, #fff7ed, #ffffff);
-    border: 1px solid #e6e0d4;
-    border-radius: 28px;
-    padding: 42px;
-    box-shadow: 0 16px 48px rgba(26,18,8,0.08);
+.nav-brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
 }
 
-.badge {
-    display: inline-block;
-    background: #fff3ea;
-    color: #d4601a;
-    border: 1px solid #f6d4b4;
-    border-radius: 999px;
-    padding: 6px 14px;
-    font-size: 13px;
-    font-weight: 800;
-    margin-bottom: 14px;
+.logo{
+    width:48px;
+    height:48px;
+    border-radius:16px;
+    background:linear-gradient(135deg,var(--accent),#fbbf24);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-weight:800;
+    font-family:'Syne',sans-serif;
 }
 
-.subtext {
-    color: #6b6150;
-    font-size: 18px;
-    line-height: 1.7;
-    max-width: 760px;
+.nav-title{
+    font-family:'Syne',sans-serif;
+    font-size:20px;
+    font-weight:800;
 }
 
-.card {
-    background: #ffffff;
-    border: 1px solid #e6e0d4;
-    border-radius: 22px;
-    padding: 22px;
-    box-shadow: 0 8px 28px rgba(26,18,8,0.07);
-    height: 100%;
+.hero{
+    max-width:1200px;
+    margin:auto;
+    padding:80px 30px;
+    display:grid;
+    grid-template-columns:1fr 420px;
+    gap:40px;
+    align-items:center;
 }
 
-.dark-card {
-    background: #1a1208;
-    color: white;
-    border-radius: 22px;
-    padding: 24px;
-    height: 100%;
+.hero-badge{
+    display:inline-block;
+    padding:8px 18px;
+    background:#fff3ea;
+    border:1px solid #f6d4b4;
+    color:var(--accent);
+    border-radius:999px;
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:18px;
 }
 
-.card h3, .dark-card h3 {
-    margin-top: 0;
-    font-size: 20px;
+.hero h1{
+    font-family:'Syne',sans-serif;
+    font-size:70px;
+    line-height:0.95;
+    margin-bottom:20px;
 }
 
-.price {
-    color: #d4601a;
-    font-size: 18px;
-    font-weight: 800;
+.hero h1 span{
+    color:var(--accent);
 }
 
-.dark-price {
-    color: #f08d3c;
-    font-size: 18px;
-    font-weight: 800;
+.hero p{
+    color:var(--text2);
+    line-height:1.8;
+    font-size:18px;
+    margin-bottom:30px;
 }
 
-.small-muted {
-    color: #6b6150;
-    font-size: 14px;
+.hero-buttons{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
 }
 
-.module-chip {
-    display: inline-block;
-    background: #f5f3ee;
-    color: #6b6150;
-    border-radius: 999px;
-    padding: 5px 10px;
-    margin: 3px;
-    font-size: 12px;
+.btn-primary{
+    background:var(--accent);
+    color:white;
+    border:none;
+    padding:14px 28px;
+    border-radius:999px;
+    font-weight:700;
+    cursor:pointer;
 }
 
-.footer {
-    background: #1a1208;
-    color: rgba(255,255,255,0.78);
-    padding: 28px;
-    border-radius: 24px;
-    text-align: center;
-    line-height: 1.8;
-    margin-top: 30px;
+.btn-secondary{
+    background:white;
+    border:1px solid var(--border);
+    padding:14px 28px;
+    border-radius:999px;
+    font-weight:700;
+    cursor:pointer;
 }
 
-.support-box {
-    background: #ffffff;
-    border: 1px solid #e6e0d4;
-    border-radius: 22px;
-    padding: 24px;
-    height: 100%;
+.hero-card{
+    background:white;
+    border-radius:var(--radius);
+    border:1px solid var(--border);
+    padding:28px;
+    box-shadow:0 18px 48px rgba(0,0,0,0.08);
 }
 
-.chat-box {
-    background: #ffffff;
-    border: 1px solid #e6e0d4;
-    border-radius: 24px;
-    padding: 22px;
-    box-shadow: 0 8px 28px rgba(26,18,8,0.07);
+.hero-card h3{
+    font-family:'Syne',sans-serif;
+    margin-bottom:10px;
 }
+
+.info-box{
+    background:var(--surface2);
+    padding:14px;
+    border-radius:14px;
+    margin-top:12px;
+}
+
+.stats{
+    background:#1a1208;
+    color:white;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    text-align:center;
+    padding:30px;
+}
+
+.stat-number{
+    font-size:40px;
+    font-weight:800;
+    color:var(--accent2);
+}
+
+.section{
+    max-width:1200px;
+    margin:auto;
+    padding:70px 30px;
+}
+
+.section h2{
+    font-family:'Syne',sans-serif;
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+.section p{
+    color:var(--text2);
+}
+
+.search-box{
+    margin-top:30px;
+    margin-bottom:30px;
+}
+
+.search-box input{
+    width:100%;
+    padding:16px;
+    border-radius:14px;
+    border:1px solid var(--border);
+    background:white;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+}
+
+.card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:24px;
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 18px 38px rgba(0,0,0,0.08);
+}
+
+.tag{
+    display:inline-block;
+    padding:6px 12px;
+    border-radius:999px;
+    background:#fff3ea;
+    color:var(--accent);
+    font-size:12px;
+    font-weight:700;
+    margin-bottom:12px;
+}
+
+.card h3{
+    margin-bottom:12px;
+    font-size:20px;
+}
+
+.card p{
+    color:var(--text2);
+    line-height:1.7;
+    margin-bottom:18px;
+}
+
+.price{
+    color:var(--accent);
+    font-weight:800;
+    margin-bottom:6px;
+}
+
+.modules{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:16px;
+}
+
+.module{
+    background:#f5f3ee;
+    padding:6px 12px;
+    border-radius:999px;
+    font-size:12px;
+}
+
+.premium-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+    margin-top:30px;
+}
+
+.premium-card{
+    background:#1a1208;
+    color:white;
+    border-radius:24px;
+    padding:28px;
+}
+
+.premium-card p{
+    color:rgba(255,255,255,0.75);
+}
+
+.premium-price{
+    color:#f08d3c;
+    font-size:22px;
+    font-weight:800;
+    margin-top:16px;
+}
+
+.mentor-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+    margin-top:30px;
+}
+
+.mentor-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:22px;
+    text-align:center;
+}
+
+.avatar{
+    width:70px;
+    height:70px;
+    border-radius:20px;
+    margin:auto;
+    margin-bottom:14px;
+    background:linear-gradient(135deg,var(--accent),#fbbf24);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-weight:800;
+    font-size:24px;
+}
+
+.support-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+    margin-top:30px;
+}
+
+.support-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:28px;
+}
+
+.chatbot{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    width:380px;
+    background:white;
+    border-radius:24px;
+    overflow:hidden;
+    border:1px solid var(--border);
+    box-shadow:0 24px 64px rgba(0,0,0,0.15);
+}
+
+.chat-header{
+    background:#1a1208;
+    color:white;
+    padding:18px;
+    font-weight:700;
+}
+
+.chat-messages{
+    height:320px;
+    overflow:auto;
+    padding:18px;
+    background:#fafaf8;
+}
+
+.message{
+    background:white;
+    padding:12px 16px;
+    border-radius:14px;
+    margin-bottom:12px;
+    border:1px solid var(--border);
+}
+
+.chat-input{
+    display:flex;
+    border-top:1px solid var(--border);
+}
+
+.chat-input input{
+    flex:1;
+    border:none;
+    padding:16px;
+    outline:none;
+}
+
+.chat-input button{
+    background:var(--accent);
+    color:white;
+    border:none;
+    padding:16px 20px;
+    cursor:pointer;
+}
+
+footer{
+    margin-top:60px;
+    background:#1a1208;
+    color:rgba(255,255,255,0.75);
+    text-align:center;
+    padding:40px;
+}
+
+@media(max-width:900px){
+
+.hero{
+    grid-template-columns:1fr;
+}
+
+.grid{
+    grid-template-columns:1fr;
+}
+
+.premium-grid{
+    grid-template-columns:1fr;
+}
+
+.mentor-grid{
+    grid-template-columns:1fr 1fr;
+}
+
+.support-grid{
+    grid-template-columns:1fr;
+}
+
+.stats{
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.chatbot{
+    width:95%;
+    right:2.5%;
+}
+
+.hero h1{
+    font-size:48px;
+}
+
+}
+
 </style>
-""",
-    unsafe_allow_html=True,
-)
+</head>
 
-# -----------------------------
-# DATA
-# -----------------------------
-PRODUCTS = [
-    {
-        "title": "Power of Trading and Investing Combo Course",
-        "category": "Live Course",
-        "tag": "Beginner",
-        "price": "Rs. 8,999 - Rs. 11,999",
-        "duration": "2 Months / 26 Hours",
-        "lessons": "57 Lessons",
-        "description": "A complete capital-market course covering trading and investing from basics to advanced level.",
-        "modules": ["Market basics", "Technical analysis", "Investing foundation", "Real market practice"],
-    },
-    {
-        "title": "Complete Intraday and Swing Trading Strategies",
-        "category": "Live Course",
-        "tag": "Technical Trading",
-        "price": "Rs. 9,999 - Rs. 12,999",
-        "duration": "2 Months / 20 Hours",
-        "lessons": "48 Lessons",
-        "description": "Advanced technical-analysis course for intraday and swing trading.",
-        "modules": ["Chart patterns", "Indicators", "Smart Money Concepts", "Risk control"],
-    },
-    {
-        "title": "Complete Future and Option Trading Strategies",
-        "category": "Live Course",
-        "tag": "Derivatives",
-        "price": "Rs. 12,999 - Rs. 15,999",
-        "duration": "2 Months / 26 Hours",
-        "lessons": "25 Lessons",
-        "description": "Futures and options training for learners who want derivatives strategy knowledge.",
-        "modules": ["Futures basics", "Option buying", "Option selling", "Hedging"],
-    },
-    {
-        "title": "Value Investing Using Advanced Fundamental Analysis",
-        "category": "Live Course",
-        "tag": "Investing",
-        "price": "Rs. 8,999 - Rs. 11,999",
-        "duration": "2 Months / 24 Hours",
-        "lessons": "57 Lessons",
-        "description": "Fundamental-analysis and value-investing roadmap for long-term equity investors.",
-        "modules": ["Business analysis", "Financial statements", "Valuation", "Portfolio mindset"],
-    },
-    {
-        "title": "Introduction To Mutual Funds Investment",
-        "category": "Course",
-        "tag": "Mutual Funds",
-        "price": "Rs. 3,999 - Rs. 6,999",
-        "duration": "1 Month",
-        "lessons": "24 Lessons",
-        "description": "Practical overview of mutual funds, SIPs, and fund selection.",
-        "modules": ["MF basics", "SIP planning", "Fund selection", "Long-term wealth"],
-    },
-    {
-        "title": "Dynamic Investment With Fixed Income Securities",
-        "category": "Recorded Course",
-        "tag": "Fixed Income",
-        "price": "Rs. 10,999",
-        "duration": "12 Hours",
-        "lessons": "33 Lessons",
-        "description": "Recorded course on bonds, government securities, income products, and diversification.",
-        "modules": ["Bonds", "Government securities", "Income planning", "Diversification"],
-    },
-    {
-        "title": "The Comprehensive Roadmap Of Commodity Market",
-        "category": "Live Course",
-        "tag": "Commodity",
-        "price": "Rs. 14,999",
-        "duration": "16 Hours",
-        "lessons": "10 Lessons",
-        "description": "Commodity-market course covering gold, silver, crude oil, natural gas, and risk management.",
-        "modules": ["Gold and silver", "Crude oil", "Natural gas", "Technical view"],
-    },
-    {
-        "title": "Power TI Masterclass",
-        "category": "Free Entry Program",
-        "tag": "Masterclass",
-        "price": "Free / Registration",
-        "duration": "Short Session",
-        "lessons": "Live Session",
-        "description": "Entry-level masterclass for learners starting their stock-market journey.",
-        "modules": ["Orientation", "Counseling", "Beginner roadmap", "Q&A"],
-    },
-    {
-        "title": "Share Samadhan",
-        "category": "Newsletter & Research",
-        "tag": "Market Study",
-        "price": "Included in selected plans",
-        "duration": "Weekly Access",
-        "lessons": "Premium Study",
-        "description": "Weekly Bengali stock-market study for cash, derivatives, IPOs, mutual funds, and trends.",
-        "modules": ["Cash market", "Derivatives", "IPO study", "Mutual funds"],
-    },
-    {
-        "title": "Market Trending All Segment",
-        "category": "Premium Tool Access",
-        "tag": "Market Intelligence",
-        "price": "Included in INSIGNIA plans",
-        "duration": "Plan-based Access",
-        "lessons": "All Segment Access",
-        "description": "Premium market-trending access included in selected INSIGNIA programs.",
-        "modules": ["Cash", "Derivatives", "Commodity", "Fixed asset investment"],
-    },
-    {
-        "title": "INVESMATE Learning App",
-        "category": "Mobile App",
-        "tag": "Learning Platform",
-        "price": "App-based Access",
-        "duration": "Anytime Learning",
-        "lessons": "Course Library",
-        "description": "Mobile app for classes, recordings, academic support, and My Insignia Help.",
-        "modules": ["Live classes", "Recordings", "Support", "Course access"],
-    },
-    {
-        "title": "Insights.Market",
-        "category": "Research Brand",
-        "tag": "SEBI RA Research",
-        "price": "Separate research platform",
-        "duration": "Research Access",
-        "lessons": "Research Products",
-        "description": "SEBI-registered equity research brand under INVESMATE INSIGHTS.",
-        "modules": ["Equity research", "Investor charter", "Disclosures", "Compliance"],
-    },
-]
+<body>
 
-INSIGNIA = [
-    {
-        "title": "Equity Market Intelligence Matrix",
-        "tag": "Premium Mentorship",
-        "price": "Rs. 38,571 / Rs. 44,420",
-        "duration": "3-5 Months",
-        "description": "Premium mentorship combining advanced technical, techno-funda, and fundamental analysis.",
-        "modules": ["Market Trending", "Share Samadhan", "1:1 mentorship", "4 practical sessions", "NISM guidance"],
-    },
-    {
-        "title": "Complete Equity and Derivative Dynasty",
-        "tag": "Options Premium",
-        "price": "Rs. 62,305 / Rs. 44,420",
-        "duration": "6-8 Months",
-        "description": "Advanced premium pathway combining technical, fundamental, derivatives, and fixed-income learning.",
-        "modules": ["Advanced Technical", "Complete Options", "Fixed Income", "8 practical sessions", "Academic helpline"],
-    },
-    {
-        "title": "Complete Global Capital Market Specialist",
-        "tag": "Global Premium",
-        "price": "Rs. 1,07,689 / Rs. 44,420",
-        "duration": "12 Months",
-        "description": "Full-stack global capital-market specialist path including commodities, US stocks, mutual funds, and software training.",
-        "modules": ["US stocks", "Commodity", "Advanced mutual fund", "3 mentorship sessions", "Lifetime recordings"],
-    },
-]
-
-MENTORS = [
-    "Arunava Chatterjee",
-    "Sayan Ghosh",
-    "Kunal Saha",
-    "Suman Goswami",
-    "Laboni Pallab Das",
-    "Debarati Mukherjee",
-    "Pratim Kumar Chakraborty",
-    "Mihir Kanti Chakraborty",
-]
-
-# -----------------------------
-# HELPERS
-# -----------------------------
-def chips(items):
-    return " ".join([f'<span class="module-chip">{item}</span>' for item in items])
-
-
-def course_card(item):
-    return f"""
-    <div class="card">
-        <div class="badge">{item["tag"]}</div>
-        <h3>{item["title"]}</h3>
-        <p>{item["description"]}</p>
-        <p class="price">{item["price"]}</p>
-        <p class="small-muted">{item["duration"]} | {item.get("lessons", "")}</p>
-        <div>{chips(item["modules"])}</div>
-    </div>
-    """
-
-
-def insignia_card(item):
-    return f"""
-    <div class="dark-card">
-        <div class="badge">{item["tag"]}</div>
-        <h3>{item["title"]}</h3>
-        <p>{item["description"]}</p>
-        <p class="dark-price">{item["price"]}</p>
-        <p>{item["duration"]}</p>
-        <div>{chips(item["modules"])}</div>
-    </div>
-    """
-
-
-def predict_course(goal, experience, budget):
-    goal = goal.lower()
-    budget = budget.lower()
-
-    if "option" in goal or "derivative" in goal:
-        return INSIGNIA[1] if "premium" in budget else PRODUCTS[2]
-    if "commodity" in goal or "global" in goal:
-        return INSIGNIA[2] if "premium" in budget else PRODUCTS[6]
-    if "mutual" in goal or "sip" in goal:
-        return PRODUCTS[4]
-    if "intraday" in goal or "swing" in goal or "technical" in goal:
-        return INSIGNIA[0] if "premium" in budget else PRODUCTS[1]
-    if "long" in goal or "fundamental" in goal or "invest" in goal:
-        return INSIGNIA[0] if "premium" in budget else PRODUCTS[3]
-
-    return INSIGNIA[0] if "premium" in budget else PRODUCTS[0]
-
-
-def advisor_reply(prompt):
-    text = prompt.lower()
-
-    if "price" in text or "fee" in text or "cost" in text:
-        return (
-            "Here is the pricing overview:\n\n"
-            "- Beginner and live courses: Rs. 8,999 to Rs. 15,999 approximately\n"
-            "- Mutual fund course: Rs. 3,999 to Rs. 6,999\n"
-            "- INSIGNIA premium plans: Rs. 38,571 onwards\n\n"
-            "For GST, EMI, discounts, and batch timing, please contact the counseling team."
-        )
-
-    if "insignia" in text or "premium" in text:
-        return (
-            "INSIGNIA is the premium mentorship journey from INVESMATE. It is suitable for learners who want structured guidance, "
-            "live support, practical sessions, 1:1 mentorship, and advanced market learning.\n\n"
-            "Top plans:\n"
-            "- Equity Market Intelligence Matrix\n"
-            "- Complete Equity and Derivative Dynasty\n"
-            "- Complete Global Capital Market Specialist"
-        )
-
-    if "option" in text or "future" in text or "derivative" in text:
-        return (
-            "For options and derivatives, the best standard course is Complete Future and Option Trading Strategies. "
-            "For premium mentorship, choose Complete Equity and Derivative Dynasty."
-        )
-
-    if "intraday" in text or "swing" in text or "technical" in text:
-        return (
-            "For intraday, swing trading, and technical analysis, choose Complete Intraday and Swing Trading Strategies. "
-            "If you want premium guidance, Equity Market Intelligence Matrix is a better fit."
-        )
-
-    if "mutual" in text or "sip" in text:
-        return (
-            "For mutual funds and SIP learning, choose Introduction To Mutual Funds Investment. "
-            "It is suitable for beginners and long-term investors."
-        )
-
-    if "enroll" in text or "join" in text or "admission" in text:
-        return (
-            "Enrollment flow:\n\n"
-            "1. Choose your course or INSIGNIA plan\n"
-            "2. Request counseling\n"
-            "3. Confirm fee, GST, EMI, and batch timing\n"
-            "4. Complete payment\n"
-            "5. Access classes through the INVESMATE learning app"
-        )
-
-    if "contact" in text or "support" in text or "call" in text:
-        return (
-            "You can contact INVESMATE here:\n\n"
-            "- +91 9016791791\n"
-            "- +91 7596037781\n"
-            "- +91 7003110622\n"
-            "- support@invesmate.com\n"
-            "- sales@invesmate.com"
-        )
-
-    if "mentor" in text:
-        return (
-            "INVESMATE mentors include Arunava Chatterjee, Sayan Ghosh, Kunal Saha, Suman Goswami, "
-            "Laboni Pallab Das, Debarati Mukherjee, Pratim Kumar Chakraborty, and Mihir Kanti Chakraborty."
-        )
-
-    return (
-        "For beginners, I recommend the Power of Trading and Investing Combo Course. "
-        "For advanced learners, INSIGNIA mentorship is better. You can also use the Course Predictor below for a personalized recommendation."
-    )
-
-
-# -----------------------------
-# NAVIGATION
-# -----------------------------
-st.sidebar.title("INVESMATE")
-page = st.sidebar.radio(
-    "Navigate",
-    [
-        "Home",
-        "Courses",
-        "INSIGNIA",
-        "AI Advisor",
-        "Mentors",
-        "Support",
-    ],
-)
-
-# -----------------------------
-# HOME
-# -----------------------------
-if page == "Home":
-    st.markdown(
-        """
-        <div class="hero-box">
-            <div class="badge">SEBI Registered RA: INH000017985</div>
-            <div class="main-title">
-                Finest Stock Market <span class="highlight">Learning</span> Experience
+<nav>
+    <div class="nav-brand">
+        <div class="logo">IM</div>
+        <div>
+            <div class="nav-title">INVESMATE</div>
+            <div style="font-size:12px;color:#d4601a;font-weight:700;">
+                Stock Market Learning
             </div>
-            <p class="subtext">
-                A professional platform for INVESMATE and INSIGNIA with AI-guided course selection,
-                multilingual support, and personalized mentorship plans for every learner.
-            </p>
         </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.write("")
-    c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Expert Courses", "20+")
-    c2.metric("Certified Mentors", "8")
-    c3.metric("Language Support", "3")
-    c4.metric("Registration", "SEBI RA")
-
-    st.divider()
-
-    st.subheader("Recommended Learning Paths")
-    c1, c2, c3 = st.columns(3)
-
-    with c1:
-        st.markdown(course_card(PRODUCTS[0]), unsafe_allow_html=True)
-    with c2:
-        st.markdown(course_card(PRODUCTS[1]), unsafe_allow_html=True)
-    with c3:
-        st.markdown(insignia_card(INSIGNIA[0]), unsafe_allow_html=True)
-
-# -----------------------------
-# COURSES
-# -----------------------------
-elif page == "Courses":
-    st.title("Complete Product Ecosystem")
-
-    search = st.text_input("Search courses, tools, or mentorship plans")
-    categories = ["All"] + sorted(set(item["category"] for item in PRODUCTS))
-    selected_category = st.selectbox("Filter by category", categories)
-
-    filtered = PRODUCTS
-
-    if selected_category != "All":
-        filtered = [p for p in filtered if p["category"] == selected_category]
-
-    if search:
-        q = search.lower()
-        filtered = [
-            p for p in filtered
-            if q in p["title"].lower()
-            or q in p["description"].lower()
-            or q in p["category"].lower()
-            or q in p["tag"].lower()
-        ]
-
-    if not filtered:
-        st.warning("No courses found. Try another search or category.")
-    else:
-        cols = st.columns(3)
-        for i, product in enumerate(filtered):
-            with cols[i % 3]:
-                st.markdown(course_card(product), unsafe_allow_html=True)
-
-# -----------------------------
-# INSIGNIA
-# -----------------------------
-elif page == "INSIGNIA":
-    st.title("INSIGNIA Premium Mentorship Plans")
-    st.write(
-        "Intensive, structured mentorship programs combining live sessions, 1:1 guidance, practical sessions, and premium learning support."
-    )
-
-    cols = st.columns(3)
-    for i, plan in enumerate(INSIGNIA):
-        with cols[i]:
-            st.markdown(insignia_card(plan), unsafe_allow_html=True)
-
-    st.divider()
-    st.subheader("INSIGNIA Includes")
-    st.write(
-        "- 1:1 mentorship\n"
-        "- Live classes and practical sessions\n"
-        "- Academic helpline\n"
-        "- Market Trending access\n"
-        "- Share Samadhan access\n"
-        "- Lifetime recordings in selected plans\n"
-        "- NISM guidance in selected plans"
-    )
-
-# -----------------------------
-# AI ADVISOR
-# -----------------------------
-elif page == "AI Advisor":
-    st.title("INVESMATE AI Advisor")
-
-    st.markdown('<div class="chat-box">', unsafe_allow_html=True)
-
-    st.subheader("AI Course Predictor")
-
-    c1, c2, c3 = st.columns(3)
-
-    with c1:
-        goal = st.selectbox(
-            "Learning Goal",
-            [
-                "Beginner trading and investing",
-                "Intraday and swing trading",
-                "Options and derivatives",
-                "Long-term investing and fundamentals",
-                "Mutual funds and SIP",
-                "Commodity or global market",
-            ],
-        )
-
-    with c2:
-        experience = st.selectbox(
-            "Experience Level",
-            ["Beginner", "Intermediate", "Advanced"],
-        )
-
-    with c3:
-        budget = st.selectbox(
-            "Budget Preference",
-            ["Standard course", "Premium mentorship"],
-        )
-
-    if st.button("Predict Best Course", type="primary"):
-        result = predict_course(goal, experience, budget)
-        st.success("Recommended Course")
-        if "modules" in result:
-            if result in INSIGNIA:
-                st.markdown(insignia_card(result), unsafe_allow_html=True)
-            else:
-                st.markdown(course_card(result), unsafe_allow_html=True)
-
-    st.divider()
-    st.subheader("Chat with AI Advisor")
-
-    if "messages" not in st.session_state:
-        st.session_state.messages = [
-            {
-                "role": "assistant",
-                "content": (
-                    "Hi! I am your INVESMATE AI Advisor. "
-                    "Ask me about courses, pricing, enrollment, INSIGNIA mentorship, or support."
-                ),
-            }
-        ]
-
-    for msg in st.session_state.messages:
-        with st.chat_message(msg["role"]):
-            st.write(msg["content"])
-
-    prompt = st.chat_input("Ask about courses, pricing, enrollment...")
-
-    if prompt:
-        st.session_state.messages.append({"role": "user", "content": prompt})
-
-        with st.chat_message("user"):
-            st.write(prompt)
-
-        reply = advisor_reply(prompt)
-        reply += "\n\nNote: Investment in securities markets is subject to market risks."
-
-        st.session_state.messages.append({"role": "assistant", "content": reply})
-
-        with st.chat_message("assistant"):
-            st.write(reply)
-
-    st.markdown("</div>", unsafe_allow_html=True)
-
-# -----------------------------
-# MENTORS
-# -----------------------------
-elif page == "Mentors":
-    st.title("Experienced Market Mentors")
-
-    cols = st.columns(4)
-    for i, mentor in enumerate(MENTORS):
-        initials = "".join([x[0] for x in mentor.split()[:2]])
-        with cols[i % 4]:
-            st.markdown(
-                f"""
-                <div class="card" style="text-align:center;">
-                    <div style="
-                        width:64px;
-                        height:64px;
-                        background:linear-gradient(135deg,#d4601a,#fbbf24);
-                        color:white;
-                        border-radius:20px;
-                        display:flex;
-                        align-items:center;
-                        justify-content:center;
-                        font-weight:900;
-                        font-size:20px;
-                        margin:0 auto 14px auto;">
-                        {initials}
-                    </div>
-                    <h3>{mentor}</h3>
-                    <p class="small-muted">Capital market mentor and NISM-certified professional</p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-# -----------------------------
-# SUPPORT
-# -----------------------------
-elif page == "Support":
-    st.title("Support and Counseling")
-
-    c1, c2 = st.columns(2)
-
-    with c1:
-        st.markdown(
-            """
-            <div class="support-box">
-                <h3>Counseling and Support</h3>
-                <p><b>Phone:</b></p>
-                <p>+91 9016791791</p>
-                <p>+91 7596037781</p>
-                <p>+91 7003110622</p>
-                <p><b>Email:</b></p>
-                <p>support@invesmate.com</p>
-                <p>sales@invesmate.com</p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    with c2:
-        st.markdown(
-            """
-            <div class="support-box">
-                <h3>Disclaimer</h3>
-                <p>
-                Investment in securities markets is subject to market risks.
-                Read all related documents carefully before investing.
-                Registration granted by SEBI and certification from NISM in no way guarantee performance
-                of the intermediary or provide any assurance of returns to investors.
-                </p>
-                <p>
-                INVESMATE INSIGHTS is a SEBI Registered Research Analyst platform.
-                This app is for educational purposes only.
-                </p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-# -----------------------------
-# FOOTER
-# -----------------------------
-st.markdown(
-    """
-    <div class="footer">
-        <strong>INVESMATE</strong><br>
-        Stock Market Learning Platform<br>
-        SEBI Registered RA: INH000017985<br>
-        support@invesmate.com | sales@invesmate.com<br><br>
-        Investment in securities markets is subject to market risks.
     </div>
-    """,
-    unsafe_allow_html=True,
-)
+</nav>
+
+<section class="hero">
+
+<div>
+    <div class="hero-badge">
+        SEBI Registered RA: INH000017985
+    </div>
+
+    <h1>
+        Finest Stock Market
+        <span>Learning</span>
+        Experience
+    </h1>
+
+    <p>
+        A professional platform for INVESMATE and INSIGNIA with AI-guided course selection,
+        multilingual support, and personalized mentorship plans for every learner.
+    </p>
+
+    <div class="hero-buttons">
+        <button class="btn-primary">Explore Courses</button>
+        <button class="btn-secondary">Talk to AI Advisor</button>
+    </div>
+</div>
+
+<div class="hero-card">
+
+    <div class="tag">Premium Learning Path</div>
+
+    <h3>Find the right course in minutes</h3>
+
+    <p style="color:#6b6150;">
+        Use our AI advisor and course predictor to choose between beginner,
+        trading, investing, derivatives, and INSIGNIA mentorship plans.
+    </p>
+
+    <div class="info-box">
+        <b>Personalized Prediction</b><br>
+        Course recommendation by goal, budget and experience
+    </div>
+
+    <div class="info-box">
+        <b>Multilingual Support</b><br>
+        English, Bengali and Hindi support
+    </div>
+
+    <div class="info-box">
+        <b>INSIGNIA Premium</b><br>
+        1:1 mentorship and live practical sessions
+    </div>
+
+</div>
+
+</section>
+
+<section class="stats">
+
+<div>
+    <div class="stat-number">20+</div>
+    <div>Expert Courses</div>
+</div>
+
+<div>
+    <div class="stat-number">8</div>
+    <div>Certified Mentors</div>
+</div>
+
+<div>
+    <div class="stat-number">3</div>
+    <div>Language Support</div>
+</div>
+
+<div>
+    <div class="stat-number">SEBI</div>
+    <div>Registered RA</div>
+</div>
+
+</section>
+
+<section class="section">
+
+<h2>Complete Product Ecosystem</h2>
+
+<p>
+Professional stock market learning programs for every level.
+</p>
+
+<div class="search-box">
+    <input type="text" placeholder="Search courses and mentorship plans...">
+</div>
+
+<div class="grid">
+
+<div class="card">
+    <div class="tag">Beginner</div>
+    <h3>Power of Trading and Investing Combo Course</h3>
+    <p>
+        Complete capital-market course covering trading and investing
+        from basics to advanced level.
+    </p>
+
+    <div class="price">
+        Rs. 8,999 - Rs. 11,999
+    </div>
+
+    <div>2 Months / 26 Hours</div>
+
+    <div class="modules">
+        <div class="module">Market basics</div>
+        <div class="module">Technical analysis</div>
+        <div class="module">Investing</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="tag">Technical Trading</div>
+    <h3>Complete Intraday and Swing Trading Strategies</h3>
+    <p>
+        Advanced technical-analysis course for intraday and swing trading.
+    </p>
+
+    <div class="price">
+        Rs. 9,999 - Rs. 12,999
+    </div>
+
+    <div>2 Months / 20 Hours</div>
+
+    <div class="modules">
+        <div class="module">Chart patterns</div>
+        <div class="module">Indicators</div>
+        <div class="module">Risk control</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="tag">Derivatives</div>
+    <h3>Complete Future and Option Trading Strategies</h3>
+
+    <p>
+        Futures and options training for learners who want derivatives strategy knowledge.
+    </p>
+
+    <div class="price">
+        Rs. 12,999 - Rs. 15,999
+    </div>
+
+    <div>2 Months / 26 Hours</div>
+
+    <div class="modules">
+        <div class="module">Options</div>
+        <div class="module">Hedging</div>
+        <div class="module">Futures</div>
+    </div>
+</div>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<h2>INSIGNIA Premium Mentorship Plans</h2>
+
+<p>
+Intensive mentorship with practical market learning.
+</p>
+
+<div class="premium-grid">
+
+<div class="premium-card">
+    <div class="tag">Premium Mentorship</div>
+
+    <h3>Equity Market Intelligence Matrix</h3>
+
+    <p>
+        Advanced technical and fundamental mentorship with live practical sessions.
+    </p>
+
+    <div class="premium-price">
+        Rs. 38,571 / Rs. 44,420
+    </div>
+</div>
+
+<div class="premium-card">
+    <div class="tag">Options Premium</div>
+
+    <h3>Complete Equity and Derivative Dynasty</h3>
+
+    <p>
+        Complete derivatives and technical mastery pathway.
+    </p>
+
+    <div class="premium-price">
+        Rs. 62,305 / Rs. 44,420
+    </div>
+</div>
+
+<div class="premium-card">
+    <div class="tag">Global Premium</div>
+
+    <h3>Complete Global Capital Market Specialist</h3>
+
+    <p>
+        Global market specialist path including US stocks and commodities.
+    </p>
+
+    <div class="premium-price">
+        Rs. 1,07,689 / Rs. 44,420
+    </div>
+</div>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<h2>Experienced Market Mentors</h2>
+
+<div class="mentor-grid">
+
+<div class="mentor-card">
+    <div class="avatar">AC</div>
+    <h3>Arunava Chatterjee</h3>
+    <p>NISM-certified market mentor</p>
+</div>
+
+<div class="mentor-card">
+    <div class="avatar">SG</div>
+    <h3>Sayan Ghosh</h3>
+    <p>NISM-certified market mentor</p>
+</div>
+
+<div class="mentor-card">
+    <div class="avatar">KS</div>
+    <h3>Kunal Saha</h3>
+    <p>NISM-certified market mentor</p>
+</div>
+
+<div class="mentor-card">
+    <div class="avatar">SM</div>
+    <h3>Suman Goswami</h3>
+    <p>NISM-certified market mentor</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<h2>Support and Counseling</h2>
+
+<div class="support-grid">
+
+<div class="support-card">
+    <h3>Contact Team</h3>
+
+    <p>+91 9016791791</p>
+    <p>+91 7596037781</p>
+    <p>+91 7003110622</p>
+
+    <br>
+
+    <p>support@invesmate.com</p>
+    <p>sales@invesmate.com</p>
+</div>
+
+<div class="support-card">
+    <h3>Disclaimer</h3>
+
+    <p>
+        Investment in securities markets is subject to market risks.
+        Read all related documents carefully before investing.
+    </p>
+
+    <br>
+
+    <p>
+        INVESMATE INSIGHTS is a SEBI Registered Research Analyst platform.
+        This platform is for educational purposes only.
+    </p>
+</div>
+
+</div>
+
+</section>
+
+<div class="chatbot">
+
+<div class="chat-header">
+    INVESMATE AI Advisor
+</div>
+
+<div class="chat-messages" id="chatMessages">
+
+<div class="message">
+    Hi! I am your INVESMATE AI Advisor 👋
+</div>
+
+<div class="message">
+    Ask me about:
+    <br><br>
+    • Course recommendations
+    <br>
+    • INSIGNIA mentorship
+    <br>
+    • Pricing and enrollment
+    <br>
+    • Support and counseling
+</div>
+
+</div>
+
+<div class="chat-input">
+
+<input
+    type="text"
+    id="chatInput"
+    placeholder="Ask about courses, pricing, enrollment..."
+>
+
+<button onclick="sendMessage()">
+➜
+</button>
+
+</div>
+
+</div>
+
+<footer>
+
+<strong>INVESMATE</strong>
+<br>
+
+Stock Market Learning Platform
+<br>
+
+SEBI Registered RA: INH000017985
+<br>
+
+support@invesmate.com
+
+<br><br>
+
+Investment in securities markets is subject to market risks.
+
+</footer>
+
+<script>
+
+function sendMessage(){
+
+    const input = document.getElementById("chatInput");
+    const value = input.value.trim();
+
+    if(!value) return;
+
+    const box = document.getElementById("chatMessages");
+
+    box.innerHTML += `
+        <div class="message">
+            <b>You:</b><br>${value}
+        </div>
+    `;
+
+    let reply = `
+        Based on your interest, our advisor recommends:
+        <br><br>
+        • Beginners → Power of Trading and Investing Combo
+        <br>
+        • Technical traders → Intraday & Swing Trading
+        <br>
+        • Advanced learners → INSIGNIA Mentorship
+        <br><br>
+        Note: Investment in securities markets is subject to market risks.
+    `;
+
+    if(value.toLowerCase().includes("option")){
+        reply = `
+            Best recommendation:
+            <br><br>
+            Complete Future and Option Trading Strategies
+            <br><br>
+            Premium Alternative:
+            <br>
+            Complete Equity and Derivative Dynasty
+        `;
+    }
+
+    if(value.toLowerCase().includes("price")){
+        reply = `
+            Course pricing starts from Rs. 3,999 and goes up depending on the program.
+            <br><br>
+            INSIGNIA plans start from Rs. 38,571.
+        `;
+    }
+
+    setTimeout(()=>{
+        box.innerHTML += `
+            <div class="message">
+                <b>Advisor:</b><br>${reply}
+            </div>
+        `;
+
+        box.scrollTop = box.scrollHeight;
+
+    },600);
+
+    input.value = "";
+}
+
+</script>
+
+</body>
+</html>
+"""
+
+components.html(html_code, height=4200, scrolling=True)
