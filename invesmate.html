@@ -1,581 +1,622 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>INVESMATE – Stock Market Learning Platform</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>INVESMATE - Stock Market Learning Platform</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
 <style>
-:root{
-  --bg:#fafaf8;--surface:#fff;--s2:#f5f3ee;--s3:#ede9e0;
-  --txt:#1a1208;--txt2:#6b6150;--txt3:#a09880;
-  --acc:#d4601a;--acc2:#f08d3c;--acc3:#fbbf24;
-  --bdr:#e6e0d4;--bdr2:#d4ccbe;
-  --sh:0 4px 24px rgba(26,18,8,.08);--sh2:0 16px 48px rgba(26,18,8,.13);
-  --r:20px;--r2:12px;--r3:999px;
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   DESIGN TOKENS — LIGHT / DARK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+[data-theme="light"]{
+  --bg:#fafaf8;--surf:#fff;--s2:#f5f3ee;--s3:#ede9e0;
+  --t1:#1a1208;--t2:#6b6150;--t3:#a09880;
+  --bd:#e6e0d4;--bd2:#d4ccbe;
+  --nav:rgba(250,250,248,.93);
+  --sh:0 4px 24px rgba(26,18,8,.07);--sh2:0 20px 56px rgba(26,18,8,.13);
+  --dark-strip:#1a1208;--prem:#1a1208;
+  --disc-bg:#fff8f4;--disc-bd:#f6d4b4;
+  --chat-head1:#1c1108;--chat-head2:#321a08;
 }
+[data-theme="dark"]{
+  --bg:#0d0c0a;--surf:#1a1812;--s2:#221f18;--s3:#2a2720;
+  --t1:#f0e8d5;--t2:#9a8a6a;--t3:#5c5040;
+  --bd:#2e2b24;--bd2:#3a3628;
+  --nav:rgba(13,12,10,.95);
+  --sh:0 4px 24px rgba(0,0,0,.35);--sh2:0 20px 56px rgba(0,0,0,.5);
+  --dark-strip:#080807;--prem:#100e0b;
+  --disc-bg:#1a1008;--disc-bd:#4a2a08;
+  --chat-head1:#0d0b08;--chat-head2:#1c1208;
+}
+:root{
+  --acc:#d4601a;--acc2:#f08d3c;--acc3:#fbbf24;--green:#22c55e;
+  --r:20px;--r2:12px;--r3:999px;
+  --transition:background .25s,color .25s,border-color .25s;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   BASE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);font-size:16px;line-height:1.6;overflow-x:hidden}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t1);font-size:16px;line-height:1.6;overflow-x:hidden;transition:var(--transition)}
 
-/* ── NAV ── */
-nav{position:sticky;top:0;z-index:100;background:rgba(250,250,248,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:68px}
-.nav-brand{display:flex;align-items:center;gap:.75rem;text-decoration:none}
-.nav-logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--acc),var(--acc3));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#fff;box-shadow:0 6px 20px rgba(212,96,26,.3)}
-.nav-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;color:var(--txt)}
-.nav-tagline{font-size:.7rem;color:var(--acc);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
-.nav-links{display:flex;align-items:center;gap:2rem}
-.nav-links a{color:var(--txt2);font-weight:500;text-decoration:none;font-size:.9rem;transition:color .2s}
-.nav-links a:hover{color:var(--txt)}
-.nav-cta{background:var(--txt)!important;color:#fff!important;padding:.5rem 1.2rem;border-radius:var(--r3);font-weight:600!important;font-size:.85rem!important}
-.nav-cta:hover{background:var(--acc)!important}
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   NAV
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+nav{position:sticky;top:0;z-index:300;background:var(--nav);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--bd);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:66px;gap:1rem;transition:var(--transition)}
+.nav-brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;flex-shrink:0}
+.nav-logo{width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,var(--acc),var(--acc3));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.95rem;color:#fff;box-shadow:0 5px 18px rgba(212,96,26,.35)}
+.nav-name{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--t1)}
+.nav-tag{font-size:.65rem;color:var(--acc);font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.nav-links{display:flex;align-items:center;gap:1.5rem}
+.nav-links a{color:var(--t2);font-weight:500;text-decoration:none;font-size:.88rem;transition:color .18s;white-space:nowrap}
+.nav-links a:hover,.nav-links a:focus{color:var(--t1)}
+.nav-cta{background:var(--t1)!important;color:var(--bg)!important;padding:.45rem 1rem;border-radius:var(--r3);font-weight:600!important;font-size:.82rem!important;transition:background .2s,color .2s!important}
+.nav-cta:hover{background:var(--acc)!important;color:#fff!important}
+.nav-right{display:flex;align-items:center;gap:.5rem;flex-shrink:0}
+.lang-sel{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r2);padding:.32rem .55rem;font-size:.75rem;font-weight:600;color:var(--t2);cursor:pointer;outline:none;font-family:'DM Sans',sans-serif;transition:var(--transition);appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%23a09880'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .4rem center;padding-right:1.4rem}
+.lang-sel:focus{border-color:var(--acc)}
+.theme-btn{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r2);padding:.32rem .65rem;font-size:.8rem;font-weight:600;color:var(--t2);cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:.3rem;white-space:nowrap}
+.theme-btn:hover{border-color:var(--acc);color:var(--acc)}
 
-/* ── HERO ── */
-.hero-wrap{padding:5rem 2rem 4rem;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 420px;gap:3rem;align-items:center;animation:fadeUp .7s ease both}
-.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:var(--s2);border:1px solid var(--bdr2);border-radius:var(--r3);padding:.35rem .9rem;font-size:.75rem;font-weight:600;color:var(--acc);letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
-.hero-badge::before{content:'●';font-size:.5rem;animation:pulse 2s infinite}
-.hero-wrap h1{font-family:'Syne',sans-serif;font-size:clamp(2.8rem,5.5vw,4.8rem);font-weight:800;line-height:.96;letter-spacing:-.05em;margin-bottom:1.25rem}
-.hero-wrap h1 em{font-style:normal;color:var(--acc)}
-.hero-sub{font-size:1.05rem;color:var(--txt2);line-height:1.75;max-width:520px;margin-bottom:2rem}
-.hero-actions{display:flex;gap:.75rem;flex-wrap:wrap}
-.btn-pri{background:var(--acc);color:#fff;padding:.85rem 1.6rem;border-radius:var(--r3);font-weight:600;font-size:.95rem;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:.4rem;box-shadow:0 8px 24px rgba(212,96,26,.28);transition:transform .2s,box-shadow .2s}
-.btn-pri:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(212,96,26,.36)}
-.btn-out{background:transparent;color:var(--txt);padding:.85rem 1.6rem;border-radius:var(--r3);font-weight:600;font-size:.95rem;border:1.5px solid var(--bdr2);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:.4rem;transition:border-color .2s,background .2s}
-.btn-out:hover{border-color:var(--acc);background:var(--s2)}
-.hero-card{background:var(--surface);border:1px solid var(--bdr);border-radius:var(--r);padding:1.75rem;box-shadow:var(--sh2)}
-.hc-label{display:inline-block;background:var(--acc);color:#fff;border-radius:var(--r3);padding:.25rem .75rem;font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:1rem}
-.hero-card h3{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:.5rem}
-.hero-card p{color:var(--txt2);font-size:.88rem;margin-bottom:1.25rem}
-.info-row{background:var(--s2);border-radius:var(--r2);padding:.85rem 1rem;margin-bottom:.6rem;border:1px solid var(--bdr)}
-.info-row strong{display:block;font-size:.88rem;margin-bottom:.2rem}
-.info-row small{color:var(--txt2);font-size:.8rem}
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   HERO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.hero{padding:5rem 2rem 4rem;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 400px;gap:3rem;align-items:center;animation:fadeUp .7s ease both}
+.hero-badge{display:inline-flex;align-items:center;gap:.45rem;background:var(--s2);border:1px solid var(--bd2);border-radius:var(--r3);padding:.32rem .85rem;font-size:.72rem;font-weight:700;color:var(--acc);letter-spacing:.07em;text-transform:uppercase;margin-bottom:1.1rem}
+.hero-badge::before{content:'●';font-size:.45rem;animation:pulse 2s infinite}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.5rem,5vw,4.5rem);font-weight:800;line-height:.95;letter-spacing:-.05em;margin-bottom:1.2rem;color:var(--t1)}
+.hero h1 em{font-style:normal;color:var(--acc)}
+.hero-sub{font-size:.98rem;color:var(--t2);line-height:1.75;max-width:500px;margin-bottom:1.9rem}
+.hero-btns{display:flex;gap:.7rem;flex-wrap:wrap}
+.btn-p{background:var(--acc);color:#fff;padding:.8rem 1.5rem;border-radius:var(--r3);font-weight:600;font-size:.92rem;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:.38rem;box-shadow:0 8px 24px rgba(212,96,26,.3);transition:transform .2s,box-shadow .2s}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(212,96,26,.4)}
+.btn-o{background:transparent;color:var(--t1);padding:.8rem 1.5rem;border-radius:var(--r3);font-weight:600;font-size:.92rem;border:1.5px solid var(--bd2);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:.38rem;transition:all .2s}
+.btn-o:hover{border-color:var(--acc);color:var(--acc);background:var(--s2)}
+.hero-card{background:var(--surf);border:1px solid var(--bd);border-radius:var(--r);padding:1.65rem;box-shadow:var(--sh2)}
+.hc-lbl{display:inline-block;background:var(--acc);color:#fff;border-radius:var(--r3);padding:.22rem .7rem;font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.9rem}
+.hero-card h3{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:.45rem;color:var(--t1)}
+.hero-card p{color:var(--t2);font-size:.84rem;margin-bottom:1.1rem;line-height:1.6}
+.irow{background:var(--s2);border-radius:var(--r2);padding:.8rem .95rem;margin-bottom:.55rem;border:1px solid var(--bd)}
+.irow strong{display:block;font-size:.84rem;margin-bottom:.12rem;color:var(--t1)}
+.irow small{color:var(--t2);font-size:.76rem}
 
-/* ── STATS ── */
-.stats{background:var(--txt);color:#fff;padding:2rem;display:flex;justify-content:center}
-.stat{flex:1;max-width:220px;text-align:center;padding:0 2rem;border-right:1px solid rgba(255,255,255,.12)}
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   STATS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.stats{background:var(--dark-strip);padding:1.85rem 2rem;display:flex;justify-content:center;transition:background .25s}
+.stat{flex:1;max-width:210px;text-align:center;padding:0 1.75rem;border-right:1px solid rgba(255,255,255,.09)}
 .stat:last-child{border-right:none}
-.stat-n{font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;color:var(--acc2)}
-.stat-l{font-size:.82rem;color:rgba(255,255,255,.6);margin-top:.2rem}
+.stat-n{font-family:'Syne',sans-serif;font-size:2.3rem;font-weight:800;color:var(--acc2)}
+.stat-l{font-size:.78rem;color:rgba(255,255,255,.5);margin-top:.12rem}
 
-/* ── SECTIONS ── */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SECTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .sec{padding:4rem 2rem;max-width:1200px;margin:0 auto}
-.eyebrow{font-size:.72rem;font-weight:700;color:var(--acc);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
-.sec-title{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;letter-spacing:-.04em;margin-bottom:.5rem}
-.sec-sub{color:var(--txt2);font-size:1rem;max-width:600px;line-height:1.7}
-.divider{border:none;border-top:1px solid var(--bdr)}
+.ey{font-size:.68rem;font-weight:700;color:var(--acc);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.45rem}
+.sec-h{font-family:'Syne',sans-serif;font-size:clamp(1.7rem,3.5vw,2.6rem);font-weight:800;letter-spacing:-.04em;margin-bottom:.45rem;color:var(--t1)}
+.sec-sub{color:var(--t2);font-size:.97rem;max-width:580px;line-height:1.7}
+.div{border:none;border-top:1px solid var(--bd)}
 
-/* ── PRODUCTS ── */
-.filter-bar{display:flex;gap:.6rem;flex-wrap:wrap;margin:1.5rem 0 .5rem}
-.fchip{background:var(--s2);border:1.5px solid var(--bdr);border-radius:var(--r3);padding:.4rem 1rem;font-size:.8rem;font-weight:600;color:var(--txt2);cursor:pointer;transition:all .2s;white-space:nowrap}
-.fchip.active,.fchip:hover{background:var(--txt);color:#fff;border-color:var(--txt)}
-.search-wrap{position:relative;display:inline-block;width:100%;max-width:380px;margin-bottom:1.5rem}
-.search-icon{position:absolute;left:.8rem;top:50%;transform:translateY(-50%);color:var(--txt3);pointer-events:none}
-.search-inp{background:var(--s2);border:1.5px solid var(--bdr);border-radius:var(--r2);padding:.65rem 1rem .65rem 2.5rem;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--txt);outline:none;width:100%;transition:border-color .2s}
-.search-inp:focus{border-color:var(--acc)}
-.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
-.pcard{background:var(--surface);border:1px solid var(--bdr);border-radius:var(--r);padding:1.5rem;box-shadow:var(--sh);transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column}
-.pcard:hover{transform:translateY(-4px);box-shadow:var(--sh2)}
-.ptag{display:inline-block;background:var(--s2);color:var(--acc);border:1px solid var(--bdr2);border-radius:var(--r3);padding:.2rem .65rem;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.85rem}
-.pcard h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;line-height:1.3;margin-bottom:.5rem}
-.pcard p{color:var(--txt2);font-size:.83rem;line-height:1.6;flex:1;margin-bottom:1rem}
-.pmeta{display:flex;flex-direction:column;gap:.5rem;margin-top:auto}
-.mpill{background:var(--s2);border-radius:var(--r2);padding:.5rem .75rem;font-size:.8rem;display:flex;justify-content:space-between}
-.mods{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.75rem}
-.mchip{background:var(--s3);border-radius:var(--r3);padding:.2rem .6rem;font-size:.7rem;color:var(--txt2)}
-.no-res{text-align:center;color:var(--txt3);padding:3rem;font-size:.95rem;grid-column:1/-1}
+/* Products */
+.fbar{display:flex;gap:.55rem;flex-wrap:wrap;margin:1.4rem 0 .5rem}
+.fc{background:var(--s2);border:1.5px solid var(--bd);border-radius:var(--r3);padding:.36rem .9rem;font-size:.77rem;font-weight:600;color:var(--t2);cursor:pointer;transition:all .2s;white-space:nowrap}
+.fc.on,.fc:hover{background:var(--t1);color:var(--bg);border-color:var(--t1)}
+.swrap{position:relative;max-width:370px;width:100%;margin-bottom:1.4rem}
+.sico{position:absolute;left:.8rem;top:50%;transform:translateY(-50%);color:var(--t3);pointer-events:none;font-size:.85rem}
+.sinp{background:var(--s2);border:1.5px solid var(--bd);border-radius:var(--r2);padding:.6rem 1rem .6rem 2.35rem;font-family:'DM Sans',sans-serif;font-size:.87rem;color:var(--t1);outline:none;width:100%;transition:border-color .2s,var(--transition)}
+.sinp:focus{border-color:var(--acc)}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.15rem}
+.pc{background:var(--surf);border:1px solid var(--bd);border-radius:var(--r);padding:1.4rem;box-shadow:var(--sh);transition:transform .22s,box-shadow .22s;display:flex;flex-direction:column}
+.pc:hover{transform:translateY(-4px);box-shadow:var(--sh2)}
+.ptag{display:inline-block;background:var(--s2);color:var(--acc);border:1px solid var(--bd2);border-radius:var(--r3);padding:.16rem .58rem;font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.8rem}
+.pc h3{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;line-height:1.3;margin-bottom:.45rem;color:var(--t1)}
+.pc p{color:var(--t2);font-size:.8rem;line-height:1.6;flex:1;margin-bottom:.9rem}
+.pmeta{display:flex;flex-direction:column;gap:.42rem;margin-top:auto}
+.mpill{background:var(--s2);border-radius:var(--r2);padding:.42rem .68rem;font-size:.77rem;display:flex;justify-content:space-between;color:var(--t1)}
+.mods{display:flex;flex-wrap:wrap;gap:.28rem;margin-top:.65rem}
+.mchip{background:var(--s3);border-radius:var(--r3);padding:.16rem .52rem;font-size:.66rem;color:var(--t2)}
+.nores{text-align:center;color:var(--t3);padding:3rem;font-size:.9rem;grid-column:1/-1}
 
-/* ── PREMIUM ── */
-.prem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:1.5rem}
-.prem-card{background:var(--txt);color:#fff;border-radius:var(--r);padding:1.75rem;position:relative;overflow:hidden;transition:transform .25s}
-.prem-card::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;background:radial-gradient(circle,rgba(212,96,26,.35),transparent 70%);pointer-events:none}
-.prem-card:hover{transform:translateY(-4px)}
-.prem-tier{font-size:.7rem;font-weight:700;letter-spacing:.1em;color:var(--acc2);text-transform:uppercase;margin-bottom:.75rem}
-.prem-card h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:.5rem;line-height:1.3}
-.prem-card p{color:rgba(255,255,255,.6);font-size:.83rem;line-height:1.6;margin-bottom:1rem}
-.prem-price{font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:800;color:var(--acc2);margin-bottom:.25rem}
-.prem-dur{font-size:.78rem;color:rgba(255,255,255,.5)}
-.prem-feats{list-style:none;margin-top:1rem;display:flex;flex-direction:column;gap:.4rem}
-.prem-feats li{font-size:.8rem;color:rgba(255,255,255,.75);display:flex;align-items:center;gap:.5rem}
-.prem-feats li::before{content:'✓';color:var(--acc2);font-weight:700;flex-shrink:0}
+/* INSIGNIA */
+.igrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.15rem;margin-top:1.4rem}
+.icard{background:var(--prem);color:#f0e8d5;border-radius:var(--r);padding:1.65rem;position:relative;overflow:hidden;transition:transform .22s,background .25s}
+.icard::before{content:'';position:absolute;top:-45px;right:-45px;width:150px;height:150px;background:radial-gradient(circle,rgba(212,96,26,.28),transparent 68%);pointer-events:none}
+.icard:hover{transform:translateY(-4px)}
+.i-tier{font-size:.66rem;font-weight:700;letter-spacing:.12em;color:var(--acc2);text-transform:uppercase;margin-bottom:.7rem}
+.icard h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;margin-bottom:.45rem;line-height:1.3;color:#f0e8d5}
+.icard p{color:rgba(240,232,213,.5);font-size:.79rem;line-height:1.6;margin-bottom:.9rem}
+.i-price{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:800;color:var(--acc2);margin-bottom:.18rem}
+.i-dur{font-size:.74rem;color:rgba(240,232,213,.4)}
+.i-feats{list-style:none;margin-top:.9rem;display:flex;flex-direction:column;gap:.38rem}
+.i-feats li{font-size:.76rem;color:rgba(240,232,213,.65);display:flex;align-items:center;gap:.45rem}
+.i-feats li::before{content:'✓';color:var(--acc2);font-weight:700;flex-shrink:0}
 
-/* ── MENTORS ── */
-.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1.5rem}
-.mcard{background:var(--surface);border:1px solid var(--bdr);border-radius:var(--r);padding:1.25rem;text-align:center;box-shadow:var(--sh);transition:transform .2s}
+/* Mentors */
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:.95rem;margin-top:1.4rem}
+.mcard{background:var(--surf);border:1px solid var(--bd);border-radius:var(--r);padding:1.15rem;text-align:center;box-shadow:var(--sh);transition:transform .2s}
 .mcard:hover{transform:translateY(-3px)}
-.mavatar{width:58px;height:58px;border-radius:18px;background:linear-gradient(135deg,var(--acc),var(--acc3));color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;margin:0 auto .75rem}
-.mname{font-weight:600;font-size:.88rem;margin-bottom:.2rem}
-.mrole{font-size:.76rem;color:var(--txt3)}
+.mav{width:52px;height:52px;border-radius:15px;background:linear-gradient(135deg,var(--acc),var(--acc3));color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.95rem;margin:0 auto .65rem}
+.mname{font-weight:600;font-size:.84rem;margin-bottom:.18rem;color:var(--t1)}
+.mrole{font-size:.72rem;color:var(--t3)}
 
-/* ── SUPPORT ── */
-.sup-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:1.5rem}
-.sup-card{background:var(--surface);border:1px solid var(--bdr);border-radius:var(--r);padding:1.75rem;box-shadow:var(--sh)}
-.sup-icon{font-size:1.75rem;margin-bottom:.75rem}
-.sup-card h3{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:.75rem}
-.c-item{display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem;color:var(--txt2);font-size:.9rem}
-.c-item a{color:var(--acc);text-decoration:none;font-weight:500}
+/* Support */
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.15rem;margin-top:1.4rem}
+.sc{background:var(--surf);border:1px solid var(--bd);border-radius:var(--r);padding:1.65rem;box-shadow:var(--sh)}
+.sc-ico{font-size:1.6rem;margin-bottom:.65rem}
+.sc h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:.7rem;color:var(--t1)}
+.ci{display:flex;align-items:center;gap:.55rem;margin-bottom:.48rem;color:var(--t2);font-size:.86rem}
+.ci a{color:var(--acc);text-decoration:none;font-weight:500}
+.ci a:hover{text-decoration:underline}
+footer{background:var(--dark-strip);color:rgba(255,255,255,.45);text-align:center;padding:1.85rem;font-size:.78rem;line-height:1.9;margin-top:2rem;transition:background .25s}
+footer strong{color:rgba(255,255,255,.75)}
 
-/* ── CHATBOT ── */
-.chat-fab{position:fixed;bottom:1.75rem;right:1.75rem;z-index:500;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--acc3));color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 8px 28px rgba(212,96,26,.4);transition:transform .2s,box-shadow .2s}
-.chat-fab:hover{transform:scale(1.08);box-shadow:0 14px 40px rgba(212,96,26,.5)}
-.chat-badge{position:absolute;top:-4px;right:-4px;background:#22c55e;border:2px solid var(--bg);width:16px;height:16px;border-radius:50%;animation:pulse 2s infinite}
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   CHAT FAB
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.fab{position:fixed;bottom:1.75rem;right:1.75rem;z-index:700;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--acc3));color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.45rem;box-shadow:0 8px 26px rgba(212,96,26,.45);transition:transform .2s,box-shadow .2s}
+.fab:hover{transform:scale(1.09);box-shadow:0 14px 38px rgba(212,96,26,.55)}
+.fab-dot{position:absolute;top:-3px;right:-3px;background:var(--green);border:2.5px solid var(--bg);width:15px;height:15px;border-radius:50%;animation:pulse 2s infinite}
 
-.chat-win{position:fixed;bottom:5.5rem;right:1.75rem;z-index:500;width:400px;height:600px;background:var(--surface);border:1px solid var(--bdr);border-radius:24px;box-shadow:0 24px 64px rgba(26,18,8,.2);display:flex;flex-direction:column;transform:scale(.93) translateY(18px);opacity:0;pointer-events:none;transition:transform .28s cubic-bezier(.34,1.56,.64,1),opacity .2s;overflow:hidden}
-.chat-win.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all}
-
-/* Chat Header */
-.chat-head{background:var(--txt);color:#fff;padding:1rem 1.25rem;display:flex;align-items:center;gap:.75rem;flex-shrink:0}
-.ch-ava{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--acc),var(--acc3));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
-.ch-info{flex:1}
-.ch-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem}
-.ch-status{font-size:.7rem;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:.3rem}
-.ch-status::before{content:'●';color:#22c55e;font-size:.55rem;animation:pulse 2s infinite}
-.ch-close{background:rgba(255,255,255,.12);border:none;color:#fff;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:1rem;transition:background .2s;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.ch-close:hover{background:rgba(255,255,255,.22)}
-
-/* Chat Tabs */
-.chat-tabs{display:flex;background:var(--s2);border-bottom:1px solid var(--bdr);flex-shrink:0;overflow-x:auto}
-.chat-tabs::-webkit-scrollbar{display:none}
-.ctab{flex:1;min-width:0;padding:.6rem .3rem;font-size:.7rem;font-weight:600;color:var(--txt3);border:none;background:transparent;cursor:pointer;transition:all .2s;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:.25rem;border-bottom:2px solid transparent}
-.ctab:hover{color:var(--txt2);background:rgba(0,0,0,.03)}
-.ctab.active{color:var(--acc);border-bottom-color:var(--acc);background:var(--surface)}
-
-/* Chat Lang Bar */
-.lang-bar{padding:.5rem 1rem;background:var(--s2);border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:.4rem;flex-shrink:0;flex-wrap:wrap}
-.lang-bar span{font-size:.68rem;color:var(--txt3);font-weight:600}
-.lbtn{background:transparent;border:1px solid var(--bdr2);border-radius:var(--r3);padding:.15rem .55rem;font-size:.68rem;font-weight:600;color:var(--txt2);cursor:pointer;transition:all .15s}
-.lbtn.active,.lbtn:hover{background:var(--acc);color:#fff;border-color:var(--acc)}
-
-/* Chat Panels */
-.chat-panels{flex:1;overflow:hidden;position:relative;min-height:0}
-.cpanel{position:absolute;inset:0;overflow-y:auto;display:none;flex-direction:column}
-.cpanel.active{display:flex}
-.cpanel::-webkit-scrollbar{width:4px}
-.cpanel::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
-
-/* Messages panel */
-#panel-chat{padding:.75rem;gap:.65rem}
-
-/* Generic scrollable panel content */
-.panel-body{padding:1rem}
-
-/* Msg bubbles */
-.msg{max-width:86%;display:flex;flex-direction:column;gap:.2rem}
-.msg.user{align-self:flex-end;align-items:flex-end}
-.msg.bot{align-self:flex-start;align-items:flex-start}
-.bubble{padding:.65rem .95rem;border-radius:16px;font-size:.85rem;line-height:1.6;white-space:pre-wrap;word-break:break-word}
-.msg.user .bubble{background:var(--acc);color:#fff;border-radius:16px 16px 4px 16px}
-.msg.bot .bubble{background:var(--s2);color:var(--txt);border:1px solid var(--bdr);border-radius:16px 16px 16px 4px}
-.msg-time{font-size:.65rem;color:var(--txt3)}
-.typing-row{align-self:flex-start}
-.typing-bub{display:flex;gap:.3rem;align-items:center;padding:.65rem .95rem;background:var(--s2);border:1px solid var(--bdr);border-radius:16px 16px 16px 4px;width:fit-content}
-.tdot{width:6px;height:6px;border-radius:50%;background:var(--txt3);animation:typing 1.2s infinite}
-.tdot:nth-child(2){animation-delay:.2s}
-.tdot:nth-child(3){animation-delay:.4s}
-
-/* Quick chips at bottom of chat */
-.qchips{padding:.5rem .75rem;border-top:1px solid var(--bdr);display:flex;gap:.35rem;flex-wrap:wrap;background:var(--surface);flex-shrink:0}
-.qchip{background:var(--s2);border:1px solid var(--bdr2);border-radius:var(--r3);padding:.25rem .7rem;font-size:.72rem;font-weight:500;color:var(--txt2);cursor:pointer;transition:all .15s;white-space:nowrap}
-.qchip:hover{background:var(--s3);border-color:var(--acc);color:var(--acc)}
-
-/* Input bar */
-.chat-inp-bar{padding:.75rem 1rem;border-top:1px solid var(--bdr);display:flex;gap:.5rem;align-items:flex-end;background:var(--surface);flex-shrink:0}
-.chat-textarea{flex:1;background:var(--s2);border:1.5px solid var(--bdr);border-radius:var(--r2);padding:.6rem .85rem;font-family:'DM Sans',sans-serif;font-size:.86rem;color:var(--txt);outline:none;resize:none;min-height:40px;max-height:110px;transition:border-color .2s;line-height:1.5}
-.chat-textarea:focus{border-color:var(--acc)}
-.chat-textarea::placeholder{color:var(--txt3)}
-.chat-send{background:var(--acc);color:#fff;border:none;width:40px;height:40px;border-radius:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;transition:background .2s,transform .15s}
-.chat-send:hover{background:#c0531a;transform:scale(1.05)}
-.chat-send:disabled{background:var(--bdr2);cursor:not-allowed;transform:none}
-
-/* ── IN-CHAT WIDGETS ── */
-/* Predictor */
-.pred-widget{background:var(--surface);border:1.5px solid var(--bdr2);border-radius:16px 16px 16px 4px;padding:1rem 1.1rem;max-width:95%;display:flex;flex-direction:column;gap:.6rem;align-self:flex-start}
-.pw-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.86rem;color:var(--txt);display:flex;align-items:center;gap:.35rem}
-.pw-row{display:flex;flex-direction:column;gap:.2rem}
-.pw-row label{font-size:.66rem;font-weight:700;color:var(--txt3);letter-spacing:.07em;text-transform:uppercase}
-.pw-sel{background:var(--s2);border:1.5px solid var(--bdr);border-radius:var(--r2);padding:.48rem .7rem;font-family:'DM Sans',sans-serif;font-size:.82rem;color:var(--txt);outline:none;cursor:pointer;width:100%;appearance:none;transition:border-color .2s}
-.pw-sel:focus{border-color:var(--acc)}
-.pw-btn{background:var(--acc);color:#fff;border:none;border-radius:var(--r2);padding:.58rem 1rem;font-family:'DM Sans',sans-serif;font-size:.84rem;font-weight:600;cursor:pointer;transition:background .2s,transform .15s}
-.pw-btn:hover{background:#c0531a;transform:scale(1.01)}
-/* Predictor result */
-.pred-res{background:linear-gradient(135deg,#fff8f4,#fff3ea);border:1.5px solid #f6d4b4;border-radius:16px 16px 16px 4px;padding:.9rem 1rem;max-width:95%;display:flex;flex-direction:column;gap:.4rem;align-self:flex-start;animation:fadeUp .35s ease}
-.pr-label{font-size:.66rem;font-weight:700;color:var(--acc);letter-spacing:.08em;text-transform:uppercase}
-.pred-res h4{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:800;color:var(--txt);line-height:1.3}
-.pred-res p{font-size:.8rem;color:var(--txt2);line-height:1.55}
-.pr-chips{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.2rem}
-.pr-chip{background:#fff;border:1px solid #f6d4b4;border-radius:var(--r3);padding:.18rem .6rem;font-size:.7rem;font-weight:600;color:var(--acc)}
-
-/* Compare widget */
-.cmp-widget{background:var(--surface);border:1.5px solid var(--bdr2);border-radius:16px 16px 16px 4px;padding:1rem 1.1rem;max-width:100%;width:100%;display:flex;flex-direction:column;gap:.6rem;align-self:flex-start}
-.cmp-selects{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
-.cmp-table{width:100%;border-collapse:collapse;font-size:.75rem;margin-top:.25rem}
-.cmp-table th{background:var(--txt);color:#fff;padding:.5rem .6rem;text-align:left;font-weight:600}
-.cmp-table td{padding:.45rem .6rem;border-bottom:1px solid var(--bdr);vertical-align:top}
-.cmp-table tr:nth-child(even) td{background:var(--s2)}
-.cmp-table .row-label{font-weight:600;color:var(--txt2);white-space:nowrap}
-
-/* Panel cards for Products / INSIGNIA / Mentors / Support */
-.pc-card{background:var(--surface);border:1px solid var(--bdr);border-radius:var(--r2);padding:1rem;box-shadow:var(--sh);margin-bottom:.75rem}
-.pc-card:last-child{margin-bottom:0}
-.pc-tag{display:inline-block;background:var(--s2);color:var(--acc);border:1px solid var(--bdr2);border-radius:var(--r3);padding:.15rem .55rem;font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem}
-.pc-card h4{font-family:'Syne',sans-serif;font-size:.88rem;font-weight:700;line-height:1.3;margin-bottom:.3rem}
-.pc-card p{font-size:.78rem;color:var(--txt2);line-height:1.55;margin-bottom:.55rem}
-.pc-row{display:flex;justify-content:space-between;font-size:.76rem;padding:.35rem .5rem;background:var(--s2);border-radius:8px;margin-bottom:.3rem}
-.pc-row strong{color:var(--acc)}
-.pc-mods{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.4rem}
-.pc-mod{background:var(--s3);border-radius:var(--r3);padding:.15rem .55rem;font-size:.68rem;color:var(--txt2)}
-
-/* Mentor panel card */
-.mc-card{display:flex;align-items:center;gap:.85rem;padding:.85rem 1rem;background:var(--surface);border:1px solid var(--bdr);border-radius:var(--r2);box-shadow:var(--sh);margin-bottom:.6rem}
-.mc-ava{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--acc),var(--acc3));color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.9rem;flex-shrink:0}
-.mc-info h4{font-weight:600;font-size:.88rem;margin-bottom:.15rem}
-.mc-info p{font-size:.76rem;color:var(--txt3)}
-
-/* Support panel */
-.sup-section{margin-bottom:1.25rem}
-.sup-section h4{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;margin-bottom:.6rem;color:var(--txt)}
-.sup-btn{display:flex;align-items:center;gap:.6rem;padding:.75rem 1rem;background:var(--surface);border:1px solid var(--bdr);border-radius:var(--r2);text-decoration:none;color:var(--txt);margin-bottom:.5rem;transition:border-color .2s,background .2s;box-shadow:var(--sh)}
-.sup-btn:hover{border-color:var(--acc);background:var(--s2)}
-.sup-btn-icon{font-size:1.1rem}
-.sup-btn-text strong{display:block;font-size:.84rem;font-weight:600}
-.sup-btn-text span{font-size:.75rem;color:var(--txt3)}
-.disc-box{background:linear-gradient(135deg,#fff8f4,#fff3ea);border:1.5px solid #f6d4b4;border-radius:var(--r2);padding:1rem;font-size:.78rem;color:var(--txt2);line-height:1.65}
-
-/* Section search/filter in panel */
-.panel-search{width:100%;background:var(--s2);border:1.5px solid var(--bdr);border-radius:var(--r2);padding:.5rem .8rem;font-family:'DM Sans',sans-serif;font-size:.83rem;color:var(--txt);outline:none;margin-bottom:.85rem;transition:border-color .2s}
-.panel-search:focus{border-color:var(--acc)}
-.panel-filter{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.85rem}
-.pfchip{background:var(--s2);border:1px solid var(--bdr);border-radius:var(--r3);padding:.25rem .7rem;font-size:.72rem;font-weight:600;color:var(--txt2);cursor:pointer;transition:all .15s}
-.pfchip.active,.pfchip:hover{background:var(--txt);color:#fff;border-color:var(--txt)}
-
-/* FOOTER */
-footer{background:var(--txt);color:rgba(255,255,255,.55);text-align:center;padding:2rem;font-size:.82rem;line-height:1.8;margin-top:2rem}
-footer strong{color:rgba(255,255,255,.8)}
-
-/* ANIMATIONS */
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-@keyframes typing{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-5px);opacity:1}}
-
-/* RESPONSIVE */
-@media(max-width:900px){
-  .hero-wrap{grid-template-columns:1fr}
-  .hero-card{display:none}
-  .pgrid{grid-template-columns:1fr 1fr}
-  .prem-grid{grid-template-columns:1fr}
-  .mgrid{grid-template-columns:1fr 1fr}
-  .sup-grid{grid-template-columns:1fr}
-  .nav-links{display:none}
-  .chat-win{width:calc(100vw - 2rem);right:1rem;height:580px}
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   CHAT WINDOW — PRO LEVEL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.cwin{
+  position:fixed;bottom:5.3rem;right:1.75rem;z-index:700;
+  width:420px;height:640px;
+  background:var(--surf);border:1px solid var(--bd);border-radius:22px;
+  box-shadow:0 30px 80px rgba(0,0,0,.25),0 0 0 1px rgba(0,0,0,.04);
+  display:flex;flex-direction:column;overflow:hidden;
+  transform:scale(.9) translateY(24px);opacity:0;pointer-events:none;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .22s;
 }
-@media(max-width:600px){.pgrid{grid-template-columns:1fr}}
+.cwin.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all}
+
+/* Header */
+.ch{background:linear-gradient(140deg,var(--chat-head1),var(--chat-head2));color:#fff;padding:1rem 1.2rem;display:flex;align-items:center;gap:.7rem;flex-shrink:0;position:relative;overflow:hidden}
+.ch::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(212,96,26,.25),transparent 65%);pointer-events:none}
+.ch-av{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--acc),var(--acc3));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;box-shadow:0 3px 12px rgba(212,96,26,.4)}
+.ch-inf{flex:1;min-width:0}
+.ch-nm{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:#fff}
+.ch-st{font-size:.66rem;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:.28rem;margin-top:.1rem}
+.ch-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0}
+.ch-close{background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.7);width:28px;height:28px;border-radius:8px;cursor:pointer;transition:all .18s;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+.ch-close:hover{background:rgba(255,255,255,.2);color:#fff}
+
+/* Tabs */
+.ctabs{display:flex;background:var(--s2);border-bottom:1px solid var(--bd);flex-shrink:0;overflow-x:auto;scroll-behavior:smooth}
+.ctabs::-webkit-scrollbar{display:none}
+.ctab{flex:none;min-width:54px;padding:.5rem .4rem;font-size:.65rem;font-weight:600;color:var(--t3);border:none;background:transparent;cursor:pointer;transition:all .18s;white-space:nowrap;display:flex;flex-direction:column;align-items:center;gap:.15rem;border-bottom:2.5px solid transparent;position:relative}
+.ctab .ti{font-size:.88rem;line-height:1}
+.ctab:hover{color:var(--t2);background:var(--s3)}
+.ctab.on{color:var(--acc);border-bottom-color:var(--acc);background:var(--surf)}
+
+/* Panels */
+.cpanels{flex:1;overflow:hidden;position:relative;min-height:0}
+.cpanel{position:absolute;inset:0;overflow-y:auto;display:none;flex-direction:column;scroll-behavior:smooth}
+.cpanel.on{display:flex}
+.cpanel::-webkit-scrollbar{width:3px}
+.cpanel::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+#pan-chat{padding:.8rem;gap:.55rem}
+.pbody{padding:1rem 1.1rem;overflow-y:auto;flex:1}
+
+/* ── MESSAGES ── */
+.msg{max-width:87%;display:flex;flex-direction:column;gap:.16rem;animation:fadeUp .2s ease}
+.msg.u{align-self:flex-end;align-items:flex-end}
+.msg.b{align-self:flex-start;align-items:flex-start}
+.bub{padding:.6rem .9rem;border-radius:16px;font-size:.83rem;line-height:1.68;word-break:break-word}
+.bub strong{font-weight:700}
+.bub ul{padding-left:1.1rem;margin:.3rem 0}
+.bub li{margin:.12rem 0;line-height:1.55}
+.bub a{color:inherit;text-decoration:underline;opacity:.8}
+.msg.u .bub{background:linear-gradient(135deg,var(--acc),#c0531a);color:#fff;border-radius:16px 16px 4px 16px;box-shadow:0 3px 12px rgba(212,96,26,.25)}
+.msg.b .bub{background:var(--s2);color:var(--t1);border:1px solid var(--bd);border-radius:16px 16px 16px 4px}
+.msg-t{font-size:.6rem;color:var(--t3);padding:0 .1rem}
+/* Bot avatar row */
+.msg.b{display:grid;grid-template-columns:24px 1fr;gap:.4rem;max-width:92%;align-items:start}
+.bot-av{width:24px;height:24px;border-radius:8px;background:linear-gradient(135deg,var(--acc),var(--acc3));display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;margin-top:.1rem}
+.bot-body{display:flex;flex-direction:column;gap:.16rem;align-items:flex-start}
+/* Typing indicator */
+.typing-row{display:grid;grid-template-columns:24px 1fr;gap:.4rem;align-items:center;align-self:flex-start}
+.tbub{display:flex;gap:.28rem;align-items:center;padding:.6rem .9rem;background:var(--s2);border:1px solid var(--bd);border-radius:16px 16px 16px 4px;width:fit-content}
+.td{width:5px;height:5px;border-radius:50%;background:var(--t3);animation:tdot 1.3s infinite}
+.td:nth-child(2){animation-delay:.22s}
+.td:nth-child(3){animation-delay:.44s}
+/* Suggestion chips inside chat */
+.sug-row{display:flex;flex-wrap:wrap;gap:.35rem;padding:.2rem 0 .3rem;margin-left:28px}
+.sug{background:var(--surf);border:1px solid var(--bd2);border-radius:var(--r3);padding:.24rem .72rem;font-size:.71rem;font-weight:500;color:var(--t2);cursor:pointer;transition:all .15s;white-space:nowrap}
+.sug:hover{border-color:var(--acc);color:var(--acc);background:var(--s2)}
+
+/* ── BOTTOM AREA ── */
+.qrow{padding:.45rem .75rem;border-top:1px solid var(--bd);display:flex;gap:.3rem;flex-wrap:wrap;background:var(--surf);flex-shrink:0;transition:var(--transition)}
+.qc{background:var(--s2);border:1px solid var(--bd2);border-radius:var(--r3);padding:.22rem .65rem;font-size:.7rem;font-weight:500;color:var(--t2);cursor:pointer;transition:all .15s;white-space:nowrap}
+.qc:hover{background:var(--s3);border-color:var(--acc);color:var(--acc)}
+.cinp-bar{padding:.65rem .9rem;border-top:1px solid var(--bd);display:flex;gap:.48rem;align-items:flex-end;background:var(--surf);flex-shrink:0;transition:var(--transition)}
+.cta{flex:1;background:var(--s2);border:1.5px solid var(--bd);border-radius:var(--r2);padding:.56rem .82rem;font-family:'DM Sans',sans-serif;font-size:.83rem;color:var(--t1);outline:none;resize:none;min-height:38px;max-height:110px;transition:border-color .2s,var(--transition);line-height:1.5}
+.cta:focus{border-color:var(--acc)}
+.cta::placeholder{color:var(--t3)}
+.csend{background:var(--acc);color:#fff;border:none;width:38px;height:38px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;transition:background .18s,transform .15s}
+.csend:hover{background:#c0531a;transform:scale(1.06)}
+.csend:disabled{background:var(--bd2);cursor:not-allowed;transform:none}
+/* Lang bar in chat */
+.lang-bar{padding:.4rem .9rem;border-top:1px solid var(--bd);display:flex;align-items:center;gap:.4rem;background:var(--surf);flex-shrink:0;flex-wrap:wrap}
+.lb-lbl{font-size:.65rem;color:var(--t3);font-weight:700;letter-spacing:.05em}
+.lb{background:transparent;border:1px solid var(--bd2);border-radius:var(--r3);padding:.14rem .52rem;font-size:.68rem;font-weight:600;color:var(--t2);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.lb.on,.lb:hover{background:var(--acc);color:#fff;border-color:var(--acc)}
+
+/* ── PANEL WIDGETS ── */
+.pw-lbl{font-size:.64rem;font-weight:700;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.22rem;display:block}
+.pw-sel,.pw-inp{background:var(--s2);border:1.5px solid var(--bd);border-radius:var(--r2);padding:.46rem .68rem;font-family:'DM Sans',sans-serif;font-size:.81rem;color:var(--t1);outline:none;cursor:pointer;width:100%;appearance:none;-webkit-appearance:none;transition:border-color .2s,var(--transition);margin-bottom:.6rem}
+.pw-sel:focus,.pw-inp:focus{border-color:var(--acc)}
+.pw-btn{background:var(--acc);color:#fff;border:none;border-radius:var(--r2);padding:.55rem .95rem;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .18s,transform .15s;width:100%;margin-top:.1rem}
+.pw-btn:hover{background:#c0531a;transform:scale(1.01)}
+.pw-btn.out{background:transparent;color:var(--acc);border:1.5px solid var(--acc);margin-top:.5rem}
+.pw-btn.out:hover{background:var(--acc);color:#fff}
+
+/* Predictor result card */
+.pres{background:linear-gradient(135deg,var(--disc-bg),var(--surf));border:1.5px solid var(--disc-bd);border-radius:var(--r2);padding:.88rem 1rem;margin-top:.9rem;animation:fadeUp .3s ease}
+.pres-lbl{font-size:.63rem;font-weight:700;color:var(--acc);letter-spacing:.09em;text-transform:uppercase;margin-bottom:.3rem}
+.pres h4{font-family:'Syne',sans-serif;font-size:.89rem;font-weight:800;color:var(--t1);line-height:1.3;margin-bottom:.3rem}
+.pres p{font-size:.78rem;color:var(--t2);line-height:1.55;margin-bottom:.5rem}
+.pres-chips{display:flex;gap:.32rem;flex-wrap:wrap}
+.pchip{background:var(--surf);border:1px solid var(--disc-bd);border-radius:var(--r3);padding:.15rem .58rem;font-size:.69rem;font-weight:700;color:var(--acc)}
+
+/* Compare table */
+.cmp-sels{display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin-bottom:.75rem}
+.cmp-tbl{width:100%;border-collapse:collapse;font-size:.73rem;border-radius:var(--r2);overflow:hidden;margin-bottom:.5rem}
+.cmp-tbl th{background:var(--t1);color:var(--bg);padding:.48rem .6rem;text-align:left;font-weight:600;font-size:.7rem}
+.cmp-tbl td{padding:.4rem .6rem;border-bottom:1px solid var(--bd);vertical-align:top;color:var(--t1);font-size:.72rem}
+.cmp-tbl tr:nth-child(even) td{background:var(--s2)}
+.cmp-rl{font-weight:700;color:var(--t2);white-space:nowrap;font-size:.69rem}
+.cmp-win{color:var(--acc);font-weight:700}
+
+/* Panel list cards */
+.lcard{background:var(--surf);border:1px solid var(--bd);border-radius:var(--r2);padding:.95rem;box-shadow:var(--sh);margin-bottom:.6rem;transition:var(--transition)}
+.lcard:last-child{margin-bottom:0}
+.ltag{display:inline-block;background:var(--s2);color:var(--acc);border:1px solid var(--bd2);border-radius:var(--r3);padding:.13rem .5rem;font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.lcard h4{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;line-height:1.3;margin-bottom:.28rem;color:var(--t1)}
+.lcard p{font-size:.76rem;color:var(--t2);line-height:1.55;margin-bottom:.5rem}
+.lrow{display:flex;justify-content:space-between;align-items:center;font-size:.74rem;padding:.3rem .48rem;background:var(--s2);border-radius:8px;margin-bottom:.28rem;color:var(--t1)}
+.lrow strong{color:var(--acc)}
+.lmods{display:flex;flex-wrap:wrap;gap:.26rem;margin-top:.38rem}
+.lmod{background:var(--s3);border-radius:var(--r3);padding:.14rem .5rem;font-size:.65rem;color:var(--t2)}
+/* Mentor panel */
+.mcrd{display:flex;align-items:center;gap:.75rem;padding:.75rem .9rem;background:var(--surf);border:1px solid var(--bd);border-radius:var(--r2);box-shadow:var(--sh);margin-bottom:.5rem;transition:var(--transition)}
+.mav2{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--acc),var(--acc3));color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;flex-shrink:0}
+.mcrd h4{font-weight:600;font-size:.84rem;margin-bottom:.12rem;color:var(--t1)}
+.mcrd p{font-size:.73rem;color:var(--t3)}
+/* Support panel */
+.ssec{margin-bottom:1.1rem}
+.ssec h4{font-family:'Syne',sans-serif;font-weight:700;font-size:.86rem;margin-bottom:.5rem;color:var(--t1)}
+.slnk{display:flex;align-items:center;gap:.55rem;padding:.68rem .9rem;background:var(--surf);border:1px solid var(--bd);border-radius:var(--r2);text-decoration:none;color:var(--t1);margin-bottom:.42rem;transition:all .18s;box-shadow:var(--sh)}
+.slnk:hover{border-color:var(--acc);background:var(--s2)}
+.slnk-ic{font-size:.95rem;flex-shrink:0}
+.slnk strong{display:block;font-size:.81rem;font-weight:600;color:var(--t1)}
+.slnk span{font-size:.72rem;color:var(--t3)}
+.disc{background:var(--disc-bg);border:1.5px solid var(--disc-bd);border-radius:var(--r2);padding:.88rem;font-size:.75rem;color:var(--t2);line-height:1.68}
+/* Panel search */
+.psrch{width:100%;background:var(--s2);border:1.5px solid var(--bd);border-radius:var(--r2);padding:.46rem .75rem;font-family:'DM Sans',sans-serif;font-size:.8rem;color:var(--t1);outline:none;margin-bottom:.7rem;transition:border-color .2s,var(--transition)}
+.psrch:focus{border-color:var(--acc)}
+.pfbar{display:flex;gap:.32rem;flex-wrap:wrap;margin-bottom:.7rem}
+.pfc{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r3);padding:.2rem .62rem;font-size:.69rem;font-weight:600;color:var(--t2);cursor:pointer;transition:all .15s}
+.pfc.on,.pfc:hover{background:var(--t1);color:var(--bg);border-color:var(--t1)}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ANIMATIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes tdot{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-5px);opacity:1}}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   RESPONSIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+@media(max-width:1024px){.hero{grid-template-columns:1fr}.hero-card{display:none}.pgrid{grid-template-columns:1fr 1fr}.igrid{grid-template-columns:1fr}.mgrid{grid-template-columns:1fr 1fr}.sgrid{grid-template-columns:1fr}}
+@media(max-width:768px){.nav-links{display:none}.cwin{width:calc(100vw - 2rem);right:1rem;height:560px}.pgrid{grid-template-columns:1fr}.stat{padding:0 1rem}}
+@media(max-width:480px){.nav-right .theme-btn span:not(.ti){display:none}}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
+<!-- ══════ NAV ══════ -->
 <nav>
   <a class="nav-brand" href="#">
     <div class="nav-logo">IM</div>
-    <div><div class="nav-title">INVESMATE</div><div class="nav-tagline">Stock Market Learning</div></div>
+    <div><div class="nav-name">INVESMATE</div><div class="nav-tag" data-i18n="tagline">Stock Market Learning</div></div>
   </a>
   <div class="nav-links">
-    <a href="#products">Products</a>
-    <a href="#insignia">INSIGNIA</a>
-    <a href="#mentors">Mentors</a>
-    <a href="#support">Support</a>
-    <a href="#support" class="nav-cta">Request Callback</a>
+    <a href="#products" data-i18n="n_products">Products</a>
+    <a href="#insignia" data-i18n="n_insignia">INSIGNIA</a>
+    <a href="#mentors"  data-i18n="n_mentors">Mentors</a>
+    <a href="#support"  data-i18n="n_support">Support</a>
+    <a href="#support" class="nav-cta" data-i18n="n_cta">Request Callback</a>
+  </div>
+  <div class="nav-right">
+    <select class="lang-sel" id="gLang" onchange="setLang(this.value)" title="Website Language">
+      <option value="en">EN</option>
+      <option value="bn">BN</option>
+      <option value="hi">HI</option>
+    </select>
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">
+      <span id="thIco">🌙</span><span id="thLbl">Dark</span>
+    </button>
   </div>
 </nav>
 
-<!-- HERO -->
-<div class="hero-wrap">
+<!-- ══════ HERO ══════ -->
+<div class="hero">
   <div>
-    <div class="hero-badge">SEBI Registered RA: INH000017985</div>
-    <h1>Finest Stock Market <em>Learning</em> Experience</h1>
-    <p class="hero-sub">A professional platform for INVESMATE and INSIGNIA — with AI-guided course selection, multilingual support, and personalized mentorship plans for every learner.</p>
-    <div class="hero-actions">
-      <a href="#products" class="btn-pri">Explore Courses ↓</a>
-      <a href="#" class="btn-out" onclick="openChat();return false;">Talk to AI Advisor</a>
+    <div class="hero-badge">&#9679; SEBI RA: INH000017985</div>
+    <h1 data-i18n="h_title">Finest Stock Market <em>Learning</em> Experience</h1>
+    <p class="hero-sub" data-i18n="h_sub">A professional platform for INVESMATE and INSIGNIA with AI-guided course selection, multilingual support, and personalized mentorship plans.</p>
+    <div class="hero-btns">
+      <a href="#products" class="btn-p" data-i18n="h_cta1">Explore Courses</a>
+      <a href="#" class="btn-o" onclick="openChat();return false;" data-i18n="h_cta2">Talk to AI Advisor</a>
     </div>
   </div>
   <div class="hero-card">
-    <span class="hc-label">Premium Learning Path</span>
-    <h3>Find the right course in minutes</h3>
-    <p>Use our AI advisor and course predictor to choose between beginner, trading, investing, derivatives, and INSIGNIA mentorship plans.</p>
-    <div class="info-row"><strong>Personalized Prediction</strong><small>Course recommendation by goal, budget &amp; experience</small></div>
-    <div class="info-row"><strong>Multilingual Support</strong><small>English, Bengali, Hindi &amp; Auto-Detect</small></div>
-    <div class="info-row"><strong>INSIGNIA Premium</strong><small>1:1 mentorship, live sessions &amp; lifetime recordings</small></div>
+    <span class="hc-lbl" data-i18n="hc_lbl">Premium Learning Path</span>
+    <h3 data-i18n="hc_h">Find the right course in minutes</h3>
+    <p data-i18n="hc_p">Use our AI advisor and course predictor to choose your perfect learning path.</p>
+    <div class="irow"><strong data-i18n="ir1">Personalized Prediction</strong><small data-i18n="ir1s">Course recommendation by goal, budget &amp; experience</small></div>
+    <div class="irow"><strong data-i18n="ir2">Multilingual Support</strong><small data-i18n="ir2s">English, Bengali, Hindi &amp; Auto-Detect</small></div>
+    <div class="irow"><strong data-i18n="ir3">INSIGNIA Premium</strong><small data-i18n="ir3s">1:1 mentorship, live sessions &amp; lifetime recordings</small></div>
   </div>
 </div>
 
 <!-- STATS -->
 <div class="stats">
-  <div class="stat"><div class="stat-n">20+</div><div class="stat-l">Expert Courses</div></div>
-  <div class="stat"><div class="stat-n">8</div><div class="stat-l">Certified Mentors</div></div>
-  <div class="stat"><div class="stat-n">3</div><div class="stat-l">Language Support</div></div>
-  <div class="stat"><div class="stat-n">SEBI</div><div class="stat-l">Registered RA</div></div>
+  <div class="stat"><div class="stat-n">20+</div><div class="stat-l" data-i18n="s1">Expert Courses</div></div>
+  <div class="stat"><div class="stat-n">8</div><div class="stat-l" data-i18n="s2">Certified Mentors</div></div>
+  <div class="stat"><div class="stat-n">3</div><div class="stat-l" data-i18n="s3">Languages</div></div>
+  <div class="stat"><div class="stat-n">SEBI</div><div class="stat-l" data-i18n="s4">Registered RA</div></div>
 </div>
 
-<!-- PRODUCTS -->
+<!-- ══════ PRODUCTS ══════ -->
 <div class="sec" id="products">
-  <div class="eyebrow">All Products</div>
-  <div class="sec-title">Complete Product Ecosystem</div>
-  <div class="filter-bar" id="filter-bar"></div>
-  <div class="search-wrap">
-    <span class="search-icon">⌕</span>
-    <input class="search-inp" id="search-inp" type="text" placeholder="Search courses…" oninput="renderProducts()"/>
-  </div>
+  <div class="ey" data-i18n="p_eye">All Products</div>
+  <div class="sec-h" data-i18n="p_title">Complete Product Ecosystem</div>
+  <div class="fbar" id="fbar"></div>
+  <div class="swrap"><span class="sico">&#9906;</span><input class="sinp" id="sinp" type="text" placeholder="Search courses..." oninput="renderProd()"/></div>
   <div class="pgrid" id="pgrid"></div>
 </div>
-<hr class="divider"/>
+<hr class="div"/>
 
-<!-- INSIGNIA -->
+<!-- ══════ INSIGNIA ══════ -->
 <div class="sec" id="insignia">
-  <div class="eyebrow">INSIGNIA Premium Journey</div>
-  <div class="sec-title">Premium Mentorship Plans</div>
-  <div class="sec-sub">Intensive mentorship combining live sessions, 1:1 guidance, and real market practice.</div>
-  <div class="prem-grid" id="prem-grid"></div>
+  <div class="ey" data-i18n="i_eye">INSIGNIA Premium Journey</div>
+  <div class="sec-h" data-i18n="i_title">Premium Mentorship Plans</div>
+  <div class="sec-sub" data-i18n="i_sub">Intensive mentorship combining live sessions, 1:1 guidance, and real market practice.</div>
+  <div class="igrid" id="igrid"></div>
 </div>
-<hr class="divider"/>
+<hr class="div"/>
 
-<!-- MENTORS -->
+<!-- ══════ MENTORS ══════ -->
 <div class="sec" id="mentors">
-  <div class="eyebrow">Top Mentors</div>
-  <div class="sec-title">Experienced Market Mentors</div>
+  <div class="ey" data-i18n="m_eye">Top Mentors</div>
+  <div class="sec-h" data-i18n="m_title">Experienced Market Mentors</div>
   <div class="mgrid" id="mgrid"></div>
 </div>
-<hr class="divider"/>
+<hr class="div"/>
 
-<!-- SUPPORT -->
+<!-- ══════ SUPPORT ══════ -->
 <div class="sec" id="support">
-  <div class="eyebrow">Support</div>
-  <div class="sec-title">Talk to the team before you enroll</div>
-  <div class="sup-grid">
-    <div class="sup-card">
-      <div class="sup-icon">📞</div>
-      <h3>Counseling &amp; Support</h3>
-      <div class="c-item">📱 <a href="tel:+919016791791">+91 9016791791</a></div>
-      <div class="c-item">📱 <a href="tel:+917596037781">+91 7596037781</a></div>
-      <div class="c-item">📱 <a href="tel:+917003110622">+91 7003110622</a></div>
-      <div class="c-item">✉️ <a href="mailto:support@invesmate.com">support@invesmate.com</a></div>
-      <div class="c-item">✉️ <a href="mailto:sales@invesmate.com">sales@invesmate.com</a></div>
+  <div class="ey" data-i18n="su_eye">Support</div>
+  <div class="sec-h" data-i18n="su_title">Talk to the team before you enroll</div>
+  <div class="sgrid">
+    <div class="sc">
+      <div class="sc-ico">&#128222;</div>
+      <h3 data-i18n="su_h1">Counseling &amp; Support</h3>
+      <div class="ci">&#128241; <a href="tel:+919016791791">+91 9016791791</a></div>
+      <div class="ci">&#128241; <a href="tel:+917596037781">+91 7596037781</a></div>
+      <div class="ci">&#128241; <a href="tel:+917003110622">+91 7003110622</a></div>
+      <div class="ci">&#9993; <a href="mailto:support@invesmate.com">support@invesmate.com</a></div>
+      <div class="ci">&#9993; <a href="mailto:sales@invesmate.com">sales@invesmate.com</a></div>
     </div>
-    <div class="sup-card">
-      <div class="sup-icon">⚠️</div>
-      <h3>Disclaimer</h3>
-      <p style="color:var(--txt2);font-size:.88rem;line-height:1.7">Investment in securities markets is subject to market risks. Read all related documents carefully before investing. Registration granted by SEBI and certification from NISM in no way guarantee performance or assurance of returns.<br><br>INVESMATE INSIGHTS — SEBI Registered Research Analyst (INH000017985). This platform is for educational purposes only.</p>
+    <div class="sc">
+      <div class="sc-ico">&#9888;</div>
+      <h3 data-i18n="su_disc">Disclaimer</h3>
+      <p style="color:var(--t2);font-size:.84rem;line-height:1.72" data-i18n="disc_txt">Investment in securities markets is subject to market risks. Read all related documents carefully before investing. SEBI registration and NISM certification do not guarantee performance or assurance of returns. INVESMATE INSIGHTS — SEBI Registered RA: INH000017985. For educational purposes only.</p>
     </div>
   </div>
 </div>
+<footer><strong>INVESMATE</strong> &mdash; Stock Market Learning Platform<br/>SEBI Registered RA: INH000017985 &nbsp;|&nbsp; support@invesmate.com<br/>&copy; 2026 INVESMATE. All rights reserved. Educational purposes only.</footer>
 
-<footer>
-  <strong>INVESMATE</strong> — Stock Market Learning Platform<br/>
-  SEBI Registered RA: INH000017985 &nbsp;|&nbsp; support@invesmate.com<br/>
-  © 2026 INVESMATE. All rights reserved. Educational purposes only.
-</footer>
+<!-- ══════ FAB ══════ -->
+<button class="fab" id="fab" onclick="toggleChat()" title="AI Advisor">&#128172;<span class="fab-dot"></span></button>
 
-<!-- CHAT FAB -->
-<button class="chat-fab" id="chat-fab" onclick="toggleChat()" title="AI Advisor">
-  💬<span class="chat-badge"></span>
-</button>
-
-<!-- CHAT WINDOW -->
-<div class="chat-win" id="chat-win">
+<!-- ══════════════════════════════════════
+     CHAT WINDOW
+══════════════════════════════════════ -->
+<div class="cwin" id="cwin">
 
   <!-- Header -->
-  <div class="chat-head">
-    <div class="ch-ava">🤖</div>
-    <div class="ch-info">
-      <div class="ch-name">INVESMATE AI Advisor</div>
-      <div class="ch-status">Online — Powered by Claude AI</div>
+  <div class="ch">
+    <div class="ch-av">&#129302;</div>
+    <div class="ch-inf">
+      <div class="ch-nm">INVESMATE AI Advisor</div>
+      <div class="ch-st"><span class="ch-dot"></span><span id="stTxt">Online &mdash; Powered by Claude AI</span></div>
     </div>
-    <button class="ch-close" onclick="toggleChat()">✕</button>
+    <button class="ch-close" onclick="toggleChat()">&#10005;</button>
   </div>
 
   <!-- Tabs -->
-  <div class="chat-tabs">
-    <button class="ctab active" onclick="switchTab('chat',this)"      >💬 Chat</button>
-    <button class="ctab"        onclick="switchTab('predictor',this)" >🎯 Predict</button>
-    <button class="ctab"        onclick="switchTab('compare',this)"   >⚖️ Compare</button>
-    <button class="ctab"        onclick="switchTab('products',this)"  >📚 Courses</button>
-    <button class="ctab"        onclick="switchTab('insignia',this)"  >👑 INSIGNIA</button>
-    <button class="ctab"        onclick="switchTab('mentors',this)"   >🧑‍🏫 Mentors</button>
-    <button class="ctab"        onclick="switchTab('support',this)"   >🆘 Support</button>
+  <div class="ctabs" id="ctabs">
+    <button class="ctab on" data-p="chat">     <span class="ti">&#128172;</span><span>Chat</span></button>
+    <button class="ctab"    data-p="predict">  <span class="ti">&#127919;</span><span>Predict</span></button>
+    <button class="ctab"    data-p="compare">  <span class="ti">&#9878;</span><span>Compare</span></button>
+    <button class="ctab"    data-p="courses">  <span class="ti">&#128218;</span><span>Courses</span></button>
+    <button class="ctab"    data-p="insignia"> <span class="ti">&#128081;</span><span>INSIGNIA</span></button>
+    <button class="ctab"    data-p="mentors">  <span class="ti">&#127891;</span><span>Mentors</span></button>
+    <button class="ctab"    data-p="support">  <span class="ti">&#128682;</span><span>Support</span></button>
   </div>
 
-  <!-- Lang bar (only on chat panel) -->
-  <div class="lang-bar" id="lang-bar">
-    <span>Lang:</span>
-    <button class="lbtn active" onclick="setLang('English',this)">EN</button>
-    <button class="lbtn" onclick="setLang('Bengali',this)">বাংলা</button>
-    <button class="lbtn" onclick="setLang('Hindi',this)">हिंदी</button>
-    <button class="lbtn" onclick="setLang('Auto',this)">Auto</button>
-  </div>
-
-  <!-- Panels container -->
-  <div class="chat-panels">
+  <!-- Panels -->
+  <div class="cpanels">
 
     <!-- ① CHAT -->
-    <div class="cpanel active" id="panel-chat"></div>
+    <div class="cpanel on" id="pan-chat"></div>
 
     <!-- ② PREDICTOR -->
-    <div class="cpanel" id="panel-predictor">
-      <div class="panel-body">
-        <div class="eyebrow">AI Course Predictor</div>
-        <p style="font-size:.83rem;color:var(--txt2);margin-bottom:1rem;line-height:1.6">Answer 3 questions and get an instant AI-powered course recommendation.</p>
-        <div style="display:flex;flex-direction:column;gap:.65rem;">
-          <div class="pw-row">
-            <label>Learning Goal</label>
-            <select class="pw-sel" id="p-goal">
-              <option value="beginner stock market">Beginner stock market learning</option>
-              <option value="intraday swing trading">Intraday &amp; swing trading</option>
-              <option value="options derivatives">Options &amp; derivatives trading</option>
-              <option value="long term investing fundamentals">Long-term investing &amp; fundamentals</option>
-              <option value="mutual fund sip">Mutual fund &amp; SIP</option>
-              <option value="commodity global market">Commodity &amp; global market</option>
-            </select>
-          </div>
-          <div class="pw-row">
-            <label>Experience Level</label>
-            <select class="pw-sel" id="p-exp">
-              <option>Beginner</option><option>Intermediate</option><option>Advanced</option>
-            </select>
-          </div>
-          <div class="pw-row">
-            <label>Budget Preference</label>
-            <select class="pw-sel" id="p-budget">
-              <option value="budget">Budget-friendly</option>
-              <option value="premium">Premium / Best value</option>
-            </select>
-          </div>
-          <button class="pw-btn" onclick="runPredictor()">Get Recommendation →</button>
-        </div>
-        <div id="pred-output" style="margin-top:1rem"></div>
+    <div class="cpanel" id="pan-predict">
+      <div class="pbody">
+        <div class="ey">AI Course Predictor</div>
+        <p style="font-size:.8rem;color:var(--t2);margin:.4rem 0 1rem;line-height:1.6">Answer 3 questions &mdash; get your perfect course match instantly.</p>
+        <label class="pw-lbl">Your Learning Goal</label>
+        <select class="pw-sel" id="pg">
+          <option value="beginner">Beginner stock market learning</option>
+          <option value="intraday">Intraday &amp; swing trading</option>
+          <option value="options">Options &amp; derivatives trading</option>
+          <option value="investing">Long-term investing &amp; fundamentals</option>
+          <option value="mutual">Mutual fund &amp; SIP</option>
+          <option value="commodity">Commodity &amp; global markets</option>
+        </select>
+        <label class="pw-lbl">Experience Level</label>
+        <select class="pw-sel" id="pe">
+          <option value="Beginner">Beginner</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Advanced">Advanced</option>
+        </select>
+        <label class="pw-lbl">Budget Preference</label>
+        <select class="pw-sel" id="pb">
+          <option value="budget">Budget-friendly</option>
+          <option value="premium">Premium / Best value</option>
+        </select>
+        <button class="pw-btn" onclick="runPredict()">Get My Recommendation &#8594;</button>
+        <div id="pred-out"></div>
       </div>
     </div>
 
     <!-- ③ COMPARE -->
-    <div class="cpanel" id="panel-compare">
-      <div class="panel-body">
-        <div class="eyebrow">Course Compare</div>
-        <p style="font-size:.83rem;color:var(--txt2);margin-bottom:.85rem;line-height:1.6">Select two courses to compare side-by-side.</p>
-        <div class="cmp-selects" style="margin-bottom:.85rem">
-          <div class="pw-row">
-            <label>Course A</label>
-            <select class="pw-sel" id="cmp-a" onchange="renderCompare()"></select>
-          </div>
-          <div class="pw-row">
-            <label>Course B</label>
-            <select class="pw-sel" id="cmp-b" onchange="renderCompare()"></select>
-          </div>
+    <div class="cpanel" id="pan-compare">
+      <div class="pbody">
+        <div class="ey">Course Compare</div>
+        <p style="font-size:.8rem;color:var(--t2);margin:.4rem 0 .85rem;line-height:1.6">Select any two courses for a detailed side-by-side comparison.</p>
+        <div class="cmp-sels">
+          <div><label class="pw-lbl">Course A</label><select class="pw-sel" id="ca" onchange="renderCmp()" style="margin:0"></select></div>
+          <div><label class="pw-lbl">Course B</label><select class="pw-sel" id="cb" onchange="renderCmp()" style="margin:0"></select></div>
         </div>
-        <div id="cmp-output"></div>
-        <div style="margin-top:.85rem">
-          <button class="pw-btn" style="width:100%" onclick="askAICompare()">🤖 Ask AI to compare these →</button>
-        </div>
+        <div id="cmp-out"></div>
+        <button class="pw-btn" onclick="aiCmp()">&#129302; Deep AI Analysis of These Two</button>
+        <button class="pw-btn out" onclick="aiCmpPro()">&#128200; Which one fits my profile?</button>
       </div>
     </div>
 
-    <!-- ④ PRODUCTS -->
-    <div class="cpanel" id="panel-products">
-      <div class="panel-body">
-        <div class="eyebrow">All Courses</div>
-        <input class="panel-search" id="prod-search" placeholder="Search courses…" oninput="renderProdPanel()"/>
-        <div class="panel-filter" id="prod-filter"></div>
-        <div id="prod-list"></div>
+    <!-- ④ COURSES -->
+    <div class="cpanel" id="pan-courses">
+      <div class="pbody">
+        <div class="ey">All Courses</div>
+        <input class="psrch" id="csrch" placeholder="Search courses..." oninput="renderCProd()"/>
+        <div class="pfbar" id="cpfbar"></div>
+        <div id="cplist"></div>
       </div>
     </div>
 
     <!-- ⑤ INSIGNIA -->
-    <div class="cpanel" id="panel-insignia">
-      <div class="panel-body">
-        <div class="eyebrow">INSIGNIA Premium Plans</div>
-        <p style="font-size:.83rem;color:var(--txt2);margin-bottom:1rem;line-height:1.6">Intensive mentorship programs with live sessions, 1:1 guidance, and real market practice.</p>
-        <div id="insig-list"></div>
+    <div class="cpanel" id="pan-insignia">
+      <div class="pbody">
+        <div class="ey">INSIGNIA Premium Plans</div>
+        <p style="font-size:.8rem;color:var(--t2);margin:.4rem 0 1rem;line-height:1.6">Intensive structured mentorship with live sessions, 1:1 guidance, and real market practice.</p>
+        <div id="ilist"></div>
       </div>
     </div>
 
     <!-- ⑥ MENTORS -->
-    <div class="cpanel" id="panel-mentors">
-      <div class="panel-body">
-        <div class="eyebrow">Our Mentors</div>
-        <p style="font-size:.83rem;color:var(--txt2);margin-bottom:1rem;line-height:1.6">All mentors are NISM-certified capital market professionals.</p>
-        <div id="mentor-list"></div>
+    <div class="cpanel" id="pan-mentors">
+      <div class="pbody">
+        <div class="ey">Our Mentors</div>
+        <p style="font-size:.8rem;color:var(--t2);margin:.4rem 0 1rem;line-height:1.6">All 8 mentors are NISM-certified capital market professionals.</p>
+        <div id="mlist"></div>
       </div>
     </div>
 
     <!-- ⑦ SUPPORT -->
-    <div class="cpanel" id="panel-support">
-      <div class="panel-body">
-        <div class="eyebrow">Support &amp; Contact</div>
-        <div class="sup-section">
-          <h4>📞 Call / WhatsApp</h4>
-          <a class="sup-btn" href="tel:+919016791791"><span class="sup-btn-icon">📱</span><div class="sup-btn-text"><strong>+91 9016791791</strong><span>Primary support line</span></div></a>
-          <a class="sup-btn" href="tel:+917596037781"><span class="sup-btn-icon">📱</span><div class="sup-btn-text"><strong>+91 7596037781</strong><span>Sales &amp; enrollment</span></div></a>
-          <a class="sup-btn" href="tel:+917003110622"><span class="sup-btn-icon">📱</span><div class="sup-btn-text"><strong>+91 7003110622</strong><span>Academic support</span></div></a>
+    <div class="cpanel" id="pan-support">
+      <div class="pbody">
+        <div class="ssec">
+          <h4>&#128222; Call / WhatsApp</h4>
+          <a class="slnk" href="tel:+919016791791"><span class="slnk-ic">&#128241;</span><div><strong>+91 9016791791</strong><span>Primary support line</span></div></a>
+          <a class="slnk" href="tel:+917596037781"><span class="slnk-ic">&#128241;</span><div><strong>+91 7596037781</strong><span>Sales &amp; enrollment</span></div></a>
+          <a class="slnk" href="tel:+917003110622"><span class="slnk-ic">&#128241;</span><div><strong>+91 7003110622</strong><span>Academic support</span></div></a>
         </div>
-        <div class="sup-section">
-          <h4>✉️ Email</h4>
-          <a class="sup-btn" href="mailto:support@invesmate.com"><span class="sup-btn-icon">📧</span><div class="sup-btn-text"><strong>support@invesmate.com</strong><span>General support</span></div></a>
-          <a class="sup-btn" href="mailto:sales@invesmate.com"><span class="sup-btn-icon">📧</span><div class="sup-btn-text"><strong>sales@invesmate.com</strong><span>Enrollment &amp; fees</span></div></a>
+        <div class="ssec">
+          <h4>&#9993; Email</h4>
+          <a class="slnk" href="mailto:support@invesmate.com"><span class="slnk-ic">&#128231;</span><div><strong>support@invesmate.com</strong><span>General support</span></div></a>
+          <a class="slnk" href="mailto:sales@invesmate.com"><span class="slnk-ic">&#128231;</span><div><strong>sales@invesmate.com</strong><span>Enrollment &amp; fees</span></div></a>
         </div>
-        <div class="sup-section">
-          <h4>⚠️ Disclaimer</h4>
-          <div class="disc-box">Investment in securities markets is subject to market risks. Read all related documents carefully before investing. SEBI registration and NISM certification do not guarantee performance or assurance of returns.<br><br><strong>INVESMATE INSIGHTS</strong> — SEBI Registered RA: <strong>INH000017985</strong>. For educational purposes only.</div>
+        <div class="ssec">
+          <h4>&#9888; Disclaimer</h4>
+          <div class="disc">Investment in securities markets is subject to market risks. Read all related documents carefully before investing. SEBI registration and NISM certification do not guarantee performance or assurance of returns.<br><br><strong>INVESMATE INSIGHTS</strong> &mdash; SEBI Registered RA: <strong>INH000017985</strong>. Educational purposes only.</div>
         </div>
-        <div style="margin-top:.85rem">
-          <button class="pw-btn" style="width:100%" onclick="switchTab('chat',document.querySelectorAll('.ctab')[0]);addBotMsg('How can I help you with support today?')">💬 Chat with AI Advisor</button>
-        </div>
+        <button class="pw-btn" style="margin-top:.75rem" onclick="goChat('I need support. Can you help me with my query?')">&#128172; Chat with AI Advisor</button>
       </div>
     </div>
 
-  </div><!-- /chat-panels -->
+  </div><!-- /cpanels -->
 
-  <!-- Quick chips (only shown on chat tab) -->
-  <div class="qchips" id="qchips">
-    <button class="qchip" onclick="switchTab('predictor',document.querySelectorAll('.ctab')[1])">🎯 Predict my course</button>
-    <button class="qchip" onclick="sendQuick('What are the INSIGNIA mentorship plans?')">👑 INSIGNIA</button>
-    <button class="qchip" onclick="sendQuick('What are the fees and pricing?')">💰 Pricing</button>
-    <button class="qchip" onclick="sendQuick('How do I enroll?')">📝 Enroll</button>
+  <!-- Quick chips -->
+  <div class="qrow" id="qrow">
+    <button class="qc" onclick="goTab('predict')">&#127919; Predict My Course</button>
+    <button class="qc" onclick="goChat('What are the INSIGNIA mentorship plans and their pricing?')">&#128081; INSIGNIA</button>
+    <button class="qc" onclick="goChat('What are the course fees? Are there EMI options?')">&#128176; Fees &amp; EMI</button>
+    <button class="qc" onclick="goChat('How do I enroll in a course at INVESMATE?')">&#128221; Enroll</button>
+    <button class="qc" onclick="goChat('Which course is best for a complete beginner?')">&#127775; For Beginners</button>
   </div>
 
-  <!-- Input bar -->
-  <div class="chat-inp-bar" id="chat-inp-bar">
-    <textarea class="chat-textarea" id="chat-input" placeholder="Ask about courses, pricing, enrollment…" rows="1"
-      onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-    <button class="chat-send" id="send-btn" onclick="sendMsg()">➤</button>
+  <!-- Lang bar -->
+  <div class="lang-bar" id="cLangBar">
+    <span class="lb-lbl">AI responds in:</span>
+    <button class="lb on" data-l="English"  onclick="setChatLang('English',this)">English</button>
+    <button class="lb"    data-l="Bengali"  onclick="setChatLang('Bengali',this)">&#2476;&#2494;&#2434;&#2482;&#2494;</button>
+    <button class="lb"    data-l="Hindi"    onclick="setChatLang('Hindi',this)">&#2361;&#2367;&#2306;&#2342;&#2368;</button>
+    <button class="lb"    data-l="Auto"     onclick="setChatLang('Auto',this)">Auto</button>
   </div>
 
-</div><!-- /chat-win -->
+  <!-- Input -->
+  <div class="cinp-bar" id="cinpBar">
+    <textarea class="cta" id="cta" rows="1" placeholder="Ask anything about courses, pricing, enrollment..."
+      onkeydown="onKey(event)" oninput="autoH(this)"></textarea>
+    <button class="csend" id="csend" onclick="send()">&#10148;</button>
+  </div>
 
+</div><!-- /cwin -->
+
+<!-- ════════════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════════ -->
 <script>
-// ════════════════════════════════════════
-//  DATA
-// ════════════════════════════════════════
-const PRODUCTS = [
-  {id:0,title:"Power of Trading and Investing Combo Course",cat:"Live Course",tag:"Beginner",price:"Rs. 8,999 – 11,999",duration:"2 Months / 26 Hrs",lessons:"57 Lessons",desc:"Complete capital-market course covering trading and investing from basics to advanced level.",modules:["Market basics","Technical analysis","Investing foundation","Real market practice"]},
-  {id:1,title:"Complete Intraday and Swing Trading Strategies",cat:"Live Course",tag:"Technical Trading",price:"Rs. 9,999 – 12,999",duration:"2 Months / 20 Hrs",lessons:"48 Lessons",desc:"Advanced technical-analysis course for intraday and swing traders.",modules:["Chart patterns","Indicators","Smart Money Concepts","Risk control"]},
-  {id:2,title:"Complete Future and Option Trading Strategies",cat:"Live Course",tag:"Derivatives",price:"Rs. 12,999 – 15,999",duration:"2 Months / 26 Hrs",lessons:"25 Lessons",desc:"Futures and options training covering derivatives strategy from basics to advanced.",modules:["Futures basics","Option buying","Option selling","Hedging"]},
-  {id:3,title:"Value Investing Using Advanced Fundamental Analysis",cat:"Live Course",tag:"Investing",price:"Rs. 8,999 – 11,999",duration:"2 Months / 24 Hrs",lessons:"57 Lessons",desc:"Fundamental-analysis and value-investing roadmap for long-term equity investors.",modules:["Business analysis","Financial statements","Valuation","Portfolio mindset"]},
-  {id:4,title:"Introduction To Mutual Funds Investment",cat:"Course",tag:"Mutual Funds",price:"Rs. 3,999 – 6,999",duration:"1 Month",lessons:"24 Lessons",desc:"Practical overview of mutual funds, SIPs, and fund selection for long-term wealth.",modules:["MF basics","SIP planning","Fund selection","Long-term wealth"]},
-  {id:5,title:"Dynamic Investment With Fixed Income Securities",cat:"Recorded Course",tag:"Fixed Income",price:"Rs. 10,999",duration:"12 Hours",lessons:"33 Lessons",desc:"Recorded course on bonds, government securities, income products, and diversification.",modules:["Bonds","Government securities","Income planning","Diversification"]},
-  {id:6,title:"The Comprehensive Roadmap Of Commodity Market",cat:"Live Course",tag:"Commodity",price:"Rs. 14,999",duration:"16 Hours",lessons:"10 Lessons",desc:"Commodity-market course covering gold, silver, crude oil, natural gas, and risk management.",modules:["Gold and silver","Crude oil","Natural gas","Technical view"]},
-  {id:7,title:"Power TI Masterclass",cat:"Free Program",tag:"Masterclass",price:"Free / Registration",duration:"Short Session",lessons:"Live Session",desc:"Entry-level masterclass for learners starting their stock-market journey.",modules:["Orientation","Counseling","Beginner roadmap","Q&A"]},
-  {id:8,title:"Share Samadhan",cat:"Newsletter",tag:"Market Study",price:"Included in plans",duration:"Weekly",lessons:"Premium Study",desc:"Weekly Bengali stock-market study for cash, derivatives, IPOs, mutual funds, and trends.",modules:["Cash market","Derivatives","IPO study","Mutual funds"]},
-  {id:9,title:"Market Trending All Segment",cat:"Premium Tool",tag:"Market Intel",price:"INSIGNIA plans",duration:"Plan-based",lessons:"All Segments",desc:"Premium market-trending access included in selected INSIGNIA programs.",modules:["Cash","Derivatives","Commodity","Fixed assets"]},
-  {id:10,title:"INVESMATE Learning App",cat:"Mobile App",tag:"Platform",price:"App-based",duration:"Anytime",lessons:"Course Library",desc:"Mobile app for live classes, recordings, academic support, and My Insignia Help.",modules:["Live classes","Recordings","Support","Course access"]},
-  {id:11,title:"Insights.Market",cat:"Research Brand",tag:"SEBI RA",price:"Separate platform",duration:"Research Access",lessons:"Research Products",desc:"SEBI-registered equity research brand under INVESMATE INSIGHTS.",modules:["Equity research","Investor charter","Disclosures","Compliance"]},
+'use strict';
+
+/* ────────────────────────────────
+   DATA
+──────────────────────────────── */
+const PRODS=[
+  {id:0,title:"Power of Trading and Investing Combo Course",cat:"Live Course",tag:"Beginner",price:"Rs. 8,999 - 11,999",dur:"2 Months / 26 Hrs",less:"57 Lessons",desc:"Complete capital-market course covering trading and investing from basics to advanced level with real market practice.",mods:["Market basics","Technical analysis","Investing foundation","Real market practice"]},
+  {id:1,title:"Complete Intraday and Swing Trading Strategies",cat:"Live Course",tag:"Trading",price:"Rs. 9,999 - 12,999",dur:"2 Months / 20 Hrs",less:"48 Lessons",desc:"Advanced technical-analysis course for intraday and swing traders using charts, indicators, and Smart Money Concepts.",mods:["Chart patterns","Indicators","Smart Money","Risk control"]},
+  {id:2,title:"Complete Future and Option Trading Strategies",cat:"Live Course",tag:"Derivatives",price:"Rs. 12,999 - 15,999",dur:"2 Months / 26 Hrs",less:"25 Lessons",desc:"Futures and options training covering derivatives strategy from basics to advanced levels including hedging.",mods:["Futures basics","Option buying","Option selling","Hedging"]},
+  {id:3,title:"Value Investing Using Advanced Fundamental Analysis",cat:"Live Course",tag:"Investing",price:"Rs. 8,999 - 11,999",dur:"2 Months / 24 Hrs",less:"57 Lessons",desc:"Fundamental-analysis and value-investing roadmap for long-term equity investors with business analysis.",mods:["Business analysis","Financial statements","Valuation","Portfolio mindset"]},
+  {id:4,title:"Introduction To Mutual Funds Investment",cat:"Course",tag:"Mutual Funds",price:"Rs. 3,999 - 6,999",dur:"1 Month",less:"24 Lessons",desc:"Practical overview of mutual funds, SIPs, and fund selection for long-term wealth creation.",mods:["MF basics","SIP planning","Fund selection","Long-term wealth"]},
+  {id:5,title:"Dynamic Investment With Fixed Income Securities",cat:"Recorded Course",tag:"Fixed Income",price:"Rs. 10,999",dur:"12 Hours",less:"33 Lessons",desc:"Recorded course on bonds, government securities, income products, and portfolio diversification.",mods:["Bonds","Govt securities","Income planning","Diversification"]},
+  {id:6,title:"The Comprehensive Roadmap Of Commodity Market",cat:"Live Course",tag:"Commodity",price:"Rs. 14,999",dur:"16 Hours",less:"10 Lessons",desc:"Commodity-market course covering gold, silver, crude oil, natural gas, and risk management strategies.",mods:["Gold & silver","Crude oil","Natural gas","Technical view"]},
+  {id:7,title:"Power TI Masterclass",cat:"Free Program",tag:"Masterclass",price:"Free / Registration",dur:"Short Session",less:"Live Session",desc:"Entry-level masterclass for beginners starting their stock-market journey — orientation and counseling.",mods:["Orientation","Counseling","Beginner roadmap","Live Q&A"]},
+  {id:8,title:"Share Samadhan",cat:"Newsletter",tag:"Market Study",price:"Included in plans",dur:"Weekly",less:"Premium Study",desc:"Weekly Bengali stock-market study covering cash market, derivatives, IPOs, mutual funds, and trending stocks.",mods:["Cash market","Derivatives","IPO study","Mutual funds"]},
+  {id:9,title:"Market Trending All Segment",cat:"Premium Tool",tag:"Market Intel",price:"INSIGNIA plans only",dur:"Plan-based",less:"All Segments",desc:"Premium market-trending access across all segments — included in selected INSIGNIA programs.",mods:["Cash","Derivatives","Commodity","Fixed assets"]},
+  {id:10,title:"INVESMATE Learning App",cat:"Mobile App",tag:"Platform",price:"App-based",dur:"Anytime",less:"Course Library",desc:"Mobile app for live classes, recordings, academic support, and My Insignia Help portal.",mods:["Live classes","Recordings","Support","Course access"]},
+  {id:11,title:"Insights.Market",cat:"Research Brand",tag:"SEBI RA",price:"Separate platform",dur:"Research Access",less:"Research Products",desc:"SEBI-registered equity research brand under INVESMATE INSIGHTS — disclosures and investor charter.",mods:["Equity research","Investor charter","Disclosures","Compliance"]},
 ];
 
-const INSIGNIA = [
-  {id:0,title:"Equity Market Intelligence Matrix",tag:"Premium Mentorship",price:"Rs. 38,571 / 44,420",duration:"3–5 Months",desc:"Premium mentorship combining advanced technical, techno-funda, and fundamental analysis with 1:1 support.",modules:["Market Trending","Share Samadhan","1:1 mentorship","4 practical sessions","NISM guidance"]},
-  {id:1,title:"Complete Equity and Derivative Dynasty",tag:"Options Premium",price:"Rs. 62,305 / 44,420",duration:"6–8 Months",desc:"Advanced pathway combining technical, fundamental, derivatives, and fixed-income learning with 8 practical sessions.",modules:["Advanced Technical","Complete Options","Fixed Income","8 practical sessions","Academic helpline"]},
-  {id:2,title:"Complete Global Capital Market Specialist",tag:"Global Premium",price:"Rs. 1,07,689 / 44,420",duration:"12 Months",desc:"Full-stack global specialist path: US stocks, commodities, mutual funds, and software training with lifetime recordings.",modules:["US stocks","Commodity","Advanced MF","3 mentorship sessions","Lifetime recordings"]},
+const INSIG=[
+  {id:0,title:"Equity Market Intelligence Matrix",tag:"Premium Mentorship",price:"Rs. 38,571 / 44,420",dur:"3-5 Months",desc:"Premium mentorship combining advanced technical, techno-funda, and fundamental analysis with 1:1 mentor support and 4 practical sessions.",mods:["Market Trending","Share Samadhan","1:1 mentorship","4 practical sessions","NISM guidance"]},
+  {id:1,title:"Complete Equity and Derivative Dynasty",tag:"Options Premium",price:"Rs. 62,305 / 44,420",dur:"6-8 Months",desc:"Advanced pathway combining technical, fundamental, derivatives, and fixed-income learning with 8 practical sessions and academic helpline.",mods:["Advanced Technical","Complete Options","Fixed Income","8 practical sessions","Academic helpline"]},
+  {id:2,title:"Complete Global Capital Market Specialist",tag:"Global Premium",price:"Rs. 1,07,689 / 44,420",dur:"12 Months",desc:"Full-stack global specialist path covering US stocks, commodities, advanced mutual funds, software training, and lifetime recordings.",mods:["US stocks","Commodity","Advanced MF","3 mentorship sessions","Lifetime recordings"]},
 ];
 
-const MENTORS = [
+const MENTORS=[
   {name:"Arunava Chatterjee",spec:"Technical Analysis & Trading"},
   {name:"Sayan Ghosh",spec:"Options & Derivatives"},
   {name:"Kunal Saha",spec:"Fundamental Analysis"},
@@ -586,343 +627,466 @@ const MENTORS = [
   {name:"Mihir Kanti Chakraborty",spec:"Value Investing"},
 ];
 
-// ════════════════════════════════════════
-//  PAGE RENDER
-// ════════════════════════════════════════
-let activeCat = 'All';
+/* ────────────────────────────────
+   i18n
+──────────────────────────────── */
+const TR={
+  en:{tagline:"Stock Market Learning",n_products:"Products",n_insignia:"INSIGNIA",n_mentors:"Mentors",n_support:"Support",n_cta:"Request Callback",h_title:"Finest Stock Market <em>Learning</em> Experience",h_sub:"A professional platform for INVESMATE and INSIGNIA with AI-guided course selection, multilingual support, and personalized mentorship plans.",h_cta1:"Explore Courses",h_cta2:"Talk to AI Advisor",hc_lbl:"Premium Learning Path",hc_h:"Find the right course in minutes",hc_p:"Use our AI advisor to choose your perfect learning path.",ir1:"Personalized Prediction",ir1s:"Course recommendation by goal, budget & experience",ir2:"Multilingual Support",ir2s:"English, Bengali, Hindi & Auto-Detect",ir3:"INSIGNIA Premium",ir3s:"1:1 mentorship, live sessions & lifetime recordings",s1:"Expert Courses",s2:"Certified Mentors",s3:"Languages",s4:"Registered RA",p_eye:"All Products",p_title:"Complete Product Ecosystem",i_eye:"INSIGNIA Premium Journey",i_title:"Premium Mentorship Plans",i_sub:"Intensive mentorship combining live sessions, 1:1 guidance, and real market practice.",m_eye:"Top Mentors",m_title:"Experienced Market Mentors",su_eye:"Support",su_title:"Talk to the team before you enroll",su_h1:"Counseling & Support",su_disc:"Disclaimer",disc_txt:"Investment in securities markets is subject to market risks. Read all related documents carefully before investing. SEBI registration and NISM certification do not guarantee performance or assurance of returns. INVESMATE INSIGHTS — SEBI Registered RA: INH000017985. For educational purposes only."},
+  bn:{tagline:"শেয়ার বাজার শিক্ষা",n_products:"কোর্স",n_insignia:"ইন্সিগনিয়া",n_mentors:"মেন্টর",n_support:"সহায়তা",n_cta:"কলব্যাক করুন",h_title:"সেরা শেয়ার বাজার <em>শিক্ষার</em> অভিজ্ঞতা",h_sub:"INVESMATE এবং INSIGNIA-র জন্য একটি পেশাদার প্ল্যাটফর্ম — AI-গাইডেড কোর্স নির্বাচন, বহুভাষিক সহায়তা এবং ব্যক্তিগতকৃত মেন্টরশিপ পরিকল্পনা সহ।",h_cta1:"কোর্স দেখুন",h_cta2:"AI উপদেষ্টার সাথে কথা বলুন",hc_lbl:"প্রিমিয়াম লার্নিং পাথ",hc_h:"মিনিটে সঠিক কোর্স খুঁজুন",hc_p:"আমাদের AI উপদেষ্টা ব্যবহার করে আপনার সঠিক শিক্ষার পথ বেছে নিন।",ir1:"ব্যক্তিগতকৃত পূর্বাভাস",ir1s:"লক্ষ্য, বাজেট এবং অভিজ্ঞতা অনুযায়ী পরামর্শ",ir2:"বহুভাষিক সহায়তা",ir2s:"ইংরেজি, বাংলা, হিন্দি এবং অটো-ডিটেক্ট",ir3:"INSIGNIA প্রিমিয়াম",ir3s:"১:১ মেন্টরশিপ, লাইভ সেশন এবং আজীবন রেকর্ডিং",s1:"বিশেষজ্ঞ কোর্স",s2:"প্রত্যয়িত মেন্টর",s3:"ভাষা",s4:"নিবন্ধিত RA",p_eye:"সমস্ত পণ্য",p_title:"সম্পূর্ণ পণ্য ইকোসিস্টেম",i_eye:"INSIGNIA প্রিমিয়াম যাত্রা",i_title:"প্রিমিয়াম মেন্টরশিপ পরিকল্পনা",i_sub:"লাইভ সেশন, ১:১ গাইডেন্স এবং বাস্তব বাজার অনুশীলনের সমন্বয়ে নিবিড় মেন্টরশিপ।",m_eye:"শীর্ষ মেন্টর",m_title:"অভিজ্ঞ বাজার বিশেষজ্ঞ",su_eye:"সহায়তা",su_title:"ভর্তির আগে দলের সাথে কথা বলুন",su_h1:"কাউন্সেলিং এবং সহায়তা",su_disc:"দায়বদ্ধতা অস্বীকৃতি",disc_txt:"সিকিউরিটিজ মার্কেটে বিনিয়োগ বাজার ঝুঁকির অধীন। বিনিয়োগের আগে সমস্ত নথি সাবধানে পড়ুন। SEBI নিবন্ধন কর্মক্ষমতার নিশ্চয়তা দেয় না। INVESMATE INSIGHTS — SEBI নিবন্ধিত RA: INH000017985। শুধুমাত্র শিক্ষামূলক উদ্দেশ্যে।"},
+  hi:{tagline:"शेयर बाजार शिक्षा",n_products:"कोर्स",n_insignia:"इन्सिग्निया",n_mentors:"मेंटर",n_support:"सहायता",n_cta:"कॉलबैक करें",h_title:"सर्वश्रेष्ठ शेयर बाजार <em>सीखने</em> का अनुभव",h_sub:"INVESMATE और INSIGNIA के लिए एक पेशेवर प्लेटफॉर्म — AI-गाइडेड कोर्स चयन, बहुभाषी सहायता और व्यक्तिगत मेंटरशिप योजनाओं के साथ।",h_cta1:"कोर्स देखें",h_cta2:"AI सलाहकार से बात करें",hc_lbl:"प्रीमियम लर्निंग पाथ",hc_h:"मिनटों में सही कोर्स खोजें",hc_p:"हमारे AI सलाहकार का उपयोग करके सही सीखने का रास्ता चुनें।",ir1:"व्यक्तिगत भविष्यवाणी",ir1s:"लक्ष्य, बजट और अनुभव के अनुसार सिफारिश",ir2:"बहुभाषी सहायता",ir2s:"अंग्रेजी, बंगाली, हिंदी और ऑटो-डिटेक्ट",ir3:"INSIGNIA प्रीमियम",ir3s:"1:1 मेंटरशिप, लाइव सेशन और आजीवन रिकॉर्डिंग",s1:"विशेषज्ञ कोर्स",s2:"प्रमाणित मेंटर",s3:"भाषाएं",s4:"पंजीकृत RA",p_eye:"सभी उत्पाद",p_title:"संपूर्ण उत्पाद पारिस्थितिकी",i_eye:"INSIGNIA प्रीमियम यात्रा",i_title:"प्रीमियम मेंटरशिप योजनाएं",i_sub:"लाइव सेशन, 1:1 मार्गदर्शन और वास्तविक बाजार अभ्यास के साथ गहन मेंटरशिप।",m_eye:"शीर्ष मेंटर",m_title:"अनुभवी बाजार मेंटर",su_eye:"सहायता",su_title:"नामांकन से पहले टीम से बात करें",su_h1:"परामर्श और सहायता",su_disc:"अस्वीकरण",disc_txt:"प्रतिभूति बाजार में निवेश बाजार जोखिमों के अधीन है। निवेश से पहले सभी संबंधित दस्तावेज ध्यान से पढ़ें। SEBI पंजीकरण प्रदर्शन की गारंटी नहीं देता। INVESMATE INSIGHTS — SEBI पंजीकृत RA: INH000017985। केवल शैक्षिक उद्देश्यों के लिए।"},
+};
+
+/* ────────────────────────────────
+   STATE
+──────────────────────────────── */
+let theme      = localStorage.getItem('im-theme') || 'light';
+let siteLang   = localStorage.getItem('im-lang')  || 'en';
+let chatLang   = 'Auto';
+let chatOpen   = false;
+let chatHist   = [];   // {role,content}[]
+let busy       = false;
+let prodCat    = 'All';
+let cprodCat   = 'All';
+const ALL_CRS  = [...PRODS, ...INSIG.map(x=>({...x,cat:'INSIGNIA Plan'}))];
+
+/* ────────────────────────────────
+   THEME
+──────────────────────────────── */
+function applyTheme(t){
+  theme=t;
+  document.documentElement.setAttribute('data-theme',t);
+  const ico=document.getElementById('thIco');
+  const lbl=document.getElementById('thLbl');
+  if(t==='dark'){ico.textContent='☀️';lbl.textContent='Light';}
+  else{ico.textContent='🌙';lbl.textContent='Dark';}
+  localStorage.setItem('im-theme',t);
+}
+function toggleTheme(){applyTheme(theme==='light'?'dark':'light');}
+
+/* ────────────────────────────────
+   LANGUAGE
+──────────────────────────────── */
+function setLang(l){
+  siteLang=l;
+  document.getElementById('gLang').value=l;
+  const t=TR[l]||TR.en;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');
+    if(t[k]!==undefined) el.innerHTML=t[k];
+  });
+  localStorage.setItem('im-lang',l);
+}
+
+/* ────────────────────────────────
+   PAGE RENDER
+──────────────────────────────── */
 function initPage(){
-  // Filter bar
-  const cats = ['All',...new Set(PRODUCTS.map(p=>p.cat))];
-  document.getElementById('filter-bar').innerHTML = cats.map(c=>
-    `<button class="fchip${c==='All'?' active':''}" onclick="setCat('${c.replace(/'/g,"\\'")}',this)">${c}</button>`
-  ).join('');
-  renderProducts();
+  // Product filter chips
+  const cats=['All',...new Set(PRODS.map(p=>p.cat))];
+  document.getElementById('fbar').innerHTML=cats.map(c=>`<button class="fc${c==='All'?' on':''}" onclick="setPCat(this,'${esc2(c)}')">${c}</button>`).join('');
+  renderProd();
 
   // INSIGNIA grid
-  document.getElementById('prem-grid').innerHTML = INSIGNIA.map(p=>`
-    <div class="prem-card">
-      <div class="prem-tier">${p.tag}</div>
-      <h3>${p.title}</h3>
-      <p>${p.desc}</p>
-      <div class="prem-price">${p.price}</div>
-      <div class="prem-dur">⏱ ${p.duration}</div>
-      <ul class="prem-feats">${p.modules.map(m=>`<li>${m}</li>`).join('')}</ul>
+  document.getElementById('igrid').innerHTML=INSIG.map(p=>`
+    <div class="icard">
+      <div class="i-tier">${p.tag}</div>
+      <h3>${p.title}</h3><p>${p.desc}</p>
+      <div class="i-price">${p.price}</div>
+      <div class="i-dur">&#9201; ${p.dur}</div>
+      <ul class="i-feats">${p.mods.map(m=>`<li>${m}</li>`).join('')}</ul>
     </div>`).join('');
 
   // Mentors grid
-  document.getElementById('mgrid').innerHTML = MENTORS.map(m=>{
-    const ini = m.name.split(' ').map(w=>w[0]).slice(0,2).join('');
-    return `<div class="mcard"><div class="mavatar">${ini}</div><div class="mname">${m.name}</div><div class="mrole">${m.spec}</div></div>`;
+  document.getElementById('mgrid').innerHTML=MENTORS.map(m=>{
+    const ini=m.name.split(' ').map(w=>w[0]).slice(0,2).join('');
+    return `<div class="mcard"><div class="mav">${ini}</div><div class="mname">${m.name}</div><div class="mrole">${m.spec}</div></div>`;
   }).join('');
 
-  initChatPanels();
-  initCompareSelects();
+  initChat();
+  initCompare();
+  // Tabs delegation
+  document.getElementById('ctabs').addEventListener('click',e=>{
+    const b=e.target.closest('.ctab');
+    if(b) goTab(b.getAttribute('data-p'));
+  });
+  applyTheme(theme);
+  setLang(siteLang);
 }
 
-function setCat(c,el){
-  activeCat=c;
-  document.querySelectorAll('.fchip').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  renderProducts();
-}
+function setPCat(el,c){prodCat=c;document.querySelectorAll('.fc').forEach(b=>b.classList.remove('on'));el.classList.add('on');renderProd();}
 
-function renderProducts(){
-  const q=(document.getElementById('search-inp').value||'').toLowerCase();
-  const list=PRODUCTS.filter(p=>(activeCat==='All'||p.cat===activeCat)&&(!q||p.title.toLowerCase().includes(q)||p.desc.toLowerCase().includes(q)));
+function renderProd(){
+  const q=(document.getElementById('sinp').value||'').toLowerCase();
+  const list=PRODS.filter(p=>(prodCat==='All'||p.cat===prodCat)&&(!q||p.title.toLowerCase().includes(q)||p.desc.toLowerCase().includes(q)));
   document.getElementById('pgrid').innerHTML=list.length
-    ?list.map(p=>`
-      <div class="pcard">
-        <span class="ptag">${p.cat}</span>
-        <h3>${p.title}</h3>
-        <p>${p.desc}</p>
-        <div class="pmeta">
-          <div class="mpill"><span>💰 ${p.price}</span></div>
-          <div class="mpill"><span>⏱ ${p.duration}</span><span>${p.lessons}</span></div>
-        </div>
-        <div class="mods">${p.modules.map(m=>`<span class="mchip">${m}</span>`).join('')}</div>
-      </div>`).join('')
-    :`<div class="no-res">No courses found. Try different keywords.</div>`;
+    ?list.map(p=>`<div class="pc"><span class="ptag">${p.cat}</span><h3>${p.title}</h3><p>${p.desc}</p><div class="pmeta"><div class="mpill"><span>&#128176; ${p.price}</span></div><div class="mpill"><span>&#9201; ${p.dur}</span><span>${p.less}</span></div></div><div class="mods">${p.mods.map(m=>`<span class="mchip">${m}</span>`).join('')}</div></div>`).join('')
+    :'<div class="nores">No courses match your search.</div>';
 }
 
-// ════════════════════════════════════════
-//  CHAT PANEL INIT
-// ════════════════════════════════════════
-function initChatPanels(){
-  // Products panel
-  const cats=['All',...new Set(PRODUCTS.map(p=>p.cat))];
-  document.getElementById('prod-filter').innerHTML=cats.map(c=>
-    `<button class="pfchip${c==='All'?' active':''}" onclick="setProdCat('${c.replace(/'/g,"\\'")}',this)">${c}</button>`
-  ).join('');
-  renderProdPanel();
+/* ────────────────────────────────
+   CHAT PANELS INIT
+──────────────────────────────── */
+function initChat(){
+  // Courses panel
+  const cats=['All',...new Set(PRODS.map(p=>p.cat))];
+  document.getElementById('cpfbar').innerHTML=cats.map(c=>`<button class="pfc${c==='All'?' on':''}" onclick="setCPCat(this,'${esc2(c)}')">${c}</button>`).join('');
+  renderCProd();
 
   // INSIGNIA panel
-  document.getElementById('insig-list').innerHTML=INSIGNIA.map(p=>`
-    <div class="pc-card">
-      <span class="pc-tag">${p.tag}</span>
-      <h4>${p.title}</h4>
-      <p>${p.desc}</p>
-      <div class="pc-row"><span>💰 Price</span><strong>${p.price}</strong></div>
-      <div class="pc-row"><span>⏱ Duration</span><strong>${p.duration}</strong></div>
-      <div class="pc-mods">${p.modules.map(m=>`<span class="pc-mod">${m}</span>`).join('')}</div>
+  document.getElementById('ilist').innerHTML=INSIG.map(p=>`
+    <div class="lcard">
+      <span class="ltag">${p.tag}</span>
+      <h4>${p.title}</h4><p>${p.desc}</p>
+      <div class="lrow"><span>&#128176; Price</span><strong>${p.price}</strong></div>
+      <div class="lrow"><span>&#9201; Duration</span><strong>${p.dur}</strong></div>
+      <div class="lmods">${p.mods.map(m=>`<span class="lmod">${m}</span>`).join('')}</div>
+      <button class="pw-btn" style="margin-top:.6rem" onclick="goChat('Tell me everything about the ${esc2(p.title)} plan: curriculum, what is included, pricing, EMI options, and how to enroll.')">Ask AI About This Plan</button>
     </div>`).join('');
 
   // Mentors panel
-  document.getElementById('mentor-list').innerHTML=MENTORS.map(m=>{
+  document.getElementById('mlist').innerHTML=MENTORS.map(m=>{
     const ini=m.name.split(' ').map(w=>w[0]).slice(0,2).join('');
-    return `<div class="mc-card"><div class="mc-ava">${ini}</div><div class="mc-info"><h4>${m.name}</h4><p>${m.spec} · NISM Certified</p></div></div>`;
+    return `<div class="mcrd"><div class="mav2">${ini}</div><div><h4>${m.name}</h4><p>${m.spec} &middot; NISM Certified</p></div></div>`;
   }).join('');
 }
 
-let prodPanelCat='All';
-function setProdCat(c,el){
-  prodPanelCat=c;
-  document.querySelectorAll('#prod-filter .pfchip').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  renderProdPanel();
-}
-function renderProdPanel(){
-  const q=(document.getElementById('prod-search').value||'').toLowerCase();
-  const list=PRODUCTS.filter(p=>(prodPanelCat==='All'||p.cat===prodPanelCat)&&(!q||p.title.toLowerCase().includes(q)||p.desc.toLowerCase().includes(q)));
-  document.getElementById('prod-list').innerHTML=list.length
-    ?list.map(p=>`
-      <div class="pc-card">
-        <span class="pc-tag">${p.cat}</span>
-        <h4>${p.title}</h4>
-        <p>${p.desc}</p>
-        <div class="pc-row"><span>💰</span><strong>${p.price}</strong></div>
-        <div class="pc-row"><span>⏱ ${p.duration}</span><span>${p.lessons}</span></div>
-        <div class="pc-mods">${p.modules.map(m=>`<span class="pc-mod">${m}</span>`).join('')}</div>
-      </div>`).join('')
-    :`<div style="text-align:center;color:var(--txt3);padding:2rem;font-size:.85rem">No results found.</div>`;
+function setCPCat(el,c){cprodCat=c;document.querySelectorAll('#cpfbar .pfc').forEach(b=>b.classList.remove('on'));el.classList.add('on');renderCProd();}
+function renderCProd(){
+  const q=(document.getElementById('csrch').value||'').toLowerCase();
+  const list=PRODS.filter(p=>(cprodCat==='All'||p.cat===cprodCat)&&(!q||p.title.toLowerCase().includes(q)||p.desc.toLowerCase().includes(q)));
+  document.getElementById('cplist').innerHTML=list.length
+    ?list.map(p=>`<div class="lcard"><span class="ltag">${p.cat}</span><h4>${p.title}</h4><p>${p.desc}</p><div class="lrow"><span>&#128176;</span><strong>${p.price}</strong></div><div class="lrow"><span>&#9201; ${p.dur}</span><span>${p.less}</span></div><div class="lmods">${p.mods.map(m=>`<span class="lmod">${m}</span>`).join('')}</div><button class="pw-btn" style="margin-top:.6rem" onclick="goChat('Tell me more about ${esc2(p.title)}: what I will learn, fees, EMI, batch timings, and how to enroll.')">Ask AI About This</button></div>`).join('')
+    :'<div style="text-align:center;color:var(--t3);padding:2rem;font-size:.82rem">No results found.</div>';
 }
 
-// ════════════════════════════════════════
-//  PREDICTOR
-// ════════════════════════════════════════
-function runPredictor(){
-  const goal=document.getElementById('p-goal').value;
-  const exp=document.getElementById('p-exp').value;
-  const budget=document.getElementById('p-budget').value;
-  const g=goal.toLowerCase(), b=budget.toLowerCase();
+/* ────────────────────────────────
+   PREDICTOR
+──────────────────────────────── */
+function runPredict(){
+  const g=document.getElementById('pg').value;
+  const e=document.getElementById('pe').value;
+  const b=document.getElementById('pb').value;
   let rec;
-  if(g.includes('option')||g.includes('derivative')) rec=b==='premium'?{type:'insignia',item:INSIGNIA[1]}:{type:'product',item:PRODUCTS[2]};
-  else if(g.includes('commodity')||g.includes('global')) rec=b==='premium'?{type:'insignia',item:INSIGNIA[2]}:{type:'product',item:PRODUCTS[6]};
-  else if(g.includes('mutual')||g.includes('sip')) rec={type:'product',item:PRODUCTS[4]};
-  else if(g.includes('intraday')||g.includes('swing')||g.includes('trading')) rec=b==='premium'?{type:'insignia',item:INSIGNIA[0]}:{type:'product',item:PRODUCTS[1]};
-  else if(g.includes('long')||g.includes('fundamental')||g.includes('investing')) rec=b==='premium'?{type:'insignia',item:INSIGNIA[0]}:{type:'product',item:PRODUCTS[3]};
-  else rec=b==='premium'?{type:'insignia',item:INSIGNIA[0]}:{type:'product',item:PRODUCTS[0]};
-
-  const {item}=rec;
-  document.getElementById('pred-output').innerHTML=`
-    <div class="pred-res">
-      <div class="pr-label">✅ Recommended for ${exp} · ${budget}</div>
-      <h4>${item.title}</h4>
-      <p>${item.desc}</p>
-      <div class="pr-chips">
-        <span class="pr-chip">💰 ${item.price}</span>
-        <span class="pr-chip">⏱ ${item.duration}</span>
-        ${item.lessons?`<span class="pr-chip">${item.lessons}</span>`:''}
+  if(g==='options')   rec=b==='premium'?{i:true,x:INSIG[1]}:{i:false,x:PRODS[2]};
+  else if(g==='commodity') rec=b==='premium'?{i:true,x:INSIG[2]}:{i:false,x:PRODS[6]};
+  else if(g==='mutual')    rec={i:false,x:PRODS[4]};
+  else if(g==='intraday')  rec=b==='premium'?{i:true,x:INSIG[0]}:{i:false,x:PRODS[1]};
+  else if(g==='investing') rec=b==='premium'?{i:true,x:INSIG[0]}:{i:false,x:PRODS[3]};
+  else                     rec=b==='premium'?{i:true,x:INSIG[0]}:{i:false,x:PRODS[0]};
+  const x=rec.x;
+  document.getElementById('pred-out').innerHTML=`
+    <div class="pres">
+      <div class="pres-lbl">&#10003; Best match for ${e} &mdash; ${b}</div>
+      <h4>${x.title}</h4>
+      <p>${x.desc}</p>
+      <div class="pres-chips">
+        <span class="pchip">&#128176; ${x.price}</span>
+        <span class="pchip">&#9201; ${x.dur}</span>
+        ${x.less?`<span class="pchip">${x.less}</span>`:''}
+        ${rec.i?'<span class="pchip">&#128081; INSIGNIA</span>':''}
       </div>
-      <button class="pw-btn" style="margin-top:.65rem;width:100%" onclick="sendQuick('Tell me more about ${item.title.replace(/'/g,"\\'")} — pricing, EMI options, and how to enroll.');switchTab('chat',document.querySelectorAll('.ctab')[0])">💬 Ask AI about this course →</button>
+      <button class="pw-btn" style="margin-top:.7rem" onclick="goChat('I am a ${esc2(e)} interested in ${g}. Tell me everything about ${esc2(x.title)}: full curriculum, pricing breakdown, EMI options, batch timings, and step-by-step enrollment process.')">
+        &#129302; Get Full AI Breakdown
+      </button>
     </div>`;
 }
 
-// ════════════════════════════════════════
-//  COMPARE
-// ════════════════════════════════════════
-const ALL_COURSES=[...PRODUCTS,...INSIGNIA.map(i=>({...i,cat:'INSIGNIA Plan'}))];
-
-function initCompareSelects(){
-  const opts=ALL_COURSES.map((c,i)=>`<option value="${i}">${c.title}</option>`).join('');
-  document.getElementById('cmp-a').innerHTML=opts;
-  document.getElementById('cmp-b').innerHTML=opts;
-  document.getElementById('cmp-b').selectedIndex=1;
-  renderCompare();
+/* ────────────────────────────────
+   COMPARE
+──────────────────────────────── */
+function initCompare(){
+  const opts=ALL_CRS.map((c,i)=>`<option value="${i}">${c.title}</option>`).join('');
+  document.getElementById('ca').innerHTML=opts;
+  document.getElementById('cb').innerHTML=opts;
+  document.getElementById('cb').selectedIndex=1;
+  renderCmp();
 }
-
-function renderCompare(){
-  const a=ALL_COURSES[+document.getElementById('cmp-a').value];
-  const b=ALL_COURSES[+document.getElementById('cmp-b').value];
+function renderCmp(){
+  const a=ALL_CRS[+document.getElementById('ca').value];
+  const b=ALL_CRS[+document.getElementById('cb').value];
+  if(!a||!b)return;
+  // Simple price comparison to mark better
   const rows=[
-    ['Category',a.cat||'INSIGNIA',b.cat||'INSIGNIA'],
-    ['Price',a.price,b.price],
-    ['Duration',a.duration,b.duration],
-    ['Lessons / Format',a.lessons||'Mentorship',b.lessons||'Mentorship'],
-    ['Key modules',a.modules.slice(0,3).join(', '),b.modules.slice(0,3).join(', ')],
+    ['Type',a.cat,b.cat,null],
+    ['Price',a.price,b.price,null],
+    ['Duration',a.dur,b.dur,null],
+    ['Content',a.less||'Mentorship',b.less||'Mentorship',null],
+    ['Key Topics',a.mods.slice(0,3).join(', '),b.mods.slice(0,3).join(', '),null],
   ];
-  document.getElementById('cmp-output').innerHTML=`
-    <table class="cmp-table">
-      <tr><th>Feature</th><th style="color:var(--acc2)">${a.title.length>28?a.title.slice(0,28)+'…':a.title}</th><th style="color:var(--acc2)">${b.title.length>28?b.title.slice(0,28)+'…':b.title}</th></tr>
-      ${rows.map(r=>`<tr><td class="row-label">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')}
+  const short=s=>s&&s.length>26?s.slice(0,26)+'…':s;
+  document.getElementById('cmp-out').innerHTML=`
+    <table class="cmp-tbl">
+      <tr><th>&#9878;</th><th style="color:var(--acc2)">${short(a.title)}</th><th style="color:var(--acc3)">${short(b.title)}</th></tr>
+      ${rows.map(r=>`<tr><td class="cmp-rl">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')}
     </table>`;
 }
-
-function askAICompare(){
-  const a=ALL_COURSES[+document.getElementById('cmp-a').value];
-  const b=ALL_COURSES[+document.getElementById('cmp-b').value];
-  sendQuick(`Compare "${a.title}" vs "${b.title}" — which is better for me and why?`);
-  switchTab('chat',document.querySelectorAll('.ctab')[0]);
+function aiCmp(){
+  const a=ALL_CRS[+document.getElementById('ca').value];
+  const b=ALL_CRS[+document.getElementById('cb').value];
+  goChat(`Please give me a detailed expert comparison between "${a.title}" (${a.price}, ${a.dur}) and "${b.title}" (${b.price}, ${b.dur}). Include curriculum differences, target audience, value for money, and a clear recommendation.`);
+}
+function aiCmpPro(){
+  const a=ALL_CRS[+document.getElementById('ca').value];
+  const b=ALL_CRS[+document.getElementById('cb').value];
+  goChat(`Between "${a.title}" and "${b.title}", which one fits better for someone just starting out? Consider beginner-friendliness, price, and long-term value.`);
 }
 
-// ════════════════════════════════════════
-//  CHAT ENGINE
-// ════════════════════════════════════════
-let chatOpen=false, chatLang='English', chatHistory=[], isTyping=false;
+/* ────────────────────────────────
+   TAB / PANEL NAVIGATION
+──────────────────────────────── */
+function goTab(name){
+  document.querySelectorAll('.ctab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.cpanel').forEach(p=>p.classList.remove('on'));
+  const btn=document.querySelector(`.ctab[data-p="${name}"]`);
+  const pan=document.getElementById('pan-'+name);
+  if(btn) btn.classList.add('on');
+  if(pan) pan.classList.add('on');
+  // Show/hide bottom bars — only on chat tab
+  const isChat=name==='chat';
+  ['qrow','cLangBar','cinpBar'].forEach(id=>{
+    document.getElementById(id).style.display=isChat?'':'none';
+  });
+}
 
-const SYS=`You are the INVESMATE AI Advisor — knowledgeable, warm, professional. You help users of INVESMATE, a SEBI-registered Research Analyst platform (INH000017985) in India.
+function goChat(text){
+  goTab('chat');
+  if(!chatOpen) toggleChat();
+  document.getElementById('cta').value=text;
+  send();
+}
 
-Capabilities:
-- Recommend courses based on goals, experience, budget
-- Compare courses in detail
-- Explain INSIGNIA mentorship plans
-- Provide pricing, EMI, enrollment steps
-- Introduce mentors and their specializations
-- Handle support queries
-- Answer in Bengali or Hindi when requested
-
-INVESMATE Courses:
-1. Power of Trading and Investing Combo — Live, Beginner, Rs.8,999–11,999, 2mo/26hrs, 57 lessons
-2. Complete Intraday and Swing Trading — Live, Rs.9,999–12,999, 2mo/20hrs, 48 lessons
-3. Complete Future and Option Trading — Live, Rs.12,999–15,999, 2mo/26hrs
-4. Value Investing Advanced Fundamental Analysis — Live, Rs.8,999–11,999, 2mo/24hrs
-5. Introduction To Mutual Funds — Rs.3,999–6,999, 1 month
-6. Dynamic Investment Fixed Income Securities — Recorded, Rs.10,999, 12hrs
-7. Comprehensive Roadmap Commodity Market — Live, Rs.14,999, 16hrs
-8. Power TI Masterclass — Free entry program
-9. Share Samadhan — Bengali weekly newsletter, included in plans
-10. Market Trending All Segment — Premium tool, INSIGNIA plans
-11. INVESMATE Learning App — Mobile platform
-12. Insights.Market — SEBI RA research brand
-
-INSIGNIA Premium Mentorship:
-A. Equity Market Intelligence Matrix — Rs.38,571/44,420, 3–5 months, technical+fundamental, 1:1 mentorship, 4 practical sessions
-B. Complete Equity and Derivative Dynasty — Rs.62,305/44,420, 6–8 months, equity+options+fixed income, 8 sessions
-C. Complete Global Capital Market Specialist — Rs.1,07,689/44,420, 12 months, US stocks+commodity+advanced MF, lifetime recordings
-
-Mentors (all NISM-certified): Arunava Chatterjee (Technical), Sayan Ghosh (Options), Kunal Saha (Fundamentals), Suman Goswami (Commodity), Laboni Pallab Das (MF), Debarati Mukherjee (Fixed Income), Pratim Kumar Chakraborty (Global), Mihir Kanti Chakraborty (Value Investing)
-
-Support: +91 9016791791, +91 7596037781, +91 7003110622 | support@invesmate.com | sales@invesmate.com
-
-Enrollment: Select course → request counseling call → confirm batch/timing/EMI → pay → app access
-
-Respond in: {{LANG}}. If user writes Bengali → reply Bengali; Hindi → reply Hindi; otherwise English.
-Add "Note: Investment in securities markets is subject to market risks." for trading/returns topics.
-Be concise, helpful, and use bullet points for structured info.`;
-
+/* ────────────────────────────────
+   CHAT TOGGLE
+──────────────────────────────── */
 function toggleChat(){
   chatOpen=!chatOpen;
-  document.getElementById('chat-win').classList.toggle('open',chatOpen);
-  document.getElementById('chat-fab').innerHTML=chatOpen?'✕<span class="chat-badge"></span>':'💬<span class="chat-badge"></span>';
-  if(chatOpen&&chatHistory.length===0){
-    addBot("Hi! 👋 I'm your INVESMATE AI Advisor.\n\nI can help you with:\n• 🎯 Course recommendations\n• ⚖️ Compare any two courses\n• 👑 INSIGNIA mentorship plans\n• 💰 Pricing &amp; EMI options\n• 📝 Enrollment steps\n• 🆘 Support &amp; contact\n\nUse the tabs above or just ask me anything!");
-  }
+  document.getElementById('cwin').classList.toggle('open',chatOpen);
+  const fab=document.getElementById('fab');
+  fab.innerHTML=chatOpen?'&#10005;<span class="fab-dot"></span>':'&#128172;<span class="fab-dot"></span>';
+  if(chatOpen && chatHist.length===0) showWelcome();
 }
 function openChat(){if(!chatOpen)toggleChat();}
 
-function switchTab(name,el){
-  document.querySelectorAll('.ctab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.cpanel').forEach(p=>p.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('panel-'+name).classList.add('active');
-  // Show/hide lang bar and input bar only on chat tab
-  const isChat=name==='chat';
-  document.getElementById('lang-bar').style.display=isChat?'':'none';
-  document.getElementById('qchips').style.display=isChat?'':'none';
-  document.getElementById('chat-inp-bar').style.display=isChat?'':'none';
+function showWelcome(){
+  const msgs={
+    en:"Hi! I'm your **INVESMATE AI Advisor** 👋\n\nI can help you with:\n- 🎯 Course recommendations tailored to your goals\n- ⚖️ Detailed comparisons between any courses\n- 👑 INSIGNIA premium mentorship plans\n- 💰 Pricing, EMI options & enrollment steps\n- 🧑‍🏫 Meet our 8 NISM-certified mentors\n- 🆘 Support & contact\n\nUse the **tabs above** to browse, or just ask me anything!",
+    bn:"হ্যালো! আমি আপনার **INVESMATE AI উপদেষ্টা** 👋\n\nআমি আপনাকে সাহায্য করতে পারি:\n- 🎯 আপনার লক্ষ্য অনুযায়ী কোর্সের পরামর্শ\n- ⚖️ যেকোনো কোর্সের বিস্তারিত তুলনা\n- 👑 INSIGNIA প্রিমিয়াম মেন্টরশিপ পরিকল্পনা\n- 💰 মূল্য, EMI বিকল্প এবং ভর্তির ধাপ\n\nউপরের **ট্যাব** ব্যবহার করুন অথবা যেকোনো প্রশ্ন করুন!",
+    hi:"नमस्ते! मैं आपका **INVESMATE AI सलाहकार** हूं 👋\n\nमैं आपकी मदद कर सकता हूं:\n- 🎯 आपके लक्ष्यों के अनुसार कोर्स की सिफारिशें\n- ⚖️ किसी भी कोर्स की विस्तृत तुलना\n- 👑 INSIGNIA प्रीमियम मेंटरशिप योजनाएं\n- 💰 मूल्य, EMI और नामांकन के चरण\n\n**ऊपर के टैब** का उपयोग करें या कुछ भी पूछें!"
+  };
+  botMsg(msgs[siteLang]||msgs.en, false);
+  // Show suggestion chips after welcome
+  addSugs(['Which course for beginners?','INSIGNIA plan details','Fees & EMI options','How to enroll?']);
 }
 
-function setLang(l,el){
+function setChatLang(l,el){
   chatLang=l;
-  document.querySelectorAll('.lbtn').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
+  document.querySelectorAll('.lb').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
 }
 
-function addBot(html){
-  const panel=document.getElementById('panel-chat');
-  const now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+/* ────────────────────────────────
+   MESSAGING
+──────────────────────────────── */
+function userMsg(text){
+  const p=document.getElementById('pan-chat');
+  const t=now();
   const d=document.createElement('div');
-  d.className='msg bot';
-  d.innerHTML=`<div class="bubble">${html}</div><span class="msg-time">${now}</span>`;
-  panel.appendChild(d);
-  panel.scrollTop=panel.scrollHeight;
-  chatHistory.push({role:'assistant',content:html.replace(/<[^>]+>/g,'')});
+  d.className='msg u';
+  d.innerHTML=`<div class="bub">${esc(text)}</div><span class="msg-t">${t}</span>`;
+  p.appendChild(d);
+  p.scrollTop=p.scrollHeight;
+  chatHist.push({role:'user',content:text});
 }
 
-function addUser(text){
-  const panel=document.getElementById('panel-chat');
-  const now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+function botMsg(md,push=true){
+  const p=document.getElementById('pan-chat');
+  const t=now();
   const d=document.createElement('div');
-  d.className='msg user';
-  d.innerHTML=`<div class="bubble">${esc(text)}</div><span class="msg-time">${now}</span>`;
-  panel.appendChild(d);
-  panel.scrollTop=panel.scrollHeight;
-  chatHistory.push({role:'user',content:text});
+  d.className='msg b';
+  const html=mdToHtml(md);
+  d.innerHTML=`<div class="bot-av">&#129302;</div><div class="bot-body"><div class="bub">${html}</div><span class="msg-t">${t}</span></div>`;
+  p.appendChild(d);
+  p.scrollTop=p.scrollHeight;
+  if(push) chatHist.push({role:'assistant',content:md});
+}
+
+function addSugs(chips){
+  const p=document.getElementById('pan-chat');
+  const d=document.createElement('div');
+  d.className='sug-row';
+  d.innerHTML=chips.map(c=>`<button class="sug" onclick="goChat(${JSON.stringify(c)})">${c}</button>`).join('');
+  p.appendChild(d);
+  p.scrollTop=p.scrollHeight;
 }
 
 function showTyping(){
-  const panel=document.getElementById('panel-chat');
+  const p=document.getElementById('pan-chat');
   const d=document.createElement('div');
-  d.className='msg bot typing-row';d.id='typing-ind';
-  d.innerHTML=`<div class="typing-bub"><span class="tdot"></span><span class="tdot"></span><span class="tdot"></span></div>`;
-  panel.appendChild(d);panel.scrollTop=panel.scrollHeight;
+  d.className='typing-row';d.id='typ';
+  d.innerHTML=`<div class="bot-av">&#129302;</div><div class="tbub"><span class="td"></span><span class="td"></span><span class="td"></span></div>`;
+  p.appendChild(d);p.scrollTop=p.scrollHeight;
 }
-function removeTyping(){const t=document.getElementById('typing-ind');if(t)t.remove();}
+function hideTyping(){const t=document.getElementById('typ');if(t)t.remove();}
 
-async function sendMsg(){
-  const inp=document.getElementById('chat-input');
-  const text=inp.value.trim();
-  if(!text||isTyping)return;
-  inp.value='';autoResize(inp);
-  addUser(text);
-  document.getElementById('send-btn').disabled=true;
-  isTyping=true;
+/* ────────────────────────────────
+   CORE SEND — fully fixed
+──────────────────────────────── */
+const SYS=`You are the INVESMATE AI Advisor — a professional, warm, and deeply knowledgeable stock market learning advisor for INVESMATE, a SEBI-registered Research Analyst platform (INH000017985) in India.
+
+You have expert knowledge of:
+
+INVESMATE COURSES:
+1. Power of Trading and Investing Combo — Live, Beginner, Rs.8,999-11,999, 2 months/26hrs, 57 lessons. Covers market basics, technical analysis, investing foundation, real practice.
+2. Complete Intraday and Swing Trading — Live, Rs.9,999-12,999, 2 months/20hrs, 48 lessons. Chart patterns, indicators, Smart Money Concepts, risk control.
+3. Complete Future and Option Trading — Live, Rs.12,999-15,999, 2 months/26hrs. Futures basics, option buying/selling, hedging.
+4. Value Investing Advanced Fundamental Analysis — Live, Rs.8,999-11,999, 2 months/24hrs. Business analysis, financial statements, valuation, portfolio mindset.
+5. Introduction To Mutual Funds — Rs.3,999-6,999, 1 month, 24 lessons. MF basics, SIP planning, fund selection.
+6. Dynamic Investment Fixed Income Securities — Recorded, Rs.10,999, 12hrs, 33 lessons. Bonds, govt securities, income planning.
+7. Comprehensive Roadmap Commodity Market — Live, Rs.14,999, 16hrs. Gold, silver, crude oil, natural gas.
+8. Power TI Masterclass — Free entry program, orientation and counseling.
+9. Share Samadhan — Weekly Bengali market study newsletter included in plans.
+10. INVESMATE Learning App — Mobile platform for live classes and recordings.
+
+INSIGNIA PREMIUM MENTORSHIP:
+A. Equity Market Intelligence Matrix — Rs.38,571 / Rs.44,420 (EMI available), 3-5 months. Advanced technical + fundamental analysis. Includes: Market Trending tool, Share Samadhan, 1:1 mentorship, 4 practical sessions, NISM exam guidance.
+B. Complete Equity and Derivative Dynasty — Rs.62,305 / Rs.44,420 (EMI), 6-8 months. Technical + fundamental + derivatives + fixed income. 8 practical sessions, academic helpline.
+C. Complete Global Capital Market Specialist — Rs.1,07,689 / Rs.44,420 (EMI), 12 months. US stocks, commodities, advanced MF, software training. 3 mentorship sessions, lifetime recordings.
+
+MENTORS (all NISM-certified):
+- Arunava Chatterjee — Technical Analysis & Trading
+- Sayan Ghosh — Options & Derivatives
+- Kunal Saha — Fundamental Analysis
+- Suman Goswami — Commodity Markets
+- Laboni Pallab Das — Mutual Funds & SIP
+- Debarati Mukherjee — Fixed Income
+- Pratim Kumar Chakraborty — Global Markets
+- Mihir Kanti Chakraborty — Value Investing
+
+SUPPORT: +91 9016791791, +91 7596037781, +91 7003110622 | support@invesmate.com | sales@invesmate.com
+
+ENROLLMENT PROCESS: (1) Browse and select course → (2) Request counseling call → (3) Confirm batch timing, fee structure, and EMI options → (4) Complete payment → (5) Get app access and start learning.
+
+RESPONSE RULES:
+- Use **bold** for course names and key terms
+- Use bullet lists (- item) for multiple points
+- Keep responses focused and helpful
+- Always add risk disclaimer when discussing trading returns: "⚠️ Note: Investment in securities markets is subject to market risks."
+- Never fabricate batch dates or real-time availability — direct users to call support
+- Language: {{LANG}}`;
+
+async function send(){
+  const el=document.getElementById('cta');
+  const txt=el.value.trim();
+  if(!txt||busy) return;
+  goTab('chat');
+  el.value=''; autoH(el);
+  userMsg(txt);
+  document.getElementById('csend').disabled=true;
+  busy=true;
   showTyping();
 
+  /* Build clean messages array — must start with user */
+  let msgs=[];
+  for(const m of chatHist.slice(-30)){
+    if(msgs.length && msgs[msgs.length-1].role===m.role){
+      msgs[msgs.length-1].content+='\n'+m.content;
+    } else {
+      msgs.push({role:m.role,content:m.content});
+    }
+  }
+  while(msgs.length && msgs[0].role!=='user') msgs.shift();
+
+  /* Determine response language */
+  const langMap={English:'Respond in English.',Bengali:'Respond in Bengali (বাংলা).',Hindi:'Respond in Hindi (हिंदी).',Auto:'Detect the language from the user message and respond in the same language.'};
+  const sys=SYS.replace('{{LANG}}', langMap[chatLang]||langMap.Auto);
+
   try{
-    const msgs=chatHistory.slice(-22);
     const res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        system:SYS.replace('{{LANG}}',chatLang),
-        messages:msgs,
-      })
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,system:sys,messages:msgs})
     });
-    removeTyping();
-    const data=await res.json();
-    if(data.content&&data.content[0]&&data.content[0].text){
-      addBot(esc(data.content[0].text));
-    }else if(data.error){
-      addBot('⚠️ API error: '+esc(data.error.message||'Unknown')+'\n\nContact: support@invesmate.com');
-    }else{
-      addBot('Sorry, something went wrong. Please try again.');
+
+    hideTyping();
+
+    if(!res.ok){
+      let eMsg=`HTTP ${res.status}`;
+      try{const ed=await res.json();eMsg=ed?.error?.message||eMsg;}catch(_){}
+      botMsg(`Sorry, I ran into an error (${eMsg}).\n\nPlease try again or contact us:\n- 📞 +91 9016791791\n- ✉️ support@invesmate.com`,false);
+    } else {
+      const d=await res.json();
+      const blk=d.content&&d.content.find(b=>b.type==='text');
+      if(blk&&blk.text){
+        botMsg(blk.text);
+        // Add contextual follow-up suggestions
+        const sugs=getFollowUp(txt,blk.text);
+        if(sugs.length) addSugs(sugs);
+      } else {
+        botMsg('I received an unexpected response. Please rephrase your question.',false);
+      }
     }
-  }catch(e){
-    removeTyping();
-    addBot('⚠️ Connection error.\n\nFor immediate help:\n📞 +91 9016791791\n✉️ support@invesmate.com');
+  }catch(err){
+    hideTyping();
+    botMsg(`Connection error: ${err.message||'Network issue'}\n\nFor immediate support:\n- 📞 +91 9016791791\n- ✉️ support@invesmate.com`,false);
   }
-  isTyping=false;
-  document.getElementById('send-btn').disabled=false;
-  document.getElementById('chat-input').focus();
+
+  busy=false;
+  document.getElementById('csend').disabled=false;
+  document.getElementById('cta').focus();
 }
 
-function sendQuick(text){
-  // Switch to chat tab first
-  const chatTab=document.querySelectorAll('.ctab')[0];
-  switchTab('chat',chatTab);
-  document.getElementById('chat-input').value=text;
-  sendMsg();
+/* Contextual follow-up suggestions based on conversation */
+function getFollowUp(q,a){
+  const ql=q.toLowerCase();
+  if(ql.includes('beginner')||ql.includes('start')) return ['What does the course include?','What are the fees?','How do I enroll?'];
+  if(ql.includes('insignia')||ql.includes('mentorship')) return ['Which INSIGNIA plan is best for me?','Can I pay in EMI?','Who are the mentors?'];
+  if(ql.includes('option')||ql.includes('derivative')) return ['Tell me about F&O course fees','Compare F&O vs INSIGNIA Dynasty','How long does the course take?'];
+  if(ql.includes('fee')||ql.includes('price')||ql.includes('cost')||ql.includes('emi')) return ['How do I pay?','Is there a free course?','Compare two courses'];
+  if(ql.includes('enroll')||ql.includes('join')||ql.includes('register')) return ['Contact support to enroll','Which course should I choose?','What happens after enrollment?'];
+  return [];
 }
 
-function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
-function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
-function esc(t){return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');}
+/* ────────────────────────────────
+   MARKDOWN → HTML (robust)
+──────────────────────────────── */
+function mdToHtml(md){
+  let s=String(md||'');
+  // Bold
+  s=s.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+  // Italic
+  s=s.replace(/\*(.*?)\*/g,'<em>$1</em>');
+  // Process line by line for lists
+  const lines=s.split('\n');
+  const out=[];
+  let inUL=false;
+  for(const ln of lines){
+    const bullet=ln.match(/^[-•]\s+(.+)/);
+    if(bullet){
+      if(!inUL){out.push('<ul>');inUL=true;}
+      out.push(`<li>${bullet[1]}</li>`);
+    } else {
+      if(inUL){out.push('</ul>');inUL=false;}
+      if(ln.trim()==='') out.push('<br>');
+      else out.push(ln+'<br>');
+    }
+  }
+  if(inUL) out.push('</ul>');
+  // Clean up multiple <br>
+  return out.join('').replace(/(<br>){3,}/g,'<br><br>').replace(/<br>$/,'');
+}
 
-// ════════════════════════════════════════
-//  INIT
-// ════════════════════════════════════════
+/* ────────────────────────────────
+   UTILS
+──────────────────────────────── */
+function esc(t){return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function esc2(t){return String(t||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');}
+function now(){return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}
+function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
+function autoH(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
+
+/* ────────────────────────────────
+   BOOT
+──────────────────────────────── */
 initPage();
 </script>
 </body>
